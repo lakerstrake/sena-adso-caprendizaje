@@ -63,7 +63,7 @@ export default {
     // -------------------------------------------------------------------------
     // 1. PUBLIC CV TRACKING ROUTE (/cv or /api/track-cv)
     // -------------------------------------------------------------------------
-    if (url.pathname === "/cv" || url.pathname === "/api/track-cv" || url.pathname === "/track/cv") {
+    if (url.pathname === "/cv" || url.pathname.startsWith("/cv/") || url.pathname === "/cv.html" || url.pathname === "/api/track-cv" || url.pathname === "/track/cv") {
       return handleCvTracking(request, url, env, ctx);
     }
 

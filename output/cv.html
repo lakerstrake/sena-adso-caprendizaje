@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoja de Vida Oficial · Juan Manuel Lagos Monroy | ADSO SENA</title>
+    <meta name="description" content="Hoja de vida oficial, certificados académicos y portafolio de Juan Manuel Lagos Monroy - Tecnólogo en Análisis y Desarrollo de Software (ADSO) SENA.">
+    <meta http-equiv="refresh" content="1; url=https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN">
+    <link rel="canonical" href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN">
+    
+    <!-- Open Graph / Meta -->
+    <meta property="og:title" content="Hoja de Vida Oficial · Juan Manuel Lagos Monroy">
+    <meta property="og:description" content="Aprendiz en Etapa Productiva ADSO SENA · 7 semestres de Ingeniería Mecatrónica + Técnico en Sistemas">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-base: #07090e;
+            --bg-card: rgba(15, 23, 42, 0.85);
+            --border-card: rgba(16, 185, 129, 0.3);
+            --brand-primary: #10b981;
+            --brand-glow: rgba(16, 185, 129, 0.25);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(16, 185, 129, 0.18), transparent 70%),
+                linear-gradient(180deg, #07090e 0%, #030712 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+        .gateway-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 30px var(--brand-glow);
+            border-radius: 16px;
+            padding: 2.2rem;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .avatar-glow {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: rgba(16, 185, 129, 0.15);
+            border: 2px solid var(--brand-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--brand-primary);
+            margin: 0 auto 1.2rem auto;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.35);
+            animation: pulse 2s infinite ease-in-out;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(16, 185, 129, 0.35); }
+            50% { transform: scale(1.05); box-shadow: 0 0 32px rgba(16, 185, 129, 0.55); }
+        }
+        .badge-sena {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 9999px;
+            color: var(--brand-primary);
+            font-size: 0.72rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 0.8rem;
+        }
+        h1 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.35rem;
+            color: #ffffff;
+        }
+        p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 1.4rem;
+        }
+        .spinner-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 1.4rem;
+            position: relative;
+        }
+        .spinner-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 40%;
+            height: 100%;
+            background: var(--brand-primary);
+            border-radius: 2px;
+            animation: loadingBar 1.2s infinite ease-in-out;
+        }
+        @keyframes loadingBar {
+            0% { left: -40%; width: 40%; }
+            50% { left: 30%; width: 50%; }
+            100% { left: 100%; width: 40%; }
+        }
+        .btn-drive {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            width: 100%;
+            padding: 0.85rem 1.4rem;
+            background: #10b981;
+            color: #042f2e;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 18px rgba(16, 185, 129, 0.35);
+            transition: all 0.2s ease;
+        }
+        .btn-drive:hover {
+            background: #34d399;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(16, 185, 129, 0.5);
+            color: #022c22;
+        }
+        .links-secondary {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            margin-top: 1.4rem;
+            padding-top: 1.2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .links-secondary a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.78rem;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            transition: color 0.2s ease;
+        }
+        .links-secondary a:hover {
+            color: var(--brand-primary);
+        }
+    </style>
+</head>
+<body>
+    <main class="gateway-card">
+        <div class="avatar-glow">
+            <i class="fa-solid fa-file-pdf" aria-hidden="true"></i>
+        </div>
+        <div class="badge-sena">
+            <i class="fa-solid fa-circle-check" aria-hidden="true"></i> DISPONIBLE ETAPA PRODUCTIVA
+        </div>
+        <h1>Juan Manuel Lagos Monroy</h1>
+        <p>
+            Tecnólogo en Análisis y Desarrollo de Software (ADSO) · Doble titulación técnica (7 semestres de Ingeniería Mecatrónica + Técnico en Sistemas).
+        </p>
+        
+        <div class="spinner-bar" aria-hidden="true"></div>
+        <p style="font-size: 0.78rem; color: #38bdf8; margin-bottom: 1.2rem;">
+            <i class="fa-solid fa-cloud-arrow-down fa-bounce" aria-hidden="true"></i> Conectando con Google Drive oficial...
+        </p>
+
+        <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN" id="btnManualRedirect" class="btn-drive">
+            <i class="fa-solid fa-file-lines" aria-hidden="true"></i> Abrir Hoja de Vida (CV Oficial)
+        </a>
+
+        <div class="links-secondary">
+            <a href="https://github.com/lakerstrake" target="_blank" rel="noopener noreferrer">
+                <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub
+            </a>
+            <a href="https://linkedin.com/in/juan-manuel-lagos-monroy" target="_blank" rel="noopener noreferrer">
+                <i class="fa-brands fa-linkedin" aria-hidden="true"></i> LinkedIn
+            </a>
+            <a href="https://sena-adso-caprendizaje.pages.dev" target="_blank" rel="noopener noreferrer">
+                <i class="fa-solid fa-table-list" aria-hidden="true"></i> Portal SGVA
+            </a>
+        </div>
+    </main>
+
+    <script>
+        (function() {
+            const DRIVE_URL = "https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN";
+            
+            try {
+                // Parse tracking telemetry params
+                const params = new URLSearchParams(window.location.search);
+                const empresa = params.get('empresa') || params.get('e') || 'Reclutador Externo';
+                const id = params.get('id') || 'N/A';
+                const contacto = params.get('c') || params.get('contacto') || 'Equipo de Selección';
+                const src = params.get('src') || 'Web Link';
+
+                // Local storage alert registration
+                const alertItem = {
+                    id: 'cv_' + Date.now(),
+                    empresa: empresa,
+                    contacto: contacto,
+                    solicitudId: id,
+                    source: src,
+                    fecha: new Date().toLocaleString('es-CO', { timeZone: 'America/Bogota' }),
+                    timestamp: Date.now()
+                };
+
+                const storedAlerts = JSON.parse(localStorage.getItem('sgva_cv_alerts_store') || '[]');
+                storedAlerts.unshift(alertItem);
+                if (storedAlerts.length > 50) storedAlerts.pop();
+                localStorage.setItem('sgva_cv_alerts_store', JSON.stringify(storedAlerts));
+
+                // Optional telemetry ping
+                if (navigator.sendBeacon) {
+                    const data = new Blob([JSON.stringify(alertItem)], { type: 'application/json' });
+                    navigator.sendBeacon('/api/cv-events', data);
+                } else {
+                    fetch('/api/cv-events', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(alertItem),
+                        keepalive: true
+                    }).catch(function() {});
+                }
+            } catch (err) {
+                console.warn('[CV Tracker]', err);
+            }
+
+            // Smooth redirect to Google Drive
+            setTimeout(function() {
+                window.location.replace(DRIVE_URL);
+            }, 800);
+        })();
+    </script>
+</body>
+</html>
