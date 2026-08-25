@@ -35,8 +35,8 @@
     <!-- Header & Top Navigation Bar -->
     <header class="navbar" role="banner">
         <div class="navbar-container">
-            <!-- Row 1: Brand Logo (Left) + Quick Tools (Right) -->
-            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 0.5rem;">
+            <!-- Left Group: Brand Logo & Title + Main Navigation Pills -->
+            <div class="nav-left-group">
                 <div class="brand-section">
                     <div class="brand-badge" aria-hidden="true"><i class="fa-solid fa-code"></i></div>
                     <div class="brand-title">
@@ -44,35 +44,24 @@
                         <span>Directorio Estratégico</span>
                     </div>
                 </div>
-                <div style="display: flex; align-items: center; gap: 0.3rem; flex-shrink: 0;">
-                    <button class="btn" data-action="exportData" data-format="xlsx" title="Descargar Excel (.xlsx)" aria-label="Exportar Excel" style="padding: 0.22rem 0.45rem;">
-                        <i class="fa-solid fa-file-excel" style="color: #10b981;" aria-hidden="true"></i>
+
+                <!-- Main Navigation Tabs -->
+                <nav class="nav-pills main-nav-pills" role="navigation" aria-label="Navegación principal">
+                    <button class="nav-pill-btn active" id="pillDirectory" data-action="switchNavTab" data-tab="directory" aria-current="page">
+                        <i class="fa-solid fa-list-ul" aria-hidden="true"></i> Directorio <span class="count-badge" id="pillTotalCount">179</span>
                     </button>
-                    <button class="btn" data-action="exportData" data-format="csv" title="Descargar CSV (.csv)" aria-label="Exportar CSV" style="padding: 0.22rem 0.45rem;">
-                        <i class="fa-solid fa-file-csv" style="color: #38bdf8;" aria-hidden="true"></i>
+                    <button class="nav-pill-btn" id="pillStrategy" data-action="switchNavTab" data-tab="strategy">
+                        <i class="fa-solid fa-rocket" aria-hidden="true"></i> Finanzas & 5A
                     </button>
-                    <button class="btn btn-icon" data-action="toggleTheme" id="themeBtn" title="Cambiar tema de color" aria-label="Cambiar tema" style="width: 26px; height: 26px;">
-                        <i class="fa-solid fa-sun" id="themeIcon" aria-hidden="true"></i>
+                    <button class="nav-pill-btn" id="pillFavs" data-action="switchNavTab" data-tab="favs">
+                        <i class="fa-regular fa-bookmark" aria-hidden="true"></i> Favoritas <span class="count-badge" id="pillFavCount">0</span>
                     </button>
-                </div>
+                </nav>
             </div>
 
-            <!-- Row 2: Main Navigation Tabs (Full Width, Scaled) -->
-            <nav class="nav-pills" role="navigation" aria-label="Navegación principal" style="width: 100%;">
-                <button class="nav-pill-btn active" id="pillDirectory" data-action="switchNavTab" data-tab="directory" aria-current="page">
-                    <i class="fa-solid fa-list-ul" aria-hidden="true"></i> Directorio <span class="count-badge" id="pillTotalCount">179</span>
-                </button>
-                <button class="nav-pill-btn" id="pillStrategy" data-action="switchNavTab" data-tab="strategy">
-                    <i class="fa-solid fa-rocket" aria-hidden="true"></i> Finanzas & 5A
-                </button>
-                <button class="nav-pill-btn" id="pillFavs" data-action="switchNavTab" data-tab="favs">
-                    <i class="fa-regular fa-bookmark" aria-hidden="true"></i> Favoritas <span class="count-badge" id="pillFavCount">0</span>
-                </button>
-            </nav>
-
-            <!-- Row 3: Candidate Profile Bar (Smooth Horizontal Scroll Pill) -->
-            <div style="width: 100%; overflow: hidden; display: flex;">
-                <div class="candidate-pill" style="width: 100%;">
+            <!-- Right Group: Candidate Profile Bar + Quick Tools -->
+            <div class="nav-right-group">
+                <div class="candidate-pill">
                     <i class="fa-solid fa-user-check" style="color: var(--brand-primary); flex-shrink: 0;" aria-hidden="true"></i>
                     <strong style="color: var(--text-main); flex-shrink: 0;">Juan Manuel Lagos</strong>
                     <span style="color: var(--text-dim); flex-shrink: 0;" aria-hidden="true">•</span>
@@ -91,6 +80,18 @@
                     <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN" target="_blank" rel="noopener noreferrer" title="Certificados Académicos en Google Drive" style="color: var(--drive-color); flex-shrink: 0;">
                         <i class="fa-brands fa-google-drive" aria-hidden="true"></i> Certificados
                     </a>
+                </div>
+
+                <div class="nav-tools">
+                    <button class="btn" data-action="exportData" data-format="xlsx" title="Descargar Excel (.xlsx)" aria-label="Exportar Excel" style="padding: 0.22rem 0.45rem;">
+                        <i class="fa-solid fa-file-excel" style="color: #10b981;" aria-hidden="true"></i>
+                    </button>
+                    <button class="btn" data-action="exportData" data-format="csv" title="Descargar CSV (.csv)" aria-label="Exportar CSV" style="padding: 0.22rem 0.45rem;">
+                        <i class="fa-solid fa-file-csv" style="color: #38bdf8;" aria-hidden="true"></i>
+                    </button>
+                    <button class="btn btn-icon" data-action="toggleTheme" id="themeBtn" title="Cambiar tema de color" aria-label="Cambiar tema" style="width: 26px; height: 26px;">
+                        <i class="fa-solid fa-sun" id="themeIcon" aria-hidden="true"></i>
+                    </button>
                 </div>
             </div>
         </div>
