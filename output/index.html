@@ -197,7 +197,12 @@
 
             <!-- Table Toolbar -->
             <div class="table-toolbar">
-                <div>Mostrando <strong id="lblVisibleCount">179</strong> de <strong id="lblTotalCount">179</strong> vacantes</div>
+                <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
+                    <div>Mostrando <strong id="lblVisibleCount">179</strong> de <strong id="lblTotalCount">179</strong> vacantes</div>
+                    <span class="pill-badge" style="background: rgba(16, 185, 129, 0.08); color: var(--brand-primary); font-size: 0.62rem; border: 1px solid rgba(16, 185, 129, 0.2);" title="Dataset sincronizado con el portal oficial SGVA SENA Caprendizaje">
+                        <i class="fa-solid fa-circle-check"></i> Sincronizado SGVA SENA 2026
+                    </span>
+                </div>
                 <div style="display: flex; align-items: center; gap: 0.35rem;">
                     <button class="btn" style="padding: 0.22rem 0.45rem; font-size: 0.68rem;" data-action="resetFilters" title="Restablecer filtros">
                         <i class="fa-solid fa-rotate-left"></i> Limpiar
