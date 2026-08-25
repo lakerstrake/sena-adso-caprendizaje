@@ -17,7 +17,8 @@ const CONFIG = Object.freeze({
         email: "jmlagos2003@gmail.com",
         github: "https://github.com/lakerstrake",
         linkedin: "https://linkedin.com/in/juan-manuel-lagos-monroy",
-        cvDrive: "https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN",
+        cvDrive: "https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing",
+        certsDrive: "https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN?usp=sharing",
         program: "Tecnólogo en Análisis y Desarrollo de Software (ADSO) - SENA"
     },
     STORAGE_KEYS: {
