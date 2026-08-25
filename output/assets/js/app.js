@@ -1,29 +1,59 @@
 /**
- * SGVA SENA ADSO - Executive Application Core
- * Architecture: Clean Modular State-Driven Architecture
- * Security: OWASP Compliant (Strict Context Escaping, Safe DOM manipulation)
+ * SGVA SENA ADSO - Clean Architecture Application Controller
+ * Patterns: MVVM / Store Pattern + Event Delegation + Observer
+ * Security: OWASP Top 10 Compliant (Zero Inline JS, Strict Contextual Escaping)
  * Accessibility: WCAG 2.1 AA / ISO 9241-210 Compliant
  */
 
 'use strict';
 
-// ---------------------------------------------------------
-// 1. Candidate Context & Application Constants
-// ---------------------------------------------------------
-const CANDIDATE_PROFILE = Object.freeze({
-    name: "Juan Manuel Lagos Monroy",
-    phone: "(+57) 300 727 9875",
-    email: "jmlagos2003@gmail.com",
-    github: "https://github.com/lakerstrake",
-    linkedin: "https://linkedin.com/in/juan-manuel-lagos-monroy",
-    cvDrive: "https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN",
-    program: "Tecnólogo en Análisis y Desarrollo de Software (ADSO) - SENA",
-    availability: "Etapa Productiva (Septiembre 2026 - Marzo 2027)"
+// =========================================================================
+// 1. CONFIGURATION & DOMAIN CONSTANTS
+// =========================================================================
+const CONFIG = Object.freeze({
+    CANDIDATE: {
+        name: "Juan Manuel Lagos Monroy",
+        phone: "(+57) 300 727 9875",
+        email: "jmlagos2003@gmail.com",
+        github: "https://github.com/lakerstrake",
+        linkedin: "https://linkedin.com/in/juan-manuel-lagos-monroy",
+        cvDrive: "https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN",
+        program: "Tecnólogo en Análisis y Desarrollo de Software (ADSO) - SENA"
+    },
+    STORAGE_KEYS: {
+        FAVORITES: 'cap_favs',
+        COMPARE: 'cap_comp',
+        THEME: 'cap_theme'
+    },
+    PAGINATION: {
+        DEFAULT_PAGE_SIZE: 50
+    },
+    MAX_COMPARE: 3
 });
 
-// ---------------------------------------------------------
-// 2. Application State Management
-// ---------------------------------------------------------
+// =========================================================================
+// 2. SECURITY & UTILITY SERVICE (OWASP Compliant)
+// =========================================================================
+class SecurityService {
+    /**
+     * Escapes HTML entities to prevent Reflected and DOM-based Cross-Site Scripting (XSS).
+     * @param {*} input 
+     * @returns {string} Safe string
+     */
+    static escapeHtml(input) {
+        if (input === null || input === undefined) return '';
+        return String(input)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+}
+
+// =========================================================================
+// 3. APPLICATION STATE STORE (Single Source of Truth)
+// =========================================================================
 class AppStore {
     constructor(initialData = []) {
         this.rawData = Array.isArray(initialData) ? initialData : [];
@@ -33,33 +63,33 @@ class AppStore {
         this.filterFavs = false;
         this.viewMode = 'table'; // 'table' | 'cards'
         this.currentPage = 1;
-        this.pageSize = 50;
+        this.pageSize = CONFIG.PAGINATION.DEFAULT_PAGE_SIZE;
         this.sortCol = 'ranking_posicion';
         this.sortAsc = true;
         this.activeItem = null;
         this.activeChannel = 'email';
         
-        // Persistent State
-        this.favorites = this.loadStorage('cap_favs', []);
-        this.compareList = this.loadStorage('cap_comp', []);
-        this.theme = this.loadStorage('cap_theme', 'dark');
+        // Persistent State with Fallbacks
+        this.favorites = this._loadFromStorage(CONFIG.STORAGE_KEYS.FAVORITES, []);
+        this.compareList = this._loadFromStorage(CONFIG.STORAGE_KEYS.COMPARE, []);
+        this.theme = this._loadFromStorage(CONFIG.STORAGE_KEYS.THEME, 'dark');
     }
 
-    loadStorage(key, fallback) {
+    _loadFromStorage(key, fallback) {
         try {
-            const item = localStorage.getItem(key);
-            return item ? JSON.parse(item) : fallback;
-        } catch (e) {
-            console.warn(`[Storage] Failed to read ${key}:`, e);
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : fallback;
+        } catch (err) {
+            console.warn(`[AppStore] Error reading '${key}' from storage:`, err);
             return fallback;
         }
     }
 
-    saveStorage(key, value) {
+    _saveToStorage(key, value) {
         try {
             localStorage.setItem(key, JSON.stringify(value));
-        } catch (e) {
-            console.warn(`[Storage] Failed to save ${key}:`, e);
+        } catch (err) {
+            console.warn(`[AppStore] Error saving '${key}' to storage:`, err);
         }
     }
 
@@ -70,7 +100,7 @@ class AppStore {
         } else {
             this.favorites.push(strId);
         }
-        this.saveStorage('cap_favs', this.favorites);
+        this._saveToStorage(CONFIG.STORAGE_KEYS.FAVORITES, this.favorites);
     }
 
     isFavorite(id) {
@@ -81,14 +111,14 @@ class AppStore {
         const strId = String(id);
         if (this.compareList.includes(strId)) {
             this.compareList = this.compareList.filter(x => x !== strId);
-            this.saveStorage('cap_comp', this.compareList);
+            this._saveToStorage(CONFIG.STORAGE_KEYS.COMPARE, this.compareList);
             return { status: 'removed' };
         } else {
-            if (this.compareList.length >= 3) {
+            if (this.compareList.length >= CONFIG.MAX_COMPARE) {
                 return { status: 'limit_reached' };
             }
             this.compareList.push(strId);
-            this.saveStorage('cap_comp', this.compareList);
+            this._saveToStorage(CONFIG.STORAGE_KEYS.COMPARE, this.compareList);
             return { status: 'added' };
         }
     }
@@ -99,36 +129,16 @@ class AppStore {
 
     clearCompare() {
         this.compareList = [];
-        this.saveStorage('cap_comp', this.compareList);
+        this._saveToStorage(CONFIG.STORAGE_KEYS.COMPARE, this.compareList);
     }
 }
 
-// ---------------------------------------------------------
-// 3. Security & Utility Helper Functions (OWASP)
-// ---------------------------------------------------------
-const SecurityUtils = {
-    escapeHtml(str) {
-        if (!str) return '';
-        return String(str)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
-    },
-
-    encodeMailParam(str) {
-        return encodeURIComponent(str || '').replace(/%20/g, '+');
-    }
-};
-
-// ---------------------------------------------------------
-// 4. Main Application Controller
-// ---------------------------------------------------------
+// =========================================================================
+// 4. MAIN APPLICATION CONTROLLER
+// =========================================================================
 class AppController {
     constructor() {
-        const data = window.RAW_DATA || [];
-        this.store = new AppStore(data);
+        this.store = new AppStore(window.RAW_DATA || []);
         this.dom = {};
     }
 
@@ -158,6 +168,7 @@ class AppController {
             // Sections
             sectionDirectory: document.getElementById('sectionDirectory'),
             sectionStrategy: document.getElementById('sectionStrategy'),
+            antiBlockNotice: document.getElementById('antiBlockNotice'),
             
             // Filters
             mainSearch: document.getElementById('mainSearch'),
@@ -170,7 +181,7 @@ class AppController {
             filterCity: document.getElementById('filterCity'),
             filterSort: document.getElementById('filterSort'),
             
-            // View wrappers
+            // Views
             tableCardWrap: document.getElementById('tableCardWrap'),
             cardsGridWrap: document.getElementById('cardsGridWrap'),
             tableBody: document.getElementById('tableBody'),
@@ -181,7 +192,7 @@ class AppController {
             btnLayoutTable: document.getElementById('btnLayoutTable'),
             btnLayoutCards: document.getElementById('btnLayoutCards'),
             
-            // Comparison Dock & Modal
+            // Dock & Compare Modal
             comparisonDock: document.getElementById('comparisonDock'),
             dockCount: document.getElementById('dockCount'),
             dockList: document.getElementById('dockList'),
@@ -198,7 +209,7 @@ class AppController {
             mSupport: document.getElementById('mSupport'),
             mFavBtn: document.getElementById('mFavBtn'),
             
-            // Modal Sub Tabs
+            // Modal Tabs
             mTabOutreach: document.getElementById('mTabOutreach'),
             mTabInterview: document.getElementById('mTabInterview'),
             mTabCareer: document.getElementById('mTabCareer'),
@@ -208,7 +219,7 @@ class AppController {
             mSecCareer: document.getElementById('mSecCareer'),
             mSecDetails: document.getElementById('mSecDetails'),
             
-            // Modal Outreach
+            // Modal Outreach Channel
             mChEmail: document.getElementById('mChEmail'),
             mChWA: document.getElementById('mChWA'),
             mChLinkedIn: document.getElementById('mChLinkedIn'),
@@ -220,7 +231,7 @@ class AppController {
             mContactPhone: document.getElementById('mContactPhone'),
             mContactModalidad: document.getElementById('mContactModalidad'),
             
-            // Modal Interview & Career
+            // Modal Timeline & Q&A
             mInterviewList: document.getElementById('mInterviewList'),
             mCurvaTitulo: document.getElementById('mCurvaTitulo'),
             mCurvaDetalle: document.getElementById('mCurvaDetalle'),
@@ -231,7 +242,7 @@ class AppController {
             mFunciones: document.getElementById('mFunciones'),
             mClosingDate: document.getElementById('mClosingDate'),
             
-            // Feedback
+            // Toast
             toastMsg: document.getElementById('toastMsg')
         };
     }
@@ -249,7 +260,7 @@ class AppController {
         const next = current === 'dark' ? 'light' : 'dark';
         this.dom.html.setAttribute('data-theme', next);
         this.store.theme = next;
-        this.store.saveStorage('cap_theme', next);
+        this.store._saveToStorage(CONFIG.STORAGE_KEYS.THEME, next);
         if (this.dom.themeIcon) {
             this.dom.themeIcon.className = next === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
         }
@@ -286,7 +297,20 @@ class AppController {
         });
     }
 
+    /**
+     * Unobtrusive Event Delegation Listener.
+     * Captures all actions declaratively via data-action.
+     */
     bindEvents() {
+        // Global Click Event Delegator
+        document.addEventListener('click', (e) => {
+            const actionEl = e.target.closest('[data-action]');
+            if (!actionEl) return;
+
+            const action = actionEl.getAttribute('data-action');
+            this.handleAction(action, actionEl, e);
+        });
+
         // Search Input
         if (this.dom.mainSearch) {
             this.dom.mainSearch.addEventListener('input', () => {
@@ -295,7 +319,7 @@ class AppController {
             });
         }
 
-        // Secondary Filters
+        // Dropdown Filters
         ['filterChannel', 'filterCompetition', 'filterDpto', 'filterCity', 'filterSort'].forEach(id => {
             const el = this.dom[id];
             if (el) {
@@ -307,13 +331,92 @@ class AppController {
             }
         });
 
-        // Global Keydown (Escape handler)
+        // Keyboard Access: Escape
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 this.closeDetailModal();
                 this.closeCompareModal();
             }
         });
+    }
+
+    /**
+     * Action Dispatcher
+     */
+    handleAction(action, el, event) {
+        switch (action) {
+            case 'switchNavTab':
+                this.switchNavTab(el.getAttribute('data-tab'));
+                break;
+            case 'toggleTheme':
+                this.toggleTheme();
+                break;
+            case 'exportData':
+                this.exportData(el.getAttribute('data-format'));
+                break;
+            case 'dismissNotice':
+                if (this.dom.antiBlockNotice) this.dom.antiBlockNotice.style.display = 'none';
+                break;
+            case 'filterTier':
+                this.setTierFilter(el.getAttribute('data-tier'), el);
+                break;
+            case 'filterStack':
+                this.setStackChipFilter(el.getAttribute('data-stack'), el);
+                break;
+            case 'toggleSecondaryFilters':
+                this.toggleSecondaryFilters();
+                break;
+            case 'resetFilters':
+                this.resetFilters();
+                break;
+            case 'setLayout':
+                this.setLayout(el.getAttribute('data-layout'));
+                break;
+            case 'toggleFavorite':
+                event.stopPropagation();
+                this.handleToggleFavorite(el.getAttribute('data-id'));
+                break;
+            case 'toggleCompare':
+                event.stopPropagation();
+                this.handleToggleCompare(el.getAttribute('data-id'));
+                break;
+            case 'openDetailModal':
+                this.openDetailModalById(el.getAttribute('data-id'));
+                break;
+            case 'openCompareModal':
+                this.openCompareModal();
+                break;
+            case 'closeCompareModal':
+            case 'backdropCloseCompare':
+                if (action === 'backdropCloseCompare' && event.target.id !== 'compareModal') return;
+                this.closeCompareModal();
+                break;
+            case 'clearComparison':
+                this.clearComparison();
+                break;
+            case 'closeDetailModal':
+            case 'backdropCloseDetail':
+                if (action === 'backdropCloseDetail' && event.target.id !== 'detailModal') return;
+                this.closeDetailModal();
+                break;
+            case 'toggleModalFavorite':
+                if (this.store.activeItem) this.handleToggleFavorite(this.store.activeItem.solicitud_id);
+                break;
+            case 'setModalTab':
+                this.setModalTab(el.getAttribute('data-tab'));
+                break;
+            case 'setModalChannel':
+                this.setChannel(el.getAttribute('data-channel'));
+                break;
+            case 'copyOutreach':
+                this.copyToClipboard('mOutreachBody');
+                break;
+            case 'goToPage':
+                this.goToPage(parseInt(el.getAttribute('data-page'), 10));
+                break;
+            default:
+                break;
+        }
     }
 
     updateFilterBadge() {
@@ -471,7 +574,8 @@ class AppController {
 
         pageSlice.forEach(it => {
             const tr = document.createElement('tr');
-            tr.onclick = () => this.openDetailModal(it);
+            tr.setAttribute('data-action', 'openDetailModal');
+            tr.setAttribute('data-id', it.solicitud_id);
 
             const isFav = this.store.isFavorite(it.solicitud_id);
             const isComp = this.store.isCompared(it.solicitud_id);
@@ -495,20 +599,20 @@ class AppController {
             const posFormatted = (it.ranking_posicion || 1) < 10 ? '0' + it.ranking_posicion : it.ranking_posicion;
 
             tr.innerHTML = `
-                <td style="text-align: center;" onclick="event.stopPropagation();">
-                    <input type="checkbox" ${isComp ? 'checked' : ''} onchange="app.handleToggleCompare('${SecurityUtils.escapeHtml(it.solicitud_id)}', event)">
+                <td style="text-align: center;">
+                    <input type="checkbox" ${isComp ? 'checked' : ''} data-action="toggleCompare" data-id="${SecurityService.escapeHtml(it.solicitud_id)}">
                 </td>
-                <td onclick="event.stopPropagation();">
-                    <i class="${favIcon}" style="cursor: pointer; ${favColor}" onclick="app.handleToggleFavorite('${SecurityUtils.escapeHtml(it.solicitud_id)}', event)"></i>
+                <td>
+                    <i class="${favIcon}" style="cursor: pointer; ${favColor}" data-action="toggleFavorite" data-id="${SecurityService.escapeHtml(it.solicitud_id)}"></i>
                 </td>
                 <td style="font-family: var(--font-mono); font-weight: 700; color: var(--text-dim);">#${posFormatted}</td>
                 <td>
                     <div class="cell-main">
-                        <span class="cell-title" title="${SecurityUtils.escapeHtml(it.empresa)}">${SecurityUtils.escapeHtml(it.empresa)}</span>
-                        <span class="cell-sub">${SecurityUtils.escapeHtml(it.ciudad || '')}, ${SecurityUtils.escapeHtml(it.departamento || '')} • NIT: ${SecurityUtils.escapeHtml(it.nit || 'N/A')}</span>
+                        <span class="cell-title" title="${SecurityService.escapeHtml(it.empresa)}">${SecurityService.escapeHtml(it.empresa)}</span>
+                        <span class="cell-sub">${SecurityService.escapeHtml(it.ciudad || '')}, ${SecurityService.escapeHtml(it.departamento || '')} • NIT: ${SecurityService.escapeHtml(it.nit || 'N/A')}</span>
                     </div>
                 </td>
-                <td><span class="pill-badge ${tierClass}">${SecurityUtils.escapeHtml(it.cat_badge || 'Tier')}</span></td>
+                <td><span class="pill-badge ${tierClass}">${SecurityService.escapeHtml(it.cat_badge || 'Tier')}</span></td>
                 <td><strong style="color: var(--tier-1); font-family: var(--font-mono);">${it.puntaje_exito || 0}</strong><span style="color: var(--text-dim); font-size: 0.62rem;">/100</span></td>
                 <td><span class="rating-chip"><i class="fa-solid fa-star"></i> ${(it.reputacion_rating || 3.8).toFixed(1)}</span></td>
                 <td><strong style="color: var(--tier-2); font-family: var(--font-mono);">${it.escalabilidad_score || 70}/100</strong></td>
@@ -521,15 +625,15 @@ class AppController {
                 <td>
                     <div class="cell-main" style="white-space: nowrap;">
                         <span style="color: var(--brand-primary); font-weight: 600; font-family: var(--font-mono); font-size: 0.7rem;">${cleanApoyo}</span>
-                        <span style="color: var(--tier-1); font-size: 0.62rem; font-weight: 600;">5A: ${SecurityUtils.escapeHtml(cleanTecho5A)}</span>
+                        <span style="color: var(--tier-1); font-size: 0.62rem; font-weight: 600;">5A: ${SecurityService.escapeHtml(cleanTecho5A)}</span>
                     </div>
                 </td>
-                <td style="text-align: right;" onclick="event.stopPropagation();">
+                <td style="text-align: right;">
                     <div class="row-actions">
-                        ${hasEmail ? `<a href="mailto:${SecurityUtils.escapeHtml(it.email)}?subject=Postulaci%C3%B3n+Contrato+ADSO+-+Juan+Manuel+Lagos&body=${encodeURIComponent(it.correo_formal_completo || '')}" class="mini-btn mini-mail" title="Enviar correo formal"><i class="fa-solid fa-envelope"></i></a>` : ''}
-                        ${it.is_whatsapp && it.whatsapp_url ? `<a href="${SecurityUtils.escapeHtml(it.whatsapp_url)}" target="_blank" rel="noopener noreferrer" class="mini-btn mini-wa" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
-                        ${it.linkedin_contact_search_url ? `<a href="${SecurityUtils.escapeHtml(it.linkedin_contact_search_url)}" target="_blank" rel="noopener noreferrer" class="mini-btn" title="LinkedIn"><i class="fa-brands fa-linkedin" style="color: var(--linkedin-color);"></i></a>` : ''}
-                        <button class="mini-btn" style="font-weight: 700;" onclick="app.openDetailModalById('${SecurityUtils.escapeHtml(it.solicitud_id)}')">Detalle</button>
+                        ${hasEmail ? `<a href="mailto:${SecurityService.escapeHtml(it.email)}?subject=Postulaci%C3%B3n+Contrato+ADSO+-+Juan+Manuel+Lagos&body=${encodeURIComponent(it.correo_formal_completo || '')}" class="mini-btn mini-mail" title="Enviar correo formal"><i class="fa-solid fa-envelope"></i></a>` : ''}
+                        ${it.is_whatsapp && it.whatsapp_url ? `<a href="${SecurityService.escapeHtml(it.whatsapp_url)}" target="_blank" rel="noopener noreferrer" class="mini-btn mini-wa" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
+                        ${it.linkedin_contact_search_url ? `<a href="${SecurityService.escapeHtml(it.linkedin_contact_search_url)}" target="_blank" rel="noopener noreferrer" class="mini-btn" title="LinkedIn"><i class="fa-brands fa-linkedin" style="color: var(--linkedin-color);"></i></a>` : ''}
+                        <button class="mini-btn" style="font-weight: 700;" data-action="openDetailModal" data-id="${SecurityService.escapeHtml(it.solicitud_id)}">Detalle</button>
                     </div>
                 </td>
             `;
@@ -549,7 +653,7 @@ class AppController {
         for (let i = 1; i <= totalPages; i++) {
             if (totalPages > 6 && Math.abs(i - this.store.currentPage) > 2 && i !== 1 && i !== totalPages) continue;
             const activeStyle = i === this.store.currentPage ? 'background: var(--brand-primary); color: #fff;' : '';
-            pagesHtml += `<button class="btn" style="padding: 0.15rem 0.45rem; font-size: 0.68rem; ${activeStyle}" onclick="app.goToPage(${i})">${i}</button>`;
+            pagesHtml += `<button class="btn" style="padding: 0.15rem 0.45rem; font-size: 0.68rem; ${activeStyle}" data-action="goToPage" data-page="${i}">${i}</button>`;
         }
         this.dom.paginationPages.innerHTML = pagesHtml;
     }
@@ -566,15 +670,16 @@ class AppController {
         this.store.filteredData.forEach(it => {
             const card = document.createElement('article');
             card.className = 'clean-card';
-            card.onclick = () => this.openDetailModal(it);
+            card.setAttribute('data-action', 'openDetailModal');
+            card.setAttribute('data-id', it.solicitud_id);
             card.innerHTML = `
                 <div>
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.35rem;">
-                        <span class="pill-badge pill-tier-1">${SecurityUtils.escapeHtml(it.cat_badge || 'Tier')}</span>
+                        <span class="pill-badge pill-tier-1">${SecurityService.escapeHtml(it.cat_badge || 'Tier')}</span>
                         <span class="rating-chip"><i class="fa-solid fa-star"></i> ${(it.reputacion_rating || 3.8).toFixed(1)}</span>
                     </div>
-                    <h3 style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); line-height: 1.3;">${SecurityUtils.escapeHtml(it.empresa)}</h3>
-                    <div style="font-size: 0.66rem; color: var(--text-dim); margin-top: 0.15rem;">${SecurityUtils.escapeHtml(it.ciudad || '')}, ${SecurityUtils.escapeHtml(it.departamento || '')}</div>
+                    <h3 style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); line-height: 1.3;">${SecurityService.escapeHtml(it.empresa)}</h3>
+                    <div style="font-size: 0.66rem; color: var(--text-dim); margin-top: 0.15rem;">${SecurityService.escapeHtml(it.ciudad || '')}, ${SecurityService.escapeHtml(it.departamento || '')}</div>
                 </div>
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.3rem; background: var(--bg-canvas); padding: 0.35rem; border-radius: var(--radius-xs); text-align: center;">
                     <div><span style="font-size: 0.58rem; color: var(--text-dim);">PUNTOS</span><div style="font-weight: 700; color: var(--tier-1);">${it.puntaje_exito || 0}</div></div>
@@ -583,7 +688,7 @@ class AppController {
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.66rem; color: var(--text-muted); border-top: 1px solid var(--border-muted); padding-top: 0.35rem;">
                     <span><strong>Práctica:</strong> $1.423.500 COP</span>
-                    <span style="color: var(--tier-1); font-weight: 600;">5A: ${SecurityUtils.escapeHtml(it.techo_salarial_5anios ? it.techo_salarial_5anios.split('(')[0].trim() : '')}</span>
+                    <span style="color: var(--tier-1); font-weight: 600;">5A: ${SecurityService.escapeHtml(it.techo_salarial_5anios ? it.techo_salarial_5anios.split('(')[0].trim() : '')}</span>
                 </div>
             `;
             grid.appendChild(card);
@@ -607,8 +712,7 @@ class AppController {
         }
     }
 
-    handleToggleFavorite(id, event) {
-        if (event) event.stopPropagation();
+    handleToggleFavorite(id) {
         this.store.toggleFavorite(id);
         this.updateFavCounter();
         if (this.store.filterFavs) {
@@ -628,8 +732,7 @@ class AppController {
         }
     }
 
-    handleToggleCompare(id, event) {
-        if (event) event.stopPropagation();
+    handleToggleCompare(id) {
         const res = this.store.toggleCompare(id);
         if (res.status === 'limit_reached') {
             this.showToast('Máximo 3 empresas para comparar');
@@ -656,7 +759,7 @@ class AppController {
         this.store.compareList.forEach(id => {
             const it = this.store.rawData.find(d => String(d.solicitud_id) === String(id));
             if (it) {
-                html += `<span class="pill-badge pill-tier-1">${SecurityUtils.escapeHtml(it.empresa.substring(0, 14))}... <i class="fa-solid fa-xmark" style="cursor: pointer; margin-left: 2px;" onclick="app.handleToggleCompare('${SecurityUtils.escapeHtml(it.solicitud_id)}', event)"></i></span>`;
+                html += `<span class="pill-badge pill-tier-1">${SecurityService.escapeHtml(it.empresa.substring(0, 14))}... <i class="fa-solid fa-xmark" style="cursor: pointer; margin-left: 2px;" data-action="toggleCompare" data-id="${SecurityService.escapeHtml(it.solicitud_id)}"></i></span>`;
             }
         });
         if (this.dom.dockList) this.dom.dockList.innerHTML = html;
@@ -680,18 +783,18 @@ class AppController {
 
         let html = '<thead><tr><th style="padding: 0.5rem; text-align: left;">Criterio</th>';
         items.forEach(it => {
-            html += `<th style="padding: 0.5rem; text-align: left;"><strong style="color: var(--brand-primary);">${SecurityUtils.escapeHtml(it.empresa)}</strong><div style="font-size: 0.65rem; color: var(--text-dim);">#${it.ranking_posicion} • ${SecurityUtils.escapeHtml(it.cat_badge || '')}</div></th>`;
+            html += `<th style="padding: 0.5rem; text-align: left;"><strong style="color: var(--brand-primary);">${SecurityService.escapeHtml(it.empresa)}</strong><div style="font-size: 0.65rem; color: var(--text-dim);">#${it.ranking_posicion} • ${SecurityService.escapeHtml(it.cat_badge || '')}</div></th>`;
         });
         html += '</tr></thead><tbody>';
 
         const fields = [
             { label: "Afinidad & Puntos", fn: it => `<strong style="color: var(--tier-1);">${it.puntaje_exito} / 100</strong>` },
-            { label: "Reputación Web", fn: it => `★ ${(it.reputacion_rating || 3.8).toFixed(1)} (${SecurityUtils.escapeHtml(it.reputacion_fuente || 'Web')})` },
-            { label: "Escalabilidad", fn: it => `<strong style="color: var(--tier-2);">${it.escalabilidad_score || 70}/100</strong> (${SecurityUtils.escapeHtml(it.escalabilidad_nivel || 'Media')})` },
+            { label: "Reputación Web", fn: it => `★ ${(it.reputacion_rating || 3.8).toFixed(1)} (${SecurityService.escapeHtml(it.reputacion_fuente || 'Web')})` },
+            { label: "Escalabilidad", fn: it => `<strong style="color: var(--tier-2);">${it.escalabilidad_score || 70}/100</strong> (${SecurityService.escapeHtml(it.escalabilidad_nivel || 'Media')})` },
             { label: "Apoyo Práctica", fn: it => `<strong style="color: var(--brand-primary);">$1.423.500 COP</strong>` },
-            { label: "5A Salario & Acumulado", fn: it => `<strong>${SecurityUtils.escapeHtml(it.techo_salarial_5anios || '')}</strong><div style="font-size: 0.65rem; color: var(--brand-primary);">${SecurityUtils.escapeHtml(it.finanzas_5anios?.acumulado_5a || '')}</div>` },
+            { label: "5A Salario & Acumulado", fn: it => `<strong>${SecurityService.escapeHtml(it.techo_salarial_5anios || '')}</strong><div style="font-size: 0.65rem; color: var(--brand-primary);">${SecurityService.escapeHtml(it.finanzas_5anios?.acumulado_5a || '')}</div>` },
             { label: "Competencia", fn: it => `${it.vacantes || 1} vac. vs ${it.postulados || 0} post. (Ratio: ${it.competencia_ratio || 0})` },
-            { label: "Contacto Directo", fn: it => `${SecurityUtils.escapeHtml(it.contacto || 'RRHH')} • ${SecurityUtils.escapeHtml(it.email || '')} • ${SecurityUtils.escapeHtml(it.telefono || '')}` }
+            { label: "Contacto Directo", fn: it => `${SecurityService.escapeHtml(it.contacto || 'RRHH')} • ${SecurityService.escapeHtml(it.email || '')} • ${SecurityService.escapeHtml(it.telefono || '')}` }
         ];
 
         fields.forEach(f => {
@@ -746,9 +849,9 @@ class AppController {
             let html = '';
             it.hitos_carrera.forEach(h => {
                 html += `<div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-xs); padding: 0.45rem; font-size: 0.68rem;">
-                    <span style="color: var(--text-dim); text-transform: uppercase; font-weight: 700; font-size: 0.6rem;">${SecurityUtils.escapeHtml(h.periodo)}</span>
-                    <div style="font-weight: 700; color: var(--text-main); margin: 2px 0;">${SecurityUtils.escapeHtml(h.rol)}</div>
-                    <div style="color: var(--brand-primary); font-family: var(--font-mono); font-weight: 700;">${SecurityUtils.escapeHtml(h.salario)}</div>
+                    <span style="color: var(--text-dim); text-transform: uppercase; font-weight: 700; font-size: 0.6rem;">${SecurityService.escapeHtml(h.periodo)}</span>
+                    <div style="font-weight: 700; color: var(--text-main); margin: 2px 0;">${SecurityService.escapeHtml(h.rol)}</div>
+                    <div style="color: var(--brand-primary); font-family: var(--font-mono); font-weight: 700;">${SecurityService.escapeHtml(h.salario)}</div>
                 </div>`;
             });
             tl.innerHTML = html;
@@ -761,9 +864,9 @@ class AppController {
             it.preguntas_entrevista.forEach((q, idx) => {
                 html += `
                     <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-sm); padding: 0.65rem; font-size: 0.72rem;">
-                        <strong style="color: var(--tier-2);">#${idx + 1} ${SecurityUtils.escapeHtml(q.pregunta)}</strong>
-                        <div style="color: var(--text-muted); margin: 0.3rem 0; line-height: 1.4;">${SecurityUtils.escapeHtml(q.respuesta_modelo)}</div>
-                        <div style="color: var(--brand-primary); font-size: 0.68rem;"><i class="fa-brands fa-github"></i> ${SecurityUtils.escapeHtml(q.tip_github)}</div>
+                        <strong style="color: var(--tier-2);">#${idx + 1} ${SecurityService.escapeHtml(q.pregunta)}</strong>
+                        <div style="color: var(--text-muted); margin: 0.3rem 0; line-height: 1.4;">${SecurityService.escapeHtml(q.respuesta_modelo)}</div>
+                        <div style="color: var(--brand-primary); font-size: 0.68rem;"><i class="fa-brands fa-github"></i> ${SecurityService.escapeHtml(q.tip_github)}</div>
                     </div>
                 `;
             });
@@ -823,10 +926,10 @@ class AppController {
             if (this.dom.mOutreachHeading) this.dom.mOutreachHeading.textContent = 'Carta Formal de Postulación Institucional';
             if (this.dom.mOutreachBody) this.dom.mOutreachBody.textContent = it.correo_formal_completo || '';
             const hasEmail = it.email && it.email.includes('@');
-            const mailtoLink = hasEmail ? `mailto:${SecurityUtils.escapeHtml(it.email)}?subject=Postulaci%C3%B3n+Contrato+ADSO+-+Juan+Manuel+Lagos&body=${encodeURIComponent(it.correo_formal_completo || '')}` : '#';
+            const mailtoLink = hasEmail ? `mailto:${SecurityService.escapeHtml(it.email)}?subject=Postulaci%C3%B3n+Contrato+ADSO+-+Juan+Manuel+Lagos&body=${encodeURIComponent(it.correo_formal_completo || '')}` : '#';
             if (this.dom.mOutreachActions) {
                 this.dom.mOutreachActions.innerHTML = `
-                    <button class="btn" style="padding: 0.2rem 0.5rem;" onclick="app.copyToClipboard('mOutreachBody')"><i class="fa-regular fa-copy"></i> Copiar Correo</button>
+                    <button class="btn" style="padding: 0.2rem 0.5rem;" data-action="copyOutreach"><i class="fa-regular fa-copy"></i> Copiar Correo</button>
                     ${hasEmail ? `<a href="${mailtoLink}" class="btn btn-primary" style="padding: 0.2rem 0.5rem;"><i class="fa-solid fa-paper-plane"></i> Abrir en Mi Correo</a>` : '<span style="font-size: 0.68rem; color: var(--text-dim);">Sin correo registrado</span>'}
                 `;
             }
@@ -835,8 +938,8 @@ class AppController {
             if (this.dom.mOutreachBody) this.dom.mOutreachBody.textContent = it.whatsapp_message || '';
             if (this.dom.mOutreachActions) {
                 this.dom.mOutreachActions.innerHTML = `
-                    <button class="btn" style="padding: 0.2rem 0.5rem;" onclick="app.copyToClipboard('mOutreachBody')"><i class="fa-regular fa-copy"></i> Copiar Mensaje</button>
-                    ${it.is_whatsapp && it.whatsapp_url ? `<a href="${SecurityUtils.escapeHtml(it.whatsapp_url)}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="padding: 0.2rem 0.5rem;"><i class="fa-brands fa-whatsapp"></i> Abrir Chat</a>` : '<span style="font-size: 0.68rem; color: var(--text-dim);">Teléfono fijo (usa correo)</span>'}
+                    <button class="btn" style="padding: 0.2rem 0.5rem;" data-action="copyOutreach"><i class="fa-regular fa-copy"></i> Copiar Mensaje</button>
+                    ${it.is_whatsapp && it.whatsapp_url ? `<a href="${SecurityService.escapeHtml(it.whatsapp_url)}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="padding: 0.2rem 0.5rem;"><i class="fa-brands fa-whatsapp"></i> Abrir Chat</a>` : '<span style="font-size: 0.68rem; color: var(--text-dim);">Teléfono fijo (usa correo)</span>'}
                 `;
             }
         } else if (ch === 'linkedin') {
@@ -844,8 +947,8 @@ class AppController {
             if (this.dom.mOutreachBody) this.dom.mOutreachBody.textContent = it.linkedin_connect_message || '';
             if (this.dom.mOutreachActions) {
                 this.dom.mOutreachActions.innerHTML = `
-                    <button class="btn" style="padding: 0.2rem 0.5rem;" onclick="app.copyToClipboard('mOutreachBody')"><i class="fa-regular fa-copy"></i> Copiar Nota</button>
-                    <a href="${SecurityUtils.escapeHtml(it.linkedin_contact_search_url || '')}" target="_blank" rel="noopener noreferrer" class="btn btn-linkedin" style="padding: 0.2rem 0.5rem;"><i class="fa-brands fa-linkedin"></i> Buscar Reclutador</a>
+                    <button class="btn" style="padding: 0.2rem 0.5rem;" data-action="copyOutreach"><i class="fa-regular fa-copy"></i> Copiar Nota</button>
+                    <a href="${SecurityService.escapeHtml(it.linkedin_contact_search_url || '')}" target="_blank" rel="noopener noreferrer" class="btn btn-linkedin" style="padding: 0.2rem 0.5rem;"><i class="fa-brands fa-linkedin"></i> Buscar Reclutador</a>
                 `;
             }
         }
@@ -885,7 +988,7 @@ class AppController {
     }
 }
 
-// Global App Instance
+// Global Application Bootstrap
 const app = new AppController();
 
 document.addEventListener('DOMContentLoaded', () => {
