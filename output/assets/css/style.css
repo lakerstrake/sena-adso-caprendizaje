@@ -498,6 +498,37 @@ body {
     gap: 0.6rem;
     margin-top: 0.4rem;
 }
+
+.btn-gmail {
+    background: #ea4335 !important;
+    color: #ffffff !important;
+    border-color: #ea4335 !important;
+    font-weight: 600;
+    box-shadow: 0 4px 14px -3px rgba(234, 67, 53, 0.4);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: all var(--transition-base);
+}
+.btn-gmail:hover {
+    background: #d93025 !important;
+    border-color: #d93025 !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px -2px rgba(234, 67, 53, 0.55);
+}
+.mini-gmail {
+    color: #ea4335 !important;
+    border-color: rgba(234, 67, 53, 0.3) !important;
+    background: rgba(234, 67, 53, 0.08) !important;
+}
+.mini-gmail:hover {
+    background: rgba(234, 67, 53, 0.22) !important;
+    border-color: #ea4335 !important;
+    color: #ea4335 !important;
+    transform: translateY(-1px);
+}
+
 .outreach-cv-card-meta {
     display: flex;
     align-items: center;

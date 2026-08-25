@@ -74,6 +74,20 @@ class SecurityService {
         const digits = String(phone).replace(/\D/g, '');
         return `https://wa.me/57${digits}?text=${encodeURIComponent(message || '')}`;
     }
+
+    /**
+     * Constructs a direct web compose URL for Gmail with prefilled recipient, subject and body.
+     */
+    static getGmailUrl(to, subject, body) {
+        if (!to) return '#';
+        const params = new URLSearchParams();
+        params.set('view', 'cm');
+        params.set('fs', '1');
+        params.set('to', to);
+        if (subject) params.set('su', subject);
+        if (body) params.set('body', body);
+        return `https://mail.google.com/mail/?${params.toString()}`;
+    }
 }
 
 // =========================================================================
@@ -1241,7 +1255,7 @@ class AppController {
                 </td>
                 <td style="text-align: right;">
                     <div class="row-actions">
-                        ${hasEmail ? `<a href="mailto:${SecurityService.escapeHtml(it.email)}?subject=${encodeURIComponent(mailSub)}&body=${encodeURIComponent(mailBody)}" class="mini-btn mini-mail" title="Enviar correo formal"><i class="fa-solid fa-envelope"></i></a>` : ''}
+                        ${hasEmail ? `<a href="${SecurityService.escapeHtml(SecurityService.getGmailUrl(it.email, mailSub, mailBody))}" target="_blank" rel="noopener noreferrer" class="mini-btn mini-gmail" title="Redactar en Gmail (${SecurityService.escapeHtml(it.email)})"><i class="fa-brands fa-google"></i></a>` : ''}
                         ${hasValidWA ? `<a href="${SecurityService.escapeHtml(waUrl)}" target="_blank" rel="noopener noreferrer" class="mini-btn mini-wa" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
                         ${it.linkedin_contact_search_url ? `<a href="${SecurityService.escapeHtml(it.linkedin_contact_search_url)}" target="_blank" rel="noopener noreferrer" class="mini-btn" title="Buscar en LinkedIn"><i class="fa-brands fa-linkedin" style="color: var(--linkedin-color);"></i></a>` : ''}
                         <button class="mini-btn" style="font-weight: 700;" data-action="openDetailModal" data-id="${SecurityService.escapeHtml(it.solicitud_id)}">Detalle</button>
@@ -1387,7 +1401,7 @@ class AppController {
                 <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-muted); padding-top: 0.4rem;">
                     <span style="color: var(--brand-primary); font-weight: 600; font-family: var(--font-mono); font-size: 0.72rem;">$1.423.500 COP</span>
                     <div class="row-actions">
-                        ${hasEmail ? `<a href="mailto:${SecurityService.escapeHtml(it.email)}?subject=${encodeURIComponent(isMaster ? 'Postulación Contrato ADSO - Juan Manuel Lagos' : 'Postulación Contrato ADSO SENA - [Nombre del Aprendiz]')}&body=${encodeURIComponent(isMaster ? (it.correo_formal_completo || '') : PrivacyFilterService.sanitizeForGuest(it.correo_formal_completo || ''))}" class="mini-btn mini-mail" title="Enviar correo"><i class="fa-solid fa-envelope"></i></a>` : ''}
+                        ${hasEmail ? `<a href="${SecurityService.escapeHtml(SecurityService.getGmailUrl(it.email, isMaster ? `Propuesta técnica para ${it.empresa} - Juan Manuel Lagos` : `Postulación Contrato ADSO SENA - [Nombre del Aprendiz]`, isMaster ? (it.correo_formal_completo || '') : PrivacyFilterService.sanitizeForGuest(it.correo_formal_completo || '')))}" target="_blank" rel="noopener noreferrer" class="mini-btn mini-gmail" title="Redactar en Gmail (${SecurityService.escapeHtml(it.email)})"><i class="fa-brands fa-google"></i></a>` : ''}
                         ${hasValidWA ? `<a href="${SecurityService.escapeHtml(waUrl)}" target="_blank" rel="noopener noreferrer" class="mini-btn mini-wa" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
                         ${it.linkedin_contact_search_url ? `<a href="${SecurityService.escapeHtml(it.linkedin_contact_search_url)}" target="_blank" rel="noopener noreferrer" class="mini-btn" title="LinkedIn"><i class="fa-brands fa-linkedin" style="color: var(--linkedin-color);"></i></a>` : ''}
                         <button class="mini-btn" style="font-weight: 700;" data-action="openDetailModal" data-id="${SecurityService.escapeHtml(it.solicitud_id)}">Ver Detalle</button>
@@ -1658,13 +1672,15 @@ class AppController {
             if (this.dom.mOutreachBody) this.dom.mOutreachBody.textContent = bodyText;
 
             const hasEmail = it.email && it.email.includes('@');
+            const gmailLink = hasEmail ? SecurityService.getGmailUrl(it.email, subject, bodyText) : '#';
             const mailtoLink = hasEmail ? `mailto:${encodeURIComponent(it.email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}` : '#';
             const trackingCvUrl = it.cv_tracking_url || `https://sena-adso-caprendizaje.pages.dev/cv?empresa=${encodeURIComponent(it.empresa)}&id=${it.solicitud_id}&src=portal`;
 
             if (this.dom.mOutreachActions) {
                 this.dom.mOutreachActions.innerHTML = `
                     <button class="btn" style="padding: 0.22rem 0.52rem;" data-action="copyOutreach"><i class="fa-regular fa-copy"></i> Copiar Correo</button>
-                    ${hasEmail ? `<a href="${mailtoLink}" class="btn btn-primary" style="padding: 0.22rem 0.52rem;"><i class="fa-solid fa-paper-plane"></i> Redactar Correo</a>` : '<span style="font-size: 0.68rem; color: var(--text-dim);">Sin correo registrado</span>'}
+                    ${hasEmail ? `<a href="${SecurityService.escapeHtml(gmailLink)}" target="_blank" rel="noopener noreferrer" class="btn btn-gmail" style="padding: 0.22rem 0.52rem;" title="Redactar correo de postulación directamente en Gmail"><i class="fa-brands fa-google"></i> Redactar en Gmail</a>` : '<span style="font-size: 0.68rem; color: var(--text-dim);">Sin correo registrado</span>'}
+                    ${hasEmail ? `<a href="${mailtoLink}" class="btn" style="padding: 0.22rem 0.52rem;" title="Abrir en cliente de correo local (Outlook / Apple Mail)"><i class="fa-solid fa-envelope"></i> Correo (App)</a>` : ''}
                     ${isMaster 
                         ? `<a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN" target="_blank" rel="noopener noreferrer" class="btn-cv-drive" style="padding: 0.22rem 0.52rem; font-size: 0.68rem;" title="Abrir Hoja de Vida oficial en Google Drive"><i class="fa-solid fa-file-pdf"></i> Hoja de Vida <span class="cv-mini-badge">PDF</span></a>` 
                         : `<span style="font-size: 0.68rem; color: var(--text-dim); display: inline-flex; align-items: center; gap: 0.25rem;"><i class="fa-solid fa-shield-halved" style="color: #38bdf8;"></i> CV oficial reservado al Titular</span>`
