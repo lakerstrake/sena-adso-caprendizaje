@@ -1,0 +1,39 @@
+name: Despliegue en Cloudflare Pages & Workers
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    name: Compilar y Desplegar en Cloudflare
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      deployments: write
+
+    steps:
+      - name: Clonar Repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar Dependencias y Recompilar Datos
+        run: |
+          pip install pandas requests beautifulsoup4
+          python scripts/build.py
+
+      - name: Desplegar a Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: sena-adso-caprendizaje
+          directory: output
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

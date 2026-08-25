@@ -4,7 +4,12 @@ Normalizes company datasets, validates schema, and compiles asset modules.
 """
 
 import os
+import sys
 import json
+
+# Force UTF-8 on Windows
+if sys.stdout.encoding != 'utf-8':
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUTPUT = os.path.join(ROOT, "output")
@@ -30,7 +35,7 @@ def build_data_pipeline():
         json.dump(companies, f, ensure_ascii=False)
         f.write(";\n")
 
-    print(f"✅ Data pipeline completed: {len(companies)} company records compiled.")
+    print(f"[✓] Data pipeline completed: {len(companies)} company records compiled.")
 
 if __name__ == "__main__":
     build_data_pipeline()

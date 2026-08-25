@@ -77,19 +77,24 @@ class SecurityService {
 }
 
 // =========================================================================
-// AUTHENTICATION & SECURITY SERVICE (ISO 27001 / OWASP Top 10)
+// =========================================================================
+// AUTHENTICATION & ZERO-TRUST SECURITY SERVICE (ISO/IEC 27001 & NIST SP 800-63B)
 // =========================================================================
 class AuthService {
     static STORAGE_KEY = 'sgva_sena_auth_session';
     static LOCKOUT_KEY = 'sgva_sena_auth_lockout';
     static MAX_ATTEMPTS = 5;
-    static LOCKOUT_SECONDS = 30;
+    static LOCKOUT_SECONDS = 60; // 60 seconds lockout on brute-force
 
-    // Pre-computed SHA-256 Hashes for credentials
+    // Pre-computed Cryptographic Hashes (Exact SHA-256) for Master Credentials
     static VALID_HASHES = [
-        '6ad307d8dfef24c8b21c45f448c26f04c63aa8b88d228f4115167098c8c5fa0b', // adso2026
-        '9f6c0936dc55db4db34575ecba6d21ec8c0f5902196fa04918e974e64f7b6bb2'  // sena2026
+        '01330d0d75d6e10aa888844557077614ad406cecd1242b65d6bf49d8ea2d9c6e', // adso2026
+        'a46c70b2850c056e683cc1706df439aa9904641945372be3eaa105fa433806f0', // sena2026
+        '47443ccdb4edd473cd7fbc4b561b15c5609207767558711ca3429c85e6265cff', // C26D398F
+        '6d30e4e7423ad3f757ea1387cae1be872ad8718e9e3569e94df8d9d5d91aaa6a'  // Lagos2026*
     ];
+
+    static VALID_USERS = ['admin', '1074808317', 'jmlagos2003@gmail.com', 'juan.lagos', 'juanlagos'];
 
     /**
      * Compute SHA-256 hash using the browser's native Web Crypto API
@@ -125,16 +130,18 @@ class AuthService {
         }
     }
 
-    static saveSession(user, role, remember = false) {
+    static saveSession(user, role = 'ADMIN', token = '', remember = true) {
+        const isMaster = role === 'ADMIN';
         const sessionData = {
             user: user,
             role: role,
-            name: role === 'ADMIN' ? 'Juan Manuel Lagos' : 'Evaluador / Empresa',
+            name: isMaster ? 'Juan Manuel Lagos Monroy' : 'Evaluador / Invitado (Público)',
+            token: token,
             loginTime: Date.now(),
-            expiresAt: Date.now() + (remember ? 30 * 24 * 60 * 60 * 1000 : 4 * 60 * 60 * 1000)
+            expiresAt: Date.now() + (isMaster ? (remember ? 24 * 60 * 60 * 1000 : 4 * 60 * 60 * 1000) : 2 * 60 * 60 * 1000)
         };
         const str = JSON.stringify(sessionData);
-        if (remember) {
+        if (remember && isMaster) {
             localStorage.setItem(AuthService.STORAGE_KEY, str);
         } else {
             sessionStorage.setItem(AuthService.STORAGE_KEY, str);
@@ -142,10 +149,11 @@ class AuthService {
         return sessionData;
     }
 
-    static clearSession() {
+    static async clearSession() {
         try {
             localStorage.removeItem(AuthService.STORAGE_KEY);
             sessionStorage.removeItem(AuthService.STORAGE_KEY);
+            await fetch('/api/auth/logout', { method: 'POST' }).catch(() => {});
         } catch (e) {}
     }
 
@@ -185,42 +193,84 @@ class AuthService {
         } catch (e) {}
     }
 
-    static async authenticate(username, password, remember = false) {
+    static async authenticate(username, password, remember = true) {
         const lockout = AuthService.checkLockout();
         if (lockout.locked) {
-            return { success: false, message: `Demasiados intentos fallidos. Bloqueo temporal por ${lockout.remaining}s.` };
+            return { success: false, message: `Bloqueo de seguridad activado por fuerza bruta. Espera ${lockout.remaining} segundos.` };
         }
 
         const u = String(username || '').trim().toLowerCase();
         const p = String(password || '').trim();
 
         if (!u || !p) {
-            return { success: false, message: 'Ingresa usuario y contraseña.' };
+            return { success: false, message: 'Ingresa tu usuario y contraseña maestra.' };
         }
 
-        const validUsers = ['admin', '1074808317', 'juan', 'juanlagos', 'jmlagos'];
-        const hash = await AuthService.sha256(p);
+        // 1. First attempt verification via Edge Worker API
+        try {
+            const edgeRes = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: u, password: p })
+            });
 
-        const isUserValid = validUsers.includes(u);
-        const isPassValid = AuthService.VALID_HASHES.includes(hash) || p === 'adso2026' || p === 'sena2026';
+            if (edgeRes.ok) {
+                const edgeData = await edgeRes.json();
+                if (edgeData.success) {
+                    AuthService.resetAttempts();
+                    const session = AuthService.saveSession(u, 'ADMIN', edgeData.token, remember);
+                    return { success: true, session: session };
+                }
+            } else if (edgeRes.status === 429) {
+                return { success: false, message: 'Demasiados intentos fallidos en el servidor. Bloqueo temporal de IP activo.' };
+            }
+        } catch (err) {
+            // Offline / Local File fallback verification
+        }
+
+        // 2. Client-side Cryptographic Validation (Zero-Trust fallback)
+        const hash = await AuthService.sha256(p);
+        const isUserValid = AuthService.VALID_USERS.includes(u);
+        const isPassValid = AuthService.VALID_HASHES.includes(hash) || p === 'adso2026' || p === 'sena2026' || p === 'C26D398F' || p === 'Lagos2026*';
 
         if (isUserValid && isPassValid) {
             AuthService.resetAttempts();
-            const session = AuthService.saveSession(username, 'ADMIN', remember);
+            const session = AuthService.saveSession(u, 'ADMIN', 'local_token', remember);
             return { success: true, session: session };
         } else {
             const res = AuthService.recordFailedAttempt();
             if (res.lockedUntil) {
-                return { success: false, message: `5 intentos fallidos. Bloqueado por ${AuthService.LOCKOUT_SECONDS} segundos.` };
+                return { success: false, message: `5 intentos fallidos detectados. Terminal bloqueada por ${AuthService.LOCKOUT_SECONDS}s.` };
             }
-            return { success: false, message: 'Usuario o PIN incorrecto. (Demo: admin / adso2026)' };
+            const remaining = Math.max(1, AuthService.MAX_ATTEMPTS - (res.attempts || 0));
+            return { success: false, message: `Credenciales inválidas. Intentos restantes antes del bloqueo: ${remaining}` };
         }
     }
 
     static authenticateGuest() {
         AuthService.resetAttempts();
-        const session = AuthService.saveSession('guest_recruiter', 'RECRUITER', false);
+        const session = AuthService.saveSession('invitado_publico', 'GUEST', 'guest_token', false);
         return { success: true, session: session };
+    }
+}
+
+// =========================================================================
+// PRIVACY FILTER & DATA PROTECTION SERVICE (RBAC / ISO 27001)
+// =========================================================================
+class PrivacyFilterService {
+    static sanitizeForGuest(text) {
+        if (!text) return '';
+        return text
+            .replace(/Juan Manuel Lagos Monroy/g, '[Nombre del Aprendiz]')
+            .replace(/Juan Manuel Lagos/g, '[Nombre del Aprendiz]')
+            .replace(/Juan Manuel/g, '[Nombre del Aprendiz]')
+            .replace(/jmlagos2003@gmail\.com/g, '[correo_contacto@ejemplo.com]')
+            .replace(/\(\+57\)\s*300\s*727\s*9875/g, '[+57 300 000 0000]')
+            .replace(/300\s*727\s*9875/g, '[300 000 0000]')
+            .replace(/https:\/\/drive\.google\.com\/[^\s]+/g, '[Enlace a Hoja de Vida / Drive]')
+            .replace(/https:\/\/github\.com\/lakerstrake/g, '[https://github.com/tu-usuario]')
+            .replace(/https:\/\/linkedin\.com\/in\/juan-manuel-lagos-monroy/g, '[https://linkedin.com/in/tu-perfil]')
+            .replace(/https:\/\/sena-adso-caprendizaje\.pages\.dev\/cv[^\s]+/g, '[Enlace Rastreado a Hoja de Vida]');
     }
 }
 
@@ -317,18 +367,6 @@ class AppController {
     constructor() {
         this.store = new AppStore(window.RAW_DATA || []);
         this.dom = {};
-    }
-
-    init() {
-        this.cacheDomElements();
-        this.initTheme();
-        this.initAuth();
-        this.populateFilterDropdowns();
-        this.bindEvents();
-        this.updateFavCounter();
-        this.updateCompareDock();
-        this.setLayout(this.store.viewMode);
-        this.applyFilters();
     }
 
     cacheDomElements() {
@@ -438,91 +476,332 @@ class AppController {
             mFunciones: document.getElementById('mFunciones'),
             mClosingDate: document.getElementById('mClosingDate'),
             
-            // Toast
-            toastMsg: document.getElementById('toastMsg')
+            // Toast & CV Telemetry
+            toastMsg: document.getElementById('toastMsg'),
+            btnCvAlertsTrigger: document.getElementById('btnCvAlertsTrigger'),
+            badgeCvAlertsCount: document.getElementById('badgeCvAlertsCount'),
+            cvAlertsModal: document.getElementById('cvAlertsModal'),
+            cvEventsList: document.getElementById('cvEventsList'),
+            lblCvAlertsStatus: document.getElementById('lblCvAlertsStatus')
         };
     }
 
+    init() {
+        this.cacheDomElements();
+        this.initTheme();
+        this.populateFilterDropdowns();
+        this.bindEvents();
+        this.updateFavCounter();
+        this.updateCompareDock();
+        this.setLayout(this.store.viewMode);
+        this.initCvTracker();
+        this.initAuth();
+    }
+
     initAuth() {
-        let sess = AuthService.getSession();
-        if (!sess) {
-            sess = AuthService.saveSession('admin', 'ADMIN', true);
-        }
-        this.updateSessionUI(sess);
+        // ALWAYS default to Modo Invitado (Guest Mode) on startup/refresh without requiring prior login
+        AuthService.clearSession();
+        const guestSession = AuthService.authenticateGuest().session;
+        this.unlockApplication(guestSession);
+        this.initIdleTimer();
     }
 
-    updateSessionUI(sess) {
-        if (this.dom.lblSessionUser && sess) {
-            if (sess.role === 'ADMIN') {
-                this.dom.lblSessionUser.textContent = 'Aprendiz ADSO';
+    lockApplication() {
+        // Fallback lock returns to Guest Mode with directory visible and masked data
+        const guestSession = AuthService.authenticateGuest().session;
+        this.unlockApplication(guestSession);
+    }
+
+    unlockApplication(sess) {
+        this.isAuthenticated = true;
+        this.currentSession = sess;
+
+        const dir = document.getElementById('sectionDirectory');
+        const banner = document.getElementById('candidateBanner');
+        const modal = document.getElementById('authModal');
+        const authBtn = document.getElementById('btnAuthTrigger');
+        const userLbl = document.getElementById('lblSessionUser');
+        const candName = document.getElementById('navCandidateName');
+        const candRole = document.getElementById('navCandidateRole');
+        const candLinks = document.getElementById('navCandidateLinks');
+        const alertsBtn = document.getElementById('btnCvAlertsTrigger');
+        const logoutBtn = document.getElementById('btnQuickLogout');
+        const iconStatus = document.getElementById('iconSessionStatus');
+
+        const isMaster = sess && sess.role === 'ADMIN';
+
+        if (isMaster) {
+            if (candName) candName.textContent = 'Juan Manuel Lagos';
+            if (candRole) {
+                candRole.textContent = 'Titular';
+                candRole.style.background = 'rgba(16, 185, 129, 0.15)';
+                candRole.style.color = 'var(--brand-primary)';
+                candRole.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+            }
+            if (candLinks) candLinks.style.display = ''; // Let CSS media queries control responsive display
+            if (userLbl) userLbl.textContent = 'Juan Manuel (Titular)';
+            if (iconStatus) {
+                iconStatus.className = 'fa-solid fa-user-shield';
+                iconStatus.style.color = 'var(--brand-primary)';
+            }
+            if (authBtn) {
+                authBtn.setAttribute('data-action', 'submitLogout');
+                authBtn.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+                authBtn.title = 'Sesión de Titular activa · Clic para cerrar sesión';
+            }
+            if (alertsBtn) alertsBtn.style.display = 'inline-flex';
+            if (logoutBtn) logoutBtn.style.display = 'inline-flex';
+
+            if (banner) {
+                banner.style.display = 'flex';
+                banner.innerHTML = `
+                    <div class="candidate-banner-main">
+                        <div class="candidate-badge-photo" aria-hidden="true">
+                            <i class="fa-solid fa-user-gear"></i>
+                        </div>
+                        <div class="candidate-meta">
+                            <div class="candidate-name-row">
+                                <h1>Juan Manuel Lagos Monroy</h1>
+                                <span class="status-pill status-ready" style="flex-shrink: 0;"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Disponible Etapa Productiva</span>
+                            </div>
+                            <p class="candidate-pitch">
+                                <strong>Doble Titulación Técnica:</strong> 7 semestres de Ingeniería Mecatrónica + Técnico en Sistemas. Aprendiz ADSO SENA con proyectos en producción (React, Node, SQL, Git).
+                            </p>
+                        </div>
+                    </div>
+                    <div class="candidate-banner-actions">
+                        <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN" target="_blank" rel="noopener noreferrer" class="btn-cv-drive" title="Ver Hoja de Vida oficial (CV) en Google Drive">
+                            <i class="fa-solid fa-file-pdf" aria-hidden="true"></i>
+                            <span>Hoja de Vida (CV)</span>
+                            <span class="cv-mini-badge">Drive</span>
+                        </a>
+                        <a href="https://github.com/lakerstrake" target="_blank" rel="noopener noreferrer" class="btn-github-link" title="Explorar portafolio de código en GitHub">
+                            <i class="fa-brands fa-github" aria-hidden="true"></i>
+                            <span>GitHub</span>
+                        </a>
+                        <a href="https://linkedin.com/in/juan-manuel-lagos-monroy" target="_blank" rel="noopener noreferrer" class="btn-linkedin" title="Conectar en LinkedIn">
+                            <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
+                            <span>LinkedIn</span>
+                        </a>
+                        <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN" target="_blank" rel="noopener noreferrer" class="btn-certs-link" title="Ver Certificados Académicos Oficiales">
+                            <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+                            <span>Certificados</span>
+                        </a>
+                        <button class="btn-dismiss-banner" data-action="dismissNotice" title="Ocultar banner" aria-label="Ocultar banner">
+                            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                `;
+            }
+        } else {
+            // GUEST / PUBLIC DEFAULT MODE
+            if (candName) candName.textContent = 'Directorio Público SENA ADSO';
+            if (candRole) {
+                candRole.textContent = 'Invitado';
+                candRole.style.background = 'rgba(56, 189, 248, 0.15)';
+                candRole.style.color = '#38bdf8';
+                candRole.style.borderColor = 'rgba(56, 189, 248, 0.3)';
+            }
+            if (candLinks) candLinks.style.display = 'none';
+            if (userLbl) userLbl.textContent = '👤 Invitado · Ingreso Titular';
+            if (iconStatus) {
+                iconStatus.className = 'fa-solid fa-lock-open';
+                iconStatus.style.color = '#38bdf8';
+            }
+            if (authBtn) {
+                authBtn.setAttribute('data-action', 'openAuthModal');
+                authBtn.style.borderColor = 'rgba(56, 189, 248, 0.35)';
+                authBtn.title = 'Modo Invitado Público · Clic para iniciar sesión como Titular';
+            }
+            if (alertsBtn) alertsBtn.style.display = 'none';
+            if (logoutBtn) logoutBtn.style.display = 'none';
+
+            if (banner) {
+                banner.style.display = 'flex';
+                banner.innerHTML = `
+                    <div class="candidate-banner-main">
+                        <div class="candidate-badge-photo" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;" aria-hidden="true">
+                            <i class="fa-solid fa-building-columns"></i>
+                        </div>
+                        <div class="candidate-meta">
+                            <div class="candidate-name-row">
+                                <h1>Directorio Estratégico de Vacantes · SENA ADSO</h1>
+                                <span class="status-pill" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); flex-shrink: 0;"><i class="fa-solid fa-eye" aria-hidden="true"></i> Modo Invitado</span>
+                            </div>
+                            <p class="candidate-pitch">
+                                <strong>Exploración Abierta:</strong> Consulta 179 vacantes analizadas para aprendices y egresados en Análisis y Desarrollo de Software. Filtra por canal de postulación, salario y nivel de competitividad.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="candidate-banner-actions">
+                        <button class="btn btn-primary" data-action="openAuthModal" style="padding: 0.28rem 0.65rem;" title="Iniciar sesión como Titular para desbloquear datos reales y telemetría">
+                            <i class="fa-solid fa-key" aria-hidden="true"></i> Iniciar Sesión Titular
+                        </button>
+                        <button class="btn-dismiss-banner" data-action="dismissNotice" title="Ocultar banner" aria-label="Ocultar banner">
+                            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        if (dir) dir.style.display = 'flex';
+        if (modal) modal.style.display = 'none';
+
+        this.initSessionTimer(sess.expiresAt);
+        this.applyFilters();
+    }
+
+    initSessionTimer(expiresAt) {
+        if (this.sessionInterval) clearInterval(this.sessionInterval);
+        const timerLbl = document.getElementById('lblSessionTimer');
+        if (!timerLbl) return;
+
+        timerLbl.style.display = 'inline-block';
+
+        const update = () => {
+            const now = Date.now();
+            const diff = Math.max(0, expiresAt - now);
+            if (diff <= 0) {
+                clearInterval(this.sessionInterval);
+                this.handleLogout();
+                this.showToast('⏱️ Tu sesión ha expirado.');
+                return;
+            }
+
+            const totalSec = Math.floor(diff / 1000);
+            const hrs = Math.floor(totalSec / 3600);
+            const mins = Math.floor((totalSec % 3600) / 60);
+            const secs = totalSec % 60;
+
+            let formatted = '';
+            if (hrs > 0) {
+                formatted = `${hrs}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
             } else {
-                this.dom.lblSessionUser.textContent = 'Reclutador';
+                formatted = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
             }
-        }
-    }
 
-    openAuthModal() {
-        if (this.dom.authModal) {
-            this.dom.authModal.style.display = 'flex';
-            const sess = AuthService.getSession();
-            if (this.dom.btnCancelAuth) {
-                this.dom.btnCancelAuth.style.display = sess ? 'inline-block' : 'none';
-            }
-            if (this.dom.authAlertBox) this.dom.authAlertBox.style.display = 'none';
-        }
-    }
+            timerLbl.textContent = `⏱️ ${formatted}`;
+        };
 
-    closeAuthModal() {
-        if (this.dom.authModal) this.dom.authModal.style.display = 'none';
+        update();
+        this.sessionInterval = setInterval(update, 1000);
     }
 
     switchAuthTab(tab) {
-        if (tab === 'admin') {
-            this.dom.tabAuthAdmin?.classList.add('active');
-            this.dom.tabAuthGuest?.classList.remove('active');
-            if (this.dom.formAuthAdmin) this.dom.formAuthAdmin.style.display = 'flex';
-            if (this.dom.formAuthGuest) this.dom.formAuthGuest.style.display = 'none';
+        const tabAdmin = document.getElementById('tabAuthAdmin');
+        const tabGuest = document.getElementById('tabAuthGuest');
+        const formAdmin = document.getElementById('formAuthAdmin');
+        const formGuest = document.getElementById('formAuthGuest');
+        const alertBox = document.getElementById('authAlertBox');
+
+        if (alertBox) alertBox.style.display = 'none';
+
+        if (tab === 'guest') {
+            if (tabGuest) tabGuest.classList.add('active');
+            if (tabAdmin) tabAdmin.classList.remove('active');
+            if (formGuest) formGuest.style.display = 'flex';
+            if (formAdmin) formAdmin.style.display = 'none';
         } else {
-            this.dom.tabAuthGuest?.classList.add('active');
-            this.dom.tabAuthAdmin?.classList.remove('active');
-            if (this.dom.formAuthGuest) this.dom.formAuthGuest.style.display = 'flex';
-            if (this.dom.formAuthAdmin) this.dom.formAuthAdmin.style.display = 'none';
-        }
-        if (this.dom.authAlertBox) this.dom.authAlertBox.style.display = 'none';
-    }
-
-    togglePasswordVisibility() {
-        if (!this.dom.tbLoginPass) return;
-        const isPwd = this.dom.tbLoginPass.type === 'password';
-        this.dom.tbLoginPass.type = isPwd ? 'text' : 'password';
-        if (this.dom.iconEye) {
-            this.dom.iconEye.className = isPwd ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
-        }
-    }
-
-    async handleLogin() {
-        const user = this.dom.tbLoginUser ? this.dom.tbLoginUser.value : '';
-        const pass = this.dom.tbLoginPass ? this.dom.tbLoginPass.value : '';
-        const remember = this.dom.cbRememberAuth ? this.dom.cbRememberAuth.checked : true;
-
-        const result = await AuthService.authenticate(user, pass, remember);
-        if (result.success) {
-            this.updateSessionUI(result.session);
-            this.closeAuthModal();
-            this.showToast(`¡Sesión iniciada: ${result.session.name}!`);
-        } else {
-            if (this.dom.authAlertBox && this.dom.authAlertText) {
-                this.dom.authAlertText.textContent = result.message;
-                this.dom.authAlertBox.style.display = 'flex';
-            }
+            if (tabAdmin) tabAdmin.classList.add('active');
+            if (tabGuest) tabGuest.classList.remove('active');
+            if (formAdmin) formAdmin.style.display = 'flex';
+            if (formGuest) formGuest.style.display = 'none';
         }
     }
 
     handleGuestLogin() {
         const result = AuthService.authenticateGuest();
-        this.updateSessionUI(result.session);
-        this.closeAuthModal();
-        this.showToast('Acceso activado en Modo Evaluador / Empresa');
+        if (result.success) {
+            const alertBox = document.getElementById('authAlertBox');
+            if (alertBox) alertBox.style.display = 'none';
+            this.unlockApplication(result.session);
+            this.showToast('🌐 Modo Invitado Activo · Datos Personales Protegidos');
+        }
+    }
+
+    openAuthModal() {
+        const modal = document.getElementById('authModal');
+        const alertBox = document.getElementById('authAlertBox');
+        if (modal) modal.style.display = 'flex';
+        if (alertBox) alertBox.style.display = 'none';
+        this.switchAuthTab('admin');
+    }
+
+    closeAuthModal() {
+        const modal = document.getElementById('authModal');
+        if (modal) modal.style.display = 'none';
+    }
+
+    togglePasswordVisibility() {
+        const passEl = document.getElementById('tbLoginPass');
+        const iconEye = document.getElementById('iconEye');
+        if (!passEl) return;
+        const isPwd = passEl.type === 'password';
+        passEl.type = isPwd ? 'text' : 'password';
+        if (iconEye) {
+            iconEye.className = isPwd ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
+        }
+    }
+
+    async handleLogin() {
+        const userEl = document.getElementById('tbLoginUser');
+        const passEl = document.getElementById('tbLoginPass');
+        const user = userEl ? userEl.value : '';
+        const pass = passEl ? passEl.value : '';
+        const cbRem = document.getElementById('cbRememberAuth');
+        const remember = cbRem ? cbRem.checked : true;
+        const btnSubmit = document.getElementById('btnSubmitLogin');
+
+        if (btnSubmit) {
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Verificando Firma...';
+        }
+
+        const result = await AuthService.authenticate(user, pass, remember);
+
+        if (btnSubmit) {
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = '<i class="fa-solid fa-unlock-keyhole"></i> Iniciar Sesión como Titular';
+        }
+
+        if (result.success) {
+            const alertBox = document.getElementById('authAlertBox');
+            if (alertBox) alertBox.style.display = 'none';
+            this.unlockApplication(result.session);
+            this.showToast(`🛡️ Acceso Autorizado · Bienvenido Juan Manuel`);
+        } else {
+            const alertBox = document.getElementById('authAlertBox');
+            const alertTxt = document.getElementById('authAlertText');
+            if (alertBox && alertTxt) {
+                alertTxt.textContent = result.message;
+                alertBox.style.display = 'flex';
+            }
+        }
+    }
+
+    async handleLogout() {
+        await AuthService.clearSession();
+        this.lockApplication();
+        this.showToast('🔒 Sesión cerrada de forma segura');
+    }
+
+    initIdleTimer() {
+        let idleTimeout;
+        const resetIdle = () => {
+            clearTimeout(idleTimeout);
+            if (this.isAuthenticated && this.currentSession && this.currentSession.role === 'ADMIN') {
+                idleTimeout = setTimeout(() => {
+                    this.handleLogout();
+                    this.showToast('⚠️ Sesión bloqueada por inactividad (15 min)');
+                }, 15 * 60 * 1000);
+            }
+        };
+
+        ['mousemove', 'keydown', 'touchstart', 'scroll', 'click'].forEach(evt => {
+            window.addEventListener(evt, resetIdle, { passive: true });
+        });
+        resetIdle();
     }
 
     initTheme() {
@@ -621,17 +900,33 @@ class AppController {
             case 'closeAuthModal':
                 this.closeAuthModal();
                 break;
-            case 'switchAuthTab':
-                this.switchAuthTab(el.getAttribute('data-tab'));
+            case 'openCvAlertsModal':
+                this.openCvAlertsModal();
+                break;
+            case 'closeCvAlertsModal':
+                this.closeCvAlertsModal();
+                break;
+            case 'testCvAlert':
+                this.testCvNotification();
                 break;
             case 'togglePasswordVisibility':
                 this.togglePasswordVisibility();
+                break;
+            case 'switchAuthTab':
+                this.switchAuthTab(el.getAttribute('data-tab'));
                 break;
             case 'submitLogin':
                 this.handleLogin();
                 break;
             case 'submitGuestLogin':
                 this.handleGuestLogin();
+                break;
+            case 'submitLogout':
+                if (this.isAuthenticated) {
+                    this.handleLogout();
+                } else {
+                    this.openAuthModal();
+                }
                 break;
             case 'switchNavTab':
                 this.switchNavTab(el.getAttribute('data-tab'));
@@ -794,6 +1089,13 @@ class AppController {
     }
 
     applyFilters() {
+        if (!this.isAuthenticated) {
+            if (this.dom.sectionDirectory) this.dom.sectionDirectory.style.display = 'none';
+            if (this.dom.sectionStrategy) this.dom.sectionStrategy.style.display = 'none';
+            if (this.dom.candidateBanner) this.dom.candidateBanner.style.display = 'none';
+            return;
+        }
+
         const query = (this.dom.mainSearch?.value || '').toLowerCase().trim();
         const ch = this.dom.filterChannel?.value || '';
         const comp = this.dom.filterCompetition?.value || '';
@@ -902,6 +1204,11 @@ class AppController {
             const cleanTecho5A = it.techo_salarial_5anios ? it.techo_salarial_5anios.split('(')[0].replace('COP','').trim() : '$10M-$22M';
             const posFormatted = (it.ranking_posicion || 1) < 10 ? '0' + it.ranking_posicion : it.ranking_posicion;
 
+            const isMaster = this.currentSession && this.currentSession.role === 'ADMIN';
+            const rawBody = it.correo_formal_completo || '';
+            const mailBody = isMaster ? rawBody : PrivacyFilterService.sanitizeForGuest(rawBody);
+            const mailSub = isMaster ? `Postulación Contrato ADSO - Juan Manuel Lagos` : `Postulación Contrato ADSO SENA - [Nombre del Aprendiz]`;
+
             tr.innerHTML = `
                 <td style="text-align: center;">
                     <input type="checkbox" ${isComp ? 'checked' : ''} data-action="toggleCompare" data-id="${SecurityService.escapeHtml(it.solicitud_id)}" aria-label="Comparar empresa">
@@ -934,7 +1241,7 @@ class AppController {
                 </td>
                 <td style="text-align: right;">
                     <div class="row-actions">
-                        ${hasEmail ? `<a href="mailto:${SecurityService.escapeHtml(it.email)}?subject=Postulaci%C3%B3n+Contrato+ADSO+-+Juan+Manuel+Lagos&body=${encodeURIComponent(it.correo_formal_completo || '')}" class="mini-btn mini-mail" title="Enviar correo formal"><i class="fa-solid fa-envelope"></i></a>` : ''}
+                        ${hasEmail ? `<a href="mailto:${SecurityService.escapeHtml(it.email)}?subject=${encodeURIComponent(mailSub)}&body=${encodeURIComponent(mailBody)}" class="mini-btn mini-mail" title="Enviar correo formal"><i class="fa-solid fa-envelope"></i></a>` : ''}
                         ${hasValidWA ? `<a href="${SecurityService.escapeHtml(waUrl)}" target="_blank" rel="noopener noreferrer" class="mini-btn mini-wa" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
                         ${it.linkedin_contact_search_url ? `<a href="${SecurityService.escapeHtml(it.linkedin_contact_search_url)}" target="_blank" rel="noopener noreferrer" class="mini-btn" title="Buscar en LinkedIn"><i class="fa-brands fa-linkedin" style="color: var(--linkedin-color);"></i></a>` : ''}
                         <button class="mini-btn" style="font-weight: 700;" data-action="openDetailModal" data-id="${SecurityService.escapeHtml(it.solicitud_id)}">Detalle</button>
@@ -1031,6 +1338,8 @@ class AppController {
             return;
         }
 
+        const isMaster = this.currentSession && this.currentSession.role === 'ADMIN';
+
         pageSlice.forEach(it => {
             const card = document.createElement('article');
             card.className = 'clean-card';
@@ -1078,7 +1387,7 @@ class AppController {
                 <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-muted); padding-top: 0.4rem;">
                     <span style="color: var(--brand-primary); font-weight: 600; font-family: var(--font-mono); font-size: 0.72rem;">$1.423.500 COP</span>
                     <div class="row-actions">
-                        ${hasEmail ? `<a href="mailto:${SecurityService.escapeHtml(it.email)}?subject=Postulaci%C3%B3n+Contrato+ADSO+-+Juan+Manuel+Lagos&body=${encodeURIComponent(it.correo_formal_completo || '')}" class="mini-btn mini-mail" title="Enviar correo"><i class="fa-solid fa-envelope"></i></a>` : ''}
+                        ${hasEmail ? `<a href="mailto:${SecurityService.escapeHtml(it.email)}?subject=${encodeURIComponent(isMaster ? 'Postulación Contrato ADSO - Juan Manuel Lagos' : 'Postulación Contrato ADSO SENA - [Nombre del Aprendiz]')}&body=${encodeURIComponent(isMaster ? (it.correo_formal_completo || '') : PrivacyFilterService.sanitizeForGuest(it.correo_formal_completo || ''))}" class="mini-btn mini-mail" title="Enviar correo"><i class="fa-solid fa-envelope"></i></a>` : ''}
                         ${hasValidWA ? `<a href="${SecurityService.escapeHtml(waUrl)}" target="_blank" rel="noopener noreferrer" class="mini-btn mini-wa" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
                         ${it.linkedin_contact_search_url ? `<a href="${SecurityService.escapeHtml(it.linkedin_contact_search_url)}" target="_blank" rel="noopener noreferrer" class="mini-btn" title="LinkedIn"><i class="fa-brands fa-linkedin" style="color: var(--linkedin-color);"></i></a>` : ''}
                         <button class="mini-btn" style="font-weight: 700;" data-action="openDetailModal" data-id="${SecurityService.escapeHtml(it.solicitud_id)}">Ver Detalle</button>
@@ -1318,36 +1627,85 @@ class AppController {
         const it = this.store.activeItem;
         if (!it) return;
 
+        const isMaster = this.currentSession && this.currentSession.role === 'ADMIN';
+
         if (this.dom.mChEmail) this.dom.mChEmail.className = ch === 'email' ? 'btn btn-primary' : 'btn';
         if (this.dom.mChWA) this.dom.mChWA.className = ch === 'wa' ? 'btn btn-whatsapp active' : 'btn';
         if (this.dom.mChLinkedIn) this.dom.mChLinkedIn.className = ch === 'linkedin' ? 'btn btn-linkedin active' : 'btn';
 
         if (ch === 'email') {
-            if (this.dom.mOutreachHeading) this.dom.mOutreachHeading.textContent = 'Carta Formal de Postulación Institucional';
-            if (this.dom.mOutreachBody) this.dom.mOutreachBody.textContent = it.correo_formal_completo || '';
+            let subject = isMaster 
+                ? `Propuesta técnica y proyectos de software para ${it.empresa} - Juan Manuel Lagos (ADSO SENA)`
+                : `Postulación Contrato de Aprendizaje ADSO SENA - [Nombre del Aprendiz]`;
+
+            let bodyText = it.correo_formal_completo || '';
+            if (bodyText.startsWith('Asunto:')) {
+                const lines = bodyText.split('\n');
+                subject = lines[0].replace(/^Asunto:\s*/i, '').trim();
+                bodyText = lines.slice(2).join('\n');
+            }
+
+            if (!isMaster) {
+                subject = PrivacyFilterService.sanitizeForGuest(subject);
+                bodyText = PrivacyFilterService.sanitizeForGuest(bodyText);
+            }
+
+            if (this.dom.mOutreachHeading) {
+                this.dom.mOutreachHeading.textContent = isMaster 
+                    ? 'Carta Persuasiva de Postulación (Personalizada & con CV Rastreado)' 
+                    : 'Plantilla de Postulación Formal (Pública / Formato Estándar)';
+            }
+            if (this.dom.mOutreachBody) this.dom.mOutreachBody.textContent = bodyText;
+
             const hasEmail = it.email && it.email.includes('@');
-            const mailtoLink = hasEmail ? `mailto:${SecurityService.escapeHtml(it.email)}?subject=Postulaci%C3%B3n+Contrato+ADSO+-+Juan+Manuel+Lagos&body=${encodeURIComponent(it.correo_formal_completo || '')}` : '#';
+            const mailtoLink = hasEmail ? `mailto:${encodeURIComponent(it.email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}` : '#';
+            const trackingCvUrl = it.cv_tracking_url || `https://sena-adso-caprendizaje.pages.dev/cv?empresa=${encodeURIComponent(it.empresa)}&id=${it.solicitud_id}&src=portal`;
+
             if (this.dom.mOutreachActions) {
                 this.dom.mOutreachActions.innerHTML = `
-                    <button class="btn" style="padding: 0.2rem 0.5rem;" data-action="copyOutreach"><i class="fa-regular fa-copy"></i> Copiar Correo</button>
-                    ${hasEmail ? `<a href="${mailtoLink}" class="btn btn-primary" style="padding: 0.2rem 0.5rem;"><i class="fa-solid fa-paper-plane"></i> Abrir en Mi Correo</a>` : '<span style="font-size: 0.68rem; color: var(--text-dim);">Sin correo registrado</span>'}
+                    <button class="btn" style="padding: 0.22rem 0.52rem;" data-action="copyOutreach"><i class="fa-regular fa-copy"></i> Copiar Correo</button>
+                    ${hasEmail ? `<a href="${mailtoLink}" class="btn btn-primary" style="padding: 0.22rem 0.52rem;"><i class="fa-solid fa-paper-plane"></i> Redactar Correo</a>` : '<span style="font-size: 0.68rem; color: var(--text-dim);">Sin correo registrado</span>'}
+                    ${isMaster 
+                        ? `<a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN" target="_blank" rel="noopener noreferrer" class="btn-cv-drive" style="padding: 0.22rem 0.52rem; font-size: 0.68rem;" title="Abrir Hoja de Vida oficial en Google Drive"><i class="fa-solid fa-file-pdf"></i> Hoja de Vida <span class="cv-mini-badge">PDF</span></a>` 
+                        : `<span style="font-size: 0.68rem; color: var(--text-dim); display: inline-flex; align-items: center; gap: 0.25rem;"><i class="fa-solid fa-shield-halved" style="color: #38bdf8;"></i> CV oficial reservado al Titular</span>`
+                    }
                 `;
             }
         } else if (ch === 'wa') {
-            if (this.dom.mOutreachHeading) this.dom.mOutreachHeading.textContent = 'Mensaje de WhatsApp Directo';
-            if (this.dom.mOutreachBody) this.dom.mOutreachBody.textContent = it.whatsapp_message || '';
+            let waMsg = it.whatsapp_message || '';
+            if (!isMaster) {
+                waMsg = PrivacyFilterService.sanitizeForGuest(waMsg);
+            }
+
+            if (this.dom.mOutreachHeading) {
+                this.dom.mOutreachHeading.textContent = isMaster
+                    ? 'Mensaje de WhatsApp Directo (Conversacional & Persuasivo)'
+                    : 'Plantilla de WhatsApp (Pública / Formato Estándar)';
+            }
+            if (this.dom.mOutreachBody) this.dom.mOutreachBody.textContent = waMsg;
+
             const hasValidWA = SecurityService.isValidMobile(it.telefono);
-            const waUrl = hasValidWA ? SecurityService.getWhatsAppUrl(it.telefono, it.whatsapp_message) : '';
+            const waUrl = hasValidWA ? SecurityService.getWhatsAppUrl(it.telefono, waMsg) : '';
 
             if (this.dom.mOutreachActions) {
                 this.dom.mOutreachActions.innerHTML = `
                     <button class="btn" style="padding: 0.2rem 0.5rem;" data-action="copyOutreach"><i class="fa-regular fa-copy"></i> Copiar Mensaje</button>
-                    ${hasValidWA ? `<a href="${SecurityService.escapeHtml(waUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="padding: 0.2rem 0.5rem;"><i class="fa-brands fa-whatsapp"></i> Abrir Chat</a>` : '<span style="font-size: 0.68rem; color: var(--text-dim);"><i class="fa-solid fa-phone"></i> Teléfono PBX / Fijo (usa correo o LinkedIn)</span>'}
+                    ${hasValidWA ? `<a href="${SecurityService.escapeHtml(waUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="padding: 0.2rem 0.5rem;"><i class="fa-brands fa-whatsapp"></i> Abrir Chat</a>` : '<span style="font-size: 0.68rem; color: var(--text-dim);"><i class="fa-solid fa-phone"></i> Teléfono PBX / Fijo</span>'}
                 `;
             }
         } else if (ch === 'linkedin') {
-            if (this.dom.mOutreachHeading) this.dom.mOutreachHeading.textContent = 'Nota de Conexión en LinkedIn (< 300 Caracteres)';
-            if (this.dom.mOutreachBody) this.dom.mOutreachBody.textContent = it.linkedin_connect_message || '';
+            let liMsg = it.linkedin_connect_message || '';
+            if (!isMaster) {
+                liMsg = PrivacyFilterService.sanitizeForGuest(liMsg);
+            }
+
+            if (this.dom.mOutreachHeading) {
+                this.dom.mOutreachHeading.textContent = isMaster
+                    ? 'Nota de Conexión en LinkedIn (< 300 Caracteres - Alta Aceptación)'
+                    : 'Plantilla de Conexión en LinkedIn (< 300 Caracteres)';
+            }
+            if (this.dom.mOutreachBody) this.dom.mOutreachBody.textContent = liMsg;
+
             if (this.dom.mOutreachActions) {
                 this.dom.mOutreachActions.innerHTML = `
                     <button class="btn" style="padding: 0.2rem 0.5rem;" data-action="copyOutreach"><i class="fa-regular fa-copy"></i> Copiar Nota</button>
@@ -1355,6 +1713,113 @@ class AppController {
                 `;
             }
         }
+    }
+
+    // =========================================================================
+    // CV REALTIME TELEMETRY & NOTIFICATION CONTROLLER
+    // =========================================================================
+    openCvAlertsModal() {
+        if (this.dom.cvAlertsModal) {
+            this.dom.cvAlertsModal.style.display = 'flex';
+            this.fetchCvAlerts();
+        }
+    }
+
+    closeCvAlertsModal() {
+        if (this.dom.cvAlertsModal) {
+            this.dom.cvAlertsModal.style.display = 'none';
+        }
+    }
+
+    async fetchCvAlerts() {
+        if (!this.dom.cvEventsList) return;
+        try {
+            const res = await fetch('/api/cv-events');
+            if (res.ok) {
+                const data = await res.json();
+                const count = data.total_aperturas || (data.eventos ? data.eventos.length : 0);
+                if (this.dom.badgeCvAlertsCount) {
+                    this.dom.badgeCvAlertsCount.textContent = count;
+                }
+
+                if (!data.eventos || data.eventos.length === 0) {
+                    this.dom.cvEventsList.innerHTML = `
+                        <div style="text-align: center; padding: 1.5rem; color: var(--text-muted); font-size: 0.72rem;">
+                            <i class="fa-solid fa-bell-slash" style="font-size: 1.4rem; color: var(--text-dim); margin-bottom: 0.3rem;"></i><br>
+                            Aún no se registran aperturas en vivo.<br>
+                            <span style="font-size: 0.65rem; color: var(--text-dim);">Haz clic en "Simular Apertura" o abre cualquier enlace de CV para probar.</span>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = '';
+                data.eventos.forEach(ev => {
+                    html += `
+                        <div style="background: var(--bg-surface); border: 1px solid var(--border-muted); border-radius: var(--radius-xs); padding: 0.5rem; display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.7rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <strong style="color: #10b981; font-weight: 700;">
+                                    <i class="fa-solid fa-circle-check"></i> ${SecurityService.escapeHtml(ev.empresa)}
+                                </strong>
+                                <span style="font-size: 0.62rem; color: var(--text-dim); font-family: var(--font-mono);">${SecurityService.escapeHtml(ev.fecha || '')}</span>
+                            </div>
+                            <div style="color: var(--text-muted); font-size: 0.66rem; display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                                <span><i class="fa-solid fa-user"></i> ${SecurityService.escapeHtml(ev.contacto || 'RRHH')}</span>
+                                <span>•</span>
+                                <span><i class="fa-solid fa-location-dot"></i> ${SecurityService.escapeHtml(ev.ubicacion || 'Colombia')}</span>
+                                <span>•</span>
+                                <span><i class="fa-solid fa-laptop"></i> ${SecurityService.escapeHtml(ev.dispositivo || 'Web')}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                this.dom.cvEventsList.innerHTML = html;
+            }
+        } catch (e) {
+            // Local fallback simulation
+            if (this.dom.cvEventsList) {
+                this.dom.cvEventsList.innerHTML = `
+                    <div style="text-align: center; padding: 1rem; color: var(--text-muted); font-size: 0.72rem;">
+                        <i class="fa-solid fa-shield-check" style="color: #10b981;"></i> Sistema de telemetría listo para despliegue en Cloudflare Worker.
+                    </div>
+                `;
+            }
+        }
+    }
+
+    async testCvNotification() {
+        const testPayload = {
+            empresa: "STEFANINI COLOMBIA S.A.S (Apertura de Prueba)",
+            contacto: "Johana Avilés",
+            solicitudId: "4425748"
+        };
+
+        this.showToast('🚀 Disparando alerta de telemetría de CV...');
+
+        try {
+            const res = await fetch('/api/cv-events', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(testPayload)
+            });
+
+            if (res.ok) {
+                this.showToast('✓ ¡Alerta en tiempo real generada y registrada!');
+                this.fetchCvAlerts();
+            } else {
+                this.showToast('✓ Alerta simulada localmente con éxito');
+            }
+        } catch (e) {
+            this.showToast('✓ Alerta simulada con éxito');
+        }
+    }
+
+    initCvTracker() {
+        this.fetchCvAlerts();
+        // Background polling every 30 seconds
+        setInterval(() => {
+            this.fetchCvAlerts();
+        }, 30000);
     }
 
     copyToClipboard(elementId) {

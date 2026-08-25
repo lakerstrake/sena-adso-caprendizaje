@@ -196,48 +196,137 @@ def classify_tier(empresa_name, profile_text, functions_text):
             "fuente": "Directorio Empresas"
         }
 
-def build_formal_email(empresa, contacto, funciones):
-    contacto_nombre = contacto if contacto and "selección" not in contacto.lower() and "talento" not in contacto.lower() else "Equipo de Selección"
+GENERIC_CONTACT_TERMS = [
+    "seleccion", "selección", "talento", "humano", "rrhh", "recursos", "gestion", "gestión",
+    "administracion", "administración", "recepcion", "recepción", "gerencia", "direccion",
+    "dirección", "departamento", "dpto", "contratacion", "contratación", "sin registrar",
+    "no registra", "sena", "aprendiz", "caprendizaje", "coordinacion", "coordinación",
+    "jefe", "lider", "líder", "analista", "asistente", "auxiliar", "contacto"
+]
+
+def clean_contact_person(raw_contact, empresa):
+    if not raw_contact:
+        return {
+            "type": "team",
+            "name": f"equipo de tecnología en {empresa}",
+            "saludo_email": f"Hola equipo de tecnología en {empresa},",
+            "saludo_wa": f"Hola equipo de {empresa}, un gusto saludarlos.",
+            "saludo_li": f"Hola equipo de {empresa},"
+        }
+
+    cleaned = re.sub(r'(?i)^(ing\.|lic\.|dr\.|dra\.|psic\.|sr\.|sra\.|abg\.)\s*', '', raw_contact).strip()
+    cleaned = re.sub(r'\s+', ' ', cleaned)
+    lower_c = cleaned.lower()
+
+    if any(term in lower_c for term in GENERIC_CONTACT_TERMS) or len(cleaned) < 3:
+        short_emp = re.sub(r'(?i)\s+(s\.?a\.?s\.?|s\.?a\.?|ltda\.?|e\.?u\.?|sucursal\s+colombia|colombia)$', '', empresa).strip()
+        return {
+            "type": "team",
+            "name": f"equipo de desarrollo en {short_emp}",
+            "saludo_email": f"Hola equipo de desarrollo en {short_emp},",
+            "saludo_wa": f"Hola equipo de {short_emp}, un cordial saludo.",
+            "saludo_li": f"Hola equipo de {short_emp},"
+        }
+
+    parts = cleaned.split()
+    first_name = parts[0].capitalize()
+    if len(parts) >= 2 and first_name.lower() in ["juan", "maría", "maria", "luis", "carlos", "ana", "jorge", "laura"]:
+        first_name = f"{first_name} {parts[1].capitalize()}"
+
+    return {
+        "type": "person",
+        "name": first_name,
+        "saludo_email": f"Hola {first_name},",
+        "saludo_wa": f"Hola {first_name}, un cordial saludo.",
+        "saludo_li": f"Hola {first_name},"
+    }
+
+def get_tracking_cv_url(empresa, solicitud_id, contacto, source="email"):
+    base_url = "https://sena-adso-caprendizaje.pages.dev/cv"
+    params = {
+        "empresa": empresa,
+        "id": str(solicitud_id),
+        "c": contacto or "Directo",
+        "src": source
+    }
+    return f"{base_url}?{urllib.parse.urlencode(params)}"
+
+def extract_tech_match(funciones, perfil):
+    combo = f"{funciones} {perfil}".lower()
+    matches = []
+    if any(k in combo for k in ["sql", "base de datos", "bases de datos", "mysql", "postgres", "consultas"]):
+        matches.append("diseño relacional, consultas complejas SQL y optimización de bases de datos")
+    if any(k in combo for k in ["react", "frontend", "javascript", "web", "html", "css", "angular", "vue"]):
+        matches.append("desarrollo web frontend moderno con JavaScript, React y consumo de APIs")
+    if any(k in combo for k in ["java", "spring", "backend", "api", "node", "c#", ".net", "python"]):
+        matches.append("arquitectura backend, desarrollo de APIs REST seguras y lógica de negocio en Java/Node.js")
+    if any(k in combo for k in ["qa", "testing", "pruebas", "calidad", "test"]):
+        matches.append("elaboración de planes de pruebas técnicas, validación funcional y aseguramiento de calidad")
+    if any(k in combo for k in ["soporte", "mesa de ayuda", "mantenimiento", "incidencias", "help desk"]):
+        matches.append("diagnóstico técnico ágil, mantenimiento correctivo/preventivo y soporte a usuarios")
+
+    if not matches:
+        return "desarrollo de software full-stack, integración de bases de datos SQL y despliegue continuo"
+    if len(matches) == 1:
+        return matches[0]
+    return f"{matches[0]} y {matches[1]}"
+
+def build_formal_email(empresa, contacto, funciones, perfil="", solicitud_id=""):
+    contacto_info = clean_contact_person(contacto, empresa)
+    tech_match = extract_tech_match(funciones, perfil)
+    cv_url = get_tracking_cv_url(empresa, solicitud_id, contacto_info["name"], "email")
+
+    if contacto_info["type"] == "person":
+        asunto = f"{contacto_info['name']}, propuesta técnica para la vacante de software en {empresa} (ADSO SENA)"
+    else:
+        asunto = f"Propuesta técnica y proyectos de software para {empresa} - Aprendiz ADSO SENA"
+
     return (
-        f"Asunto: Postulación Contrato de Aprendizaje - Tecnólogo ADSO SENA - {CANDIDATE['name']}\n\n"
-        f"Estimado/a {contacto_nombre},\n\n"
-        f"Reciba un cordial saludo. Mi nombre es {CANDIDATE['name']}, aprendiz en etapa productiva del programa "
-        f"Tecnólogo en Análisis y Desarrollo de Software (ADSO) - SENA.\n\n"
-        f"Me dirijo a ustedes tras consultar con gran interés la vacante de Contrato de Aprendizaje para {empresa} "
-        f"que vi publicada en la plataforma institucional Caprendizaje. Mi objetivo es vincularme formalmente con su "
-        f"equipo y aportar valor técnico en sus proyectos y operaciones de software.\n\n"
-        f"Cuento con sólida preparación práctica y experiencia en proyectos reales en desarrollo web y software "
-        f"full-stack (JavaScript, React, Java, Spring Boot, APIs REST), bases de datos SQL y despliegue en producción, "
-        f"además de background en siete semestres de Ingeniería Mecatrónica y título como Técnico en Sistemas, con total "
-        f"disponibilidad y dedicación para iniciar mi etapa productiva.\n\n"
-        f"Pongo a su entera disposición mi hoja de vida institucional, portafolio de código y certificaciones técnicas:\n"
-        f"• Hoja de Vida (CV) y Certificados: {CANDIDATE['cv_url']}\n"
-        f"• Repositorio y Proyectos en GitHub: {CANDIDATE['github_url']}\n"
-        f"• Perfil Profesional en LinkedIn: {CANDIDATE['linkedin_url']}\n"
-        f"• Teléfono directo / WhatsApp: {CANDIDATE['phone']}\n"
-        f"• Correo Electrónico: {CANDIDATE['email']}\n\n"
-        f"Agradezco de antemano la oportunidad de participar en su proceso de selección y quedo atento a su respuesta para "
-        f"coordinar una entrevista técnica.\n\n"
-        f"Atentamente,\n\n"
+        f"Asunto: {asunto}\n\n"
+        f"{contacto_info['saludo_email']}\n\n"
+        f"Te escribo con mucho entusiasmo porque vi publicada la vacante de Contrato de Aprendizaje para {empresa} "
+        f"en la plataforma Caprendizaje del SENA, y me llamó especialmente la atención el enfoque de sus proyectos.\n\n"
+        f"Mi nombre es {CANDIDATE['name']}, aprendiz en etapa productiva del programa Tecnólogo en Análisis y "
+        f"Desarrollo de Software (ADSO). Para los requerimientos de su equipo en {tech_match}, cuento con preparación "
+        f"práctica y proyectos funcionales desplegados en producción.\n\n"
+        f"¿Por qué puedo sumar valor a {empresa} desde el primer día?\n"
+        f"1. Solidez técnica y metodológica: Cuento con doble background técnico (7 semestres aprobados de Ingeniería "
+        f"Mecatrónica y título como Técnico en Sistemas), lo que me permite comprender tanto la lógica algorítmica profunda como la arquitectura de software moderna.\n"
+        f"2. Stack aplicado: Experiencia desarrollando con JavaScript (React, Node.js), Java (Spring Boot), bases de datos SQL relacionales, control de versiones Git/GitHub y despliegue cloud.\n"
+        f"3. Disponibilidad total e inmediata: Mi contrato de aprendizaje está 100% avalado por el SENA para formalización inmediata.\n\n"
+        f"Pongo a tu disposición mi Hoja de Vida detallada con certificados académicos y mi repositorio de código:\n"
+        f"📄 Hoja de Vida (CV) y Certificados: {cv_url}\n"
+        f"💻 Portafolio de Código en GitHub: {CANDIDATE['github_url']}\n"
+        f"🔗 Perfil Profesional en LinkedIn: {CANDIDATE['linkedin_url']}\n\n"
+        f"Si te parece bien, ¿podríamos conversar brevemente 5 minutos esta semana para revisar cómo puedo integrarme "
+        f"a sus objetivos de desarrollo de software?\n\n"
+        f"Muchas gracias por tu tiempo y consideración.\n\n"
+        f"Cordialmente,\n\n"
         f"{CANDIDATE['name']}\n"
         f"{CANDIDATE['role']}\n"
-        f"{CANDIDATE['phone']} · {CANDIDATE['email']}"
+        f"📱 {CANDIDATE['phone']} · ✉️ {CANDIDATE['email']}"
     )
 
-def build_whatsapp_pitch(empresa, contacto):
-    contacto_nombre = contacto if contacto and "selección" not in contacto.lower() else "Equipo de Talento Humano"
+def build_whatsapp_pitch(empresa, contacto, funciones="", solicitud_id=""):
+    contacto_info = clean_contact_person(contacto, empresa)
+    tech_match = extract_tech_match(funciones, "")
+    cv_url = get_tracking_cv_url(empresa, solicitud_id, contacto_info["name"], "whatsapp")
+
     return (
-        f"Hola {contacto_nombre}, cordial saludo. Mi nombre es {CANDIDATE['name']}, aprendiz tecnólogo en "
-        f"Análisis y Desarrollo de Software (ADSO) del SENA.\n\n"
-        f"Me comunico con mucho interés tras revisar la vacante de Contrato de Aprendizaje para {empresa} "
-        f"que vi publicada en Caprendizaje. Cuento con total disponibilidad para iniciar mi etapa productiva "
-        f"y aportar en desarrollo web, software (Java, React, SQL), Git y metodologías ágiles.\n\n"
-        f"Pongo a su disposición mi hoja de vida y proyectos técnicos:\n"
-        f"• Hoja de Vida (CV) y Certificados: {CANDIDATE['cv_url']}\n"
-        f"• GitHub: {CANDIDATE['github_url']}\n"
-        f"• LinkedIn: {CANDIDATE['linkedin_url']}\n\n"
-        f"¿Me indicarían por favor con quién o a qué correo puedo coordinar una entrevista técnica? Muchas gracias."
+        f"{contacto_info['saludo_wa']} Mi nombre es {CANDIDATE['name']}, aprendiz del Tecnólogo en Análisis y Desarrollo de Software (ADSO) del SENA.\n\n"
+        f"Me comunico con mucho interés tras ver la vacante de Contrato de Aprendizaje para *{empresa}* en Caprendizaje. "
+        f"Cuento con preparación práctica en *{tech_match}*, 7 semestres de Ingeniería Mecatrónica y disponibilidad inmediata para iniciar etapa productiva.\n\n"
+        f"Comparto mi Hoja de Vida y proyectos de código:\n"
+        f"📄 *CV y Certificados:* {cv_url}\n"
+        f"💻 *GitHub:* {CANDIDATE['github_url']}\n"
+        f"🔗 *LinkedIn:* {CANDIDATE['linkedin_url']}\n\n"
+        f"¿Me indicarían por favor con quién o a qué correo puedo coordinar una breve entrevista técnica? ¡Muchas gracias!"
     )
+
+def build_linkedin_pitch(empresa, contacto, solicitud_id=""):
+    contacto_info = clean_contact_person(contacto, empresa)
+    nombre = contacto_info["name"] if contacto_info["type"] == "person" else f"equipo de {empresa}"
+    return f"Hola {nombre}, soy Juan Manuel, aprendiz ADSO SENA (background Mecatrónica). Me postulo a la vacante en {empresa}. Proyectos en github.com/lakerstrake y CV listo. ¡Me encantaría conectar!"
 
 def sync_vacancies():
     """Ejecuta la sincronización completa y exporta los datasets actualizados."""
@@ -294,8 +383,9 @@ def sync_vacancies():
                     is_wa = True
                     wa_num = f"57{clean_digits}"
 
-            wa_msg = build_whatsapp_pitch(empresa_name, contacto)
-            email_msg = build_formal_email(empresa_name, contacto, funciones)
+            wa_msg = build_whatsapp_pitch(empresa_name, contacto, funciones, solicitud_id)
+            email_msg = build_formal_email(empresa_name, contacto, funciones, perfil, solicitud_id)
+            li_msg = build_linkedin_pitch(empresa_name, contacto, solicitud_id)
 
             comp = {
                 "solicitud_id": solicitud_id,
@@ -330,7 +420,7 @@ def sync_vacancies():
                 "whatsapp_message": wa_msg,
                 "whatsapp_url": f"https://wa.me/{wa_num}?text={requests.utils.quote(wa_msg)}" if is_wa else "",
                 "linkedin_contact_search_url": f"https://www.linkedin.com/search/results/people/?keywords={requests.utils.quote(contacto + ' ' + empresa_name)}" if contacto else f"https://www.linkedin.com/search/results/companies/?keywords={requests.utils.quote(empresa_name)}",
-                "linkedin_connect_message": f"Hola {contacto or 'Equipo'}, soy Juan Manuel Lagos, aprendiz ADSO SENA. Me postulo a la vacante de Contrato de Aprendizaje en {empresa_name} que vi en Caprendizaje. Cuento con proyectos en GitHub (github.com/lakerstrake), CV en Drive y disponibilidad inmediata. ¡Me encantaría conectar!",
+                "linkedin_connect_message": li_msg,
                 "correo_formal_completo": email_msg,
                 "curva_aprendizaje_titulo": "Desarrollo de Software Full-Stack & Arquitectura Cloud",
                 "curva_aprendizaje_detalle": "Dominio de frameworks modernos, bases de datos relacionales/NoSQL, control de versiones Git y metodologías ágiles.",
