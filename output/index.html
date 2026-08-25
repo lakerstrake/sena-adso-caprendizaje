@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="es" data-theme="dark">
 <head>
-    <!-- Character Encoding & Viewport -->
+    <!-- Character Encoding & Viewport (Strict Mobile Viewport) -->
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
     <!-- Primary Metadata -->
@@ -35,8 +35,8 @@
     <!-- Header & Top Navigation Bar -->
     <header class="navbar" role="banner">
         <div class="navbar-container">
-            <!-- Brand & Quick Actions (Header Top/Left) -->
-            <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+            <!-- Row 1: Brand Logo (Left) + Quick Tools (Right) -->
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 0.5rem;">
                 <div class="brand-section">
                     <div class="brand-badge" aria-hidden="true"><i class="fa-solid fa-code"></i></div>
                     <div class="brand-title">
@@ -44,53 +44,53 @@
                         <span>Directorio Estratégico</span>
                     </div>
                 </div>
+                <div style="display: flex; align-items: center; gap: 0.3rem; flex-shrink: 0;">
+                    <button class="btn" data-action="exportData" data-format="xlsx" title="Descargar Excel (.xlsx)" aria-label="Exportar Excel" style="padding: 0.22rem 0.45rem;">
+                        <i class="fa-solid fa-file-excel" style="color: #10b981;" aria-hidden="true"></i>
+                    </button>
+                    <button class="btn" data-action="exportData" data-format="csv" title="Descargar CSV (.csv)" aria-label="Exportar CSV" style="padding: 0.22rem 0.45rem;">
+                        <i class="fa-solid fa-file-csv" style="color: #38bdf8;" aria-hidden="true"></i>
+                    </button>
+                    <button class="btn btn-icon" data-action="toggleTheme" id="themeBtn" title="Cambiar tema de color" aria-label="Cambiar tema" style="width: 26px; height: 26px;">
+                        <i class="fa-solid fa-sun" id="themeIcon" aria-hidden="true"></i>
+                    </button>
+                </div>
             </div>
 
-            <!-- Main Navigation Pills -->
-            <nav class="nav-pills" role="navigation" aria-label="Navegación principal">
+            <!-- Row 2: Main Navigation Tabs (Full Width, Scaled) -->
+            <nav class="nav-pills" role="navigation" aria-label="Navegación principal" style="width: 100%;">
                 <button class="nav-pill-btn active" id="pillDirectory" data-action="switchNavTab" data-tab="directory" aria-current="page">
                     <i class="fa-solid fa-list-ul" aria-hidden="true"></i> Directorio <span class="count-badge" id="pillTotalCount">179</span>
                 </button>
                 <button class="nav-pill-btn" id="pillStrategy" data-action="switchNavTab" data-tab="strategy">
-                    <i class="fa-solid fa-rocket" aria-hidden="true"></i> Escalabilidad & Finanzas
+                    <i class="fa-solid fa-rocket" aria-hidden="true"></i> Finanzas & 5A
                 </button>
                 <button class="nav-pill-btn" id="pillFavs" data-action="switchNavTab" data-tab="favs">
-                    <i class="fa-regular fa-bookmark" aria-hidden="true"></i> Preseleccionadas <span class="count-badge" id="pillFavCount">0</span>
+                    <i class="fa-regular fa-bookmark" aria-hidden="true"></i> Favoritas <span class="count-badge" id="pillFavCount">0</span>
                 </button>
             </nav>
 
-            <!-- Candidate Profile & Action Tools -->
-            <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.4rem; flex-wrap: wrap;">
-                <div class="candidate-pill">
-                    <i class="fa-solid fa-user-check" style="color: var(--brand-primary);" aria-hidden="true"></i>
-                    <strong style="color: var(--text-main);">Juan Manuel Lagos</strong>
-                    <span style="color: var(--text-dim);" aria-hidden="true">•</span>
-                    <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN" target="_blank" rel="noopener noreferrer" title="Ver Hoja de Vida oficial (CV)" style="color: #38bdf8; font-weight: 600;">
+            <!-- Row 3: Candidate Profile Bar (Smooth Horizontal Scroll Pill) -->
+            <div style="width: 100%; overflow: hidden; display: flex;">
+                <div class="candidate-pill" style="width: 100%;">
+                    <i class="fa-solid fa-user-check" style="color: var(--brand-primary); flex-shrink: 0;" aria-hidden="true"></i>
+                    <strong style="color: var(--text-main); flex-shrink: 0;">Juan Manuel Lagos</strong>
+                    <span style="color: var(--text-dim); flex-shrink: 0;" aria-hidden="true">•</span>
+                    <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN" target="_blank" rel="noopener noreferrer" title="Ver Hoja de Vida oficial (CV)" style="color: #38bdf8; font-weight: 600; flex-shrink: 0;">
                         <i class="fa-solid fa-file-lines" aria-hidden="true"></i> Hoja de Vida
                     </a>
-                    <span style="color: var(--text-dim);" aria-hidden="true">•</span>
-                    <a href="https://github.com/lakerstrake" target="_blank" rel="noopener noreferrer" title="Portafolio en GitHub">
+                    <span style="color: var(--text-dim); flex-shrink: 0;" aria-hidden="true">•</span>
+                    <a href="https://github.com/lakerstrake" target="_blank" rel="noopener noreferrer" title="Portafolio en GitHub" style="flex-shrink: 0;">
                         <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub
                     </a>
-                    <span style="color: var(--text-dim);" aria-hidden="true">•</span>
-                    <a href="https://linkedin.com/in/juan-manuel-lagos-monroy" target="_blank" rel="noopener noreferrer" title="Perfil de LinkedIn">
+                    <span style="color: var(--text-dim); flex-shrink: 0;" aria-hidden="true">•</span>
+                    <a href="https://linkedin.com/in/juan-manuel-lagos-monroy" target="_blank" rel="noopener noreferrer" title="Perfil de LinkedIn" style="flex-shrink: 0;">
                         <i class="fa-brands fa-linkedin" aria-hidden="true"></i> LinkedIn
                     </a>
-                    <span style="color: var(--text-dim);" aria-hidden="true">•</span>
-                    <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN" target="_blank" rel="noopener noreferrer" title="Certificados Académicos en Google Drive" style="color: var(--drive-color);">
+                    <span style="color: var(--text-dim); flex-shrink: 0;" aria-hidden="true">•</span>
+                    <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN" target="_blank" rel="noopener noreferrer" title="Certificados Académicos en Google Drive" style="color: var(--drive-color); flex-shrink: 0;">
                         <i class="fa-brands fa-google-drive" aria-hidden="true"></i> Certificados
                     </a>
-                </div>
-                <div style="display: flex; align-items: center; gap: 0.3rem;">
-                    <button class="btn" data-action="exportData" data-format="xlsx" title="Descargar Excel (.xlsx)" aria-label="Exportar Excel">
-                        <i class="fa-solid fa-file-excel" style="color: #10b981;" aria-hidden="true"></i>
-                    </button>
-                    <button class="btn" data-action="exportData" data-format="csv" title="Descargar CSV (.csv)" aria-label="Exportar CSV">
-                        <i class="fa-solid fa-file-csv" style="color: #38bdf8;" aria-hidden="true"></i>
-                    </button>
-                    <button class="btn btn-icon" data-action="toggleTheme" id="themeBtn" title="Cambiar tema de color" aria-label="Cambiar tema">
-                        <i class="fa-solid fa-sun" id="themeIcon" aria-hidden="true"></i>
-                    </button>
                 </div>
             </div>
         </div>
@@ -105,13 +105,13 @@
                 <i class="fa-solid fa-shield-halved" style="color: var(--tier-3); flex-shrink: 0;" aria-hidden="true"></i>
                 <span><strong>Protocolo Anti-Bloqueo:</strong> Contacta directamente a las empresas por <strong>Correo</strong>, <strong>WhatsApp</strong> o <strong>LinkedIn</strong> con tu CV para no bloquear tu perfil 15 días en SGVA.</span>
             </div>
-            <button class="btn btn-icon" style="border: none; background: transparent; cursor: pointer; color: var(--text-muted);" data-action="dismissNotice" aria-label="Cerrar aviso">
+            <button class="btn btn-icon" style="border: none; background: transparent; cursor: pointer; color: var(--text-muted); flex-shrink: 0;" data-action="dismissNotice" aria-label="Cerrar aviso">
                 <i class="fa-solid fa-xmark" aria-hidden="true"></i>
             </button>
         </aside>
 
         <!-- SECTION 1: DIRECTORY WORKSPACE -->
-        <section id="sectionDirectory" style="display: flex; flex-direction: column; flex: 1; min-height: 0; gap: 0.45rem;">
+        <section id="sectionDirectory" style="display: flex; flex-direction: column; flex: 1; min-height: 0; gap: 0.45rem; width: 100%;">
 
             <!-- Unified Filter Deck -->
             <div class="filter-deck" role="search" aria-label="Filtros de búsqueda">
@@ -119,10 +119,10 @@
                 <div class="filter-deck-primary">
                     <div class="search-box">
                         <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-                        <input type="search" id="mainSearch" placeholder="Buscar por empresa, NIT, ciudad, stack (React, Node, SQL) o funciones..." aria-label="Buscar vacantes">
+                        <input type="search" id="mainSearch" placeholder="Buscar por empresa, NIT, ciudad, stack (React, Node, SQL)..." aria-label="Buscar vacantes">
                     </div>
 
-                    <!-- Tier Segments Track -->
+                    <!-- Tier Segments Track (Smooth Swipeable) -->
                     <div class="tier-segments" role="group" aria-label="Filtrar por categoría de empresa">
                         <button class="tier-seg-btn active" data-action="filterTier" data-tier="">Todos <span class="seg-pill">179</span></button>
                         <button class="tier-seg-btn seg-1" data-action="filterTier" data-tier="TIER_1">Tier 1 · Software <span class="seg-pill">11</span></button>
@@ -132,7 +132,7 @@
                         <button class="tier-seg-btn" data-action="filterTier" data-tier="TIER_5">Tier 5 <span class="seg-pill">34</span></button>
                     </div>
 
-                    <button class="btn" id="toggleFiltersBtn" data-action="toggleSecondaryFilters">
+                    <button class="btn" id="toggleFiltersBtn" data-action="toggleSecondaryFilters" style="padding: 0.28rem 0.55rem;">
                         <i class="fa-solid fa-sliders" aria-hidden="true"></i> Filtros <span class="count-badge" id="activeFilterBadge" style="margin-left: 2px;">0</span>
                     </button>
                 </div>
@@ -197,11 +197,13 @@
             <!-- Table Toolbar -->
             <div class="table-toolbar">
                 <div>Mostrando <strong id="lblVisibleCount">179</strong> de <strong id="lblTotalCount">179</strong> vacantes</div>
-                <div style="display: flex; align-items: center; gap: 0.45rem;">
-                    <button class="btn" style="padding: 0.18rem 0.45rem; font-size: 0.66rem;" data-action="resetFilters">Restablecer</button>
+                <div style="display: flex; align-items: center; gap: 0.35rem;">
+                    <button class="btn" style="padding: 0.22rem 0.45rem; font-size: 0.68rem;" data-action="resetFilters" title="Restablecer filtros">
+                        <i class="fa-solid fa-rotate-left"></i> Limpiar
+                    </button>
                     <div class="nav-pills" style="padding: 1px;" role="group" aria-label="Cambiar formato de vista">
-                        <button class="nav-pill-btn active" id="btnLayoutTable" data-action="setLayout" data-layout="table" style="padding: 0.18rem 0.45rem;" aria-label="Vista tabla"><i class="fa-solid fa-table-list"></i></button>
-                        <button class="nav-pill-btn" id="btnLayoutCards" data-action="setLayout" data-layout="cards" style="padding: 0.18rem 0.45rem;" aria-label="Vista tarjetas"><i class="fa-solid fa-border-all"></i></button>
+                        <button class="nav-pill-btn active" id="btnLayoutTable" data-action="setLayout" data-layout="table" style="padding: 0.2rem 0.45rem;" aria-label="Vista tabla"><i class="fa-solid fa-table-list"></i></button>
+                        <button class="nav-pill-btn" id="btnLayoutCards" data-action="setLayout" data-layout="cards" style="padding: 0.2rem 0.45rem;" aria-label="Vista tarjetas"><i class="fa-solid fa-border-all"></i></button>
                     </div>
                 </div>
             </div>
@@ -359,8 +361,8 @@
         <div class="modal-panel" id="modalPanel">
             <div class="modal-header">
                 <div>
-                    <h2 id="mTitle" style="font-size: 1rem; font-weight: 700;">Empresa</h2>
-                    <span id="mSubtitle" style="font-size: 0.72rem; color: var(--text-muted);">Ubicación • NIT</span>
+                    <h2 id="mTitle" style="font-size: 0.96rem; font-weight: 700;">Empresa</h2>
+                    <span id="mSubtitle" style="font-size: 0.7rem; color: var(--text-muted);">Ubicación • NIT</span>
                 </div>
                 <div style="display: flex; gap: 0.35rem;">
                     <button class="btn btn-icon" id="mFavBtn" data-action="toggleModalFavorite" aria-label="Favorito"><i class="fa-regular fa-bookmark"></i></button>
@@ -408,9 +410,9 @@
                 <!-- SUBSECTION 1: OUTREACH -->
                 <div id="mSecOutreach" style="display: flex; flex-direction: column; gap: 0.65rem;">
                     <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
-                        <button class="btn btn-primary" id="mChEmail" data-action="setModalChannel" data-channel="email" style="flex: 1; min-width: 100px;"><i class="fa-solid fa-envelope"></i> Correo</button>
-                        <button class="btn" id="mChWA" data-action="setModalChannel" data-channel="wa" style="flex: 1; min-width: 100px;"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
-                        <button class="btn" id="mChLinkedIn" data-action="setModalChannel" data-channel="linkedin" style="flex: 1; min-width: 100px;"><i class="fa-brands fa-linkedin"></i> LinkedIn</button>
+                        <button class="btn btn-primary" id="mChEmail" data-action="setModalChannel" data-channel="email" style="flex: 1; min-width: 90px;"><i class="fa-solid fa-envelope"></i> Correo</button>
+                        <button class="btn" id="mChWA" data-action="setModalChannel" data-channel="wa" style="flex: 1; min-width: 90px;"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
+                        <button class="btn" id="mChLinkedIn" data-action="setModalChannel" data-channel="linkedin" style="flex: 1; min-width: 90px;"><i class="fa-brands fa-linkedin"></i> LinkedIn</button>
                     </div>
 
                     <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-sm); padding: 0.75rem;">

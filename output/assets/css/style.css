@@ -1,14 +1,14 @@
 /**
- * SGVA SENA ADSO - Universal Responsive Design System
+ * SGVA SENA ADSO - Universal Mobile-First & Desktop Design System
  * Standard: ISO/IEC 25010 & WCAG 2.1 AA Compliant
- * Breakpoints: Mobile (320px-600px), Tablet (601px-1024px), Laptop/Desktop (>1024px)
+ * Strict Zero-Horizontal-Scroll Architecture
  */
 
 :root {
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
     
-    /* Executive SaaS Dark Palette */
+    /* SaaS Dark Executive Palette */
     --bg-canvas: #090d16;
     --bg-surface: #0f172a;
     --bg-surface-raised: #1e293b;
@@ -84,14 +84,29 @@
     --tier-5-bg: rgba(225, 29, 72, 0.06);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* -------------------------------------------------------------------------
+   GLOBAL RESET & OVERFLOW-X PREVENTION (Strict 100vw Bound)
+   ------------------------------------------------------------------------- */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+}
 
-html, body {
+html {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
     height: 100%;
-    min-height: 100vh;
+    -webkit-text-size-adjust: 100%;
 }
 
 body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    min-height: 100vh;
     font-family: var(--font-sans);
     background-color: var(--bg-canvas);
     color: var(--text-main);
@@ -100,6 +115,7 @@ body {
     -webkit-font-smoothing: antialiased;
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 /* Accessibility: Reduced Motion */
@@ -113,7 +129,7 @@ body {
 }
 
 /* -------------------------------------------------------------------------
-   HEADER & NAVBAR (Fully Adaptive)
+   HEADER & NAVBAR ARCHITECTURE
    ------------------------------------------------------------------------- */
 .navbar {
     background: var(--bg-surface);
@@ -121,36 +137,39 @@ body {
     position: sticky;
     top: 0;
     z-index: 50;
+    width: 100%;
+    max-width: 100%;
     flex-shrink: 0;
 }
 
 .navbar-container {
     max-width: 1600px;
     margin: 0 auto;
-    padding: 0.45rem 1rem;
+    padding: 0.45rem 0.85rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 0.6rem;
+    width: 100%;
 }
 
 .brand-section {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.45rem;
     flex-shrink: 0;
 }
 
 .brand-badge {
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
     background: var(--brand-primary);
     color: #fff;
     border-radius: var(--radius-xs);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.72rem;
+    font-size: 0.76rem;
     font-weight: 700;
     flex-shrink: 0;
 }
@@ -162,7 +181,7 @@ body {
 }
 
 .brand-title h1 {
-    font-size: 0.84rem;
+    font-size: 0.86rem;
     font-weight: 700;
     letter-spacing: -0.2px;
     color: var(--text-main);
@@ -175,9 +194,9 @@ body {
     white-space: nowrap;
 }
 
-/* Nav Pills */
+/* Nav Pills Component */
 .nav-pills {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     background: var(--bg-canvas);
     border: 1px solid var(--border-muted);
@@ -187,11 +206,16 @@ body {
     flex-shrink: 0;
 }
 
+.navbar .nav-pills {
+    display: flex;
+    width: auto;
+}
+
 .nav-pill-btn {
     background: transparent;
     border: none;
     color: var(--text-muted);
-    padding: 0.28rem 0.6rem;
+    padding: 0.32rem 0.6rem;
     font-size: 0.72rem;
     font-weight: 600;
     font-family: var(--font-sans);
@@ -203,6 +227,7 @@ body {
     gap: 0.35rem;
     transition: var(--transition-fast);
     white-space: nowrap;
+    text-align: center;
 }
 
 .nav-pill-btn:hover { color: var(--text-main); }
@@ -216,7 +241,7 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.08rem 0.38rem;
+    padding: 0.08rem 0.35rem;
     border-radius: 10px;
     font-size: 0.62rem;
     font-weight: 700;
@@ -233,20 +258,23 @@ body {
     border-color: rgba(16, 185, 129, 0.25);
 }
 
-/* Candidate Profile Header Pill */
+/* Candidate Profile Bar / Strip */
 .candidate-pill {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     background: var(--bg-subtle);
     border: 1px solid var(--border-muted);
-    padding: 0.22rem 0.6rem;
+    padding: 0.22rem 0.65rem;
     border-radius: 20px;
     font-size: 0.68rem;
     white-space: nowrap;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    max-width: 100%;
 }
+.candidate-pill::-webkit-scrollbar { display: none; }
 
 .candidate-pill a {
     color: var(--text-muted);
@@ -254,18 +282,18 @@ body {
     transition: var(--transition-fast);
     display: inline-flex;
     align-items: center;
-    gap: 0.2rem;
+    gap: 0.22rem;
 }
 .candidate-pill a:hover { color: var(--text-main); }
 
-/* Buttons */
+/* Buttons & Touch Elements */
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.3rem;
-    padding: 0.28rem 0.55rem;
-    font-size: 0.7rem;
+    gap: 0.35rem;
+    padding: 0.32rem 0.6rem;
+    font-size: 0.72rem;
     font-weight: 600;
     font-family: var(--font-sans);
     border-radius: var(--radius-sm);
@@ -276,6 +304,7 @@ body {
     transition: var(--transition-fast);
     text-decoration: none;
     white-space: nowrap;
+    touch-action: manipulation;
 }
 
 .btn:hover {
@@ -312,7 +341,7 @@ body {
     border-color: var(--linkedin-color);
 }
 
-.btn-icon { width: 26px; height: 26px; padding: 0; }
+.btn-icon { width: 30px; height: 30px; padding: 0; }
 
 /* -------------------------------------------------------------------------
    MAIN WORKSPACE & LAYOUT
@@ -321,7 +350,7 @@ body {
     max-width: 1600px;
     width: 100%;
     margin: 0 auto;
-    padding: 0.6rem 1rem 1.25rem;
+    padding: 0.6rem 0.85rem 1.25rem;
     display: flex;
     flex-direction: column;
     gap: 0.45rem;
@@ -334,13 +363,14 @@ body {
     background: rgba(245, 158, 11, 0.05);
     border: 1px solid rgba(245, 158, 11, 0.2);
     border-radius: var(--radius-sm);
-    padding: 0.35rem 0.65rem;
+    padding: 0.4rem 0.65rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 0.68rem;
+    font-size: 0.7rem;
     color: var(--text-muted);
     flex-shrink: 0;
+    gap: 0.5rem;
 }
 
 .notice-banner strong { color: var(--tier-3); }
@@ -355,38 +385,41 @@ body {
     flex-direction: column;
     gap: 0.4rem;
     flex-shrink: 0;
+    width: 100%;
 }
 
 .filter-deck-primary {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.45rem;
     flex-wrap: wrap;
+    width: 100%;
 }
 
 .search-box {
     flex: 1;
-    min-width: 220px;
+    min-width: 200px;
     position: relative;
     display: flex;
     align-items: center;
+    width: 100%;
 }
 
 .search-box i {
     position: absolute;
     left: 0.65rem;
     color: var(--text-dim);
-    font-size: 0.72rem;
+    font-size: 0.74rem;
 }
 
 .search-box input {
     width: 100%;
-    padding: 0.38rem 1.5rem 0.38rem 1.9rem;
+    padding: 0.42rem 1.5rem 0.42rem 1.95rem;
     background: var(--bg-canvas);
     border: 1px solid var(--border-muted);
     border-radius: var(--radius-sm);
     color: var(--text-main);
-    font-size: 0.74rem;
+    font-size: 0.76rem;
     font-family: var(--font-sans);
     outline: none;
     transition: var(--transition-fast);
@@ -397,7 +430,7 @@ body {
     background: var(--bg-surface);
 }
 
-/* Tier Segments Track */
+/* Tier Segments Track (Smooth Swipeable) */
 .tier-segments {
     display: flex;
     align-items: center;
@@ -409,14 +442,15 @@ body {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    max-width: 100%;
 }
 .tier-segments::-webkit-scrollbar { display: none; }
 
 .tier-seg-btn {
     background: transparent;
     border: none;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.68rem;
+    padding: 0.28rem 0.52rem;
+    font-size: 0.7rem;
     font-weight: 600;
     color: var(--text-muted);
     border-radius: calc(var(--radius-sm) - 2px);
@@ -426,6 +460,7 @@ body {
     align-items: center;
     gap: 0.3rem;
     transition: var(--transition-fast);
+    flex-shrink: 0;
 }
 
 .tier-seg-btn:hover { color: var(--text-main); }
@@ -442,13 +477,13 @@ body {
 .seg-pill {
     font-size: 0.62rem;
     font-family: var(--font-mono);
-    padding: 0.02rem 0.3rem;
+    padding: 0.04rem 0.32rem;
     border-radius: 8px;
     background: var(--bg-surface);
     border: 1px solid var(--border-muted);
 }
 
-/* Stack Chips Row */
+/* Stack Chips Row (Swipeable Track) */
 .stack-row {
     display: flex;
     align-items: center;
@@ -456,31 +491,34 @@ body {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding-bottom: 1px;
+    padding-bottom: 2px;
+    max-width: 100%;
 }
 .stack-row::-webkit-scrollbar { display: none; }
 
 .stack-row span {
-    font-size: 0.62rem;
+    font-size: 0.64rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.4px;
     color: var(--text-dim);
     margin-right: 0.15rem;
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .chip-btn {
     background: var(--bg-canvas);
     border: 1px solid var(--border-muted);
     color: var(--text-muted);
-    padding: 0.12rem 0.45rem;
+    padding: 0.16rem 0.48rem;
     border-radius: 12px;
-    font-size: 0.66rem;
+    font-size: 0.68rem;
     font-weight: 500;
     cursor: pointer;
     white-space: nowrap;
     transition: var(--transition-fast);
+    flex-shrink: 0;
 }
 
 .chip-btn:hover { color: var(--text-main); border-color: var(--border-default); }
@@ -498,6 +536,7 @@ body {
     gap: 0.4rem;
     padding-top: 0.4rem;
     border-top: 1px solid var(--border-muted);
+    width: 100%;
 }
 
 .filter-select-wrap {
@@ -507,7 +546,7 @@ body {
 }
 
 .filter-select-wrap label {
-    font-size: 0.58rem;
+    font-size: 0.6rem;
     text-transform: uppercase;
     color: var(--text-dim);
     font-weight: 600;
@@ -519,22 +558,24 @@ body {
     border: 1px solid var(--border-muted);
     border-radius: var(--radius-xs);
     color: var(--text-main);
-    padding: 0.24rem 0.4rem;
-    font-size: 0.7rem;
+    padding: 0.28rem 0.4rem;
+    font-size: 0.72rem;
     font-family: var(--font-sans);
     outline: none;
     cursor: pointer;
 }
 
-/* Table Toolbar */
+/* Table Toolbar (Clean No-Overlap Flex Layout) */
 .table-toolbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 0.1rem;
-    font-size: 0.7rem;
+    padding: 0.2rem 0.1rem;
+    font-size: 0.72rem;
     color: var(--text-muted);
     flex-shrink: 0;
+    width: 100%;
+    gap: 0.5rem;
 }
 
 .table-toolbar strong { color: var(--text-main); font-family: var(--font-mono); }
@@ -550,12 +591,14 @@ body {
     flex-direction: column;
     flex: 1;
     min-height: 0;
+    width: 100%;
 }
 
 .table-container {
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     flex: 1;
+    width: 100%;
 }
 
 .data-table {
@@ -574,7 +617,7 @@ body {
 
 .data-table th {
     padding: 0.45rem 0.55rem;
-    font-size: 0.62rem;
+    font-size: 0.64rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.4px;
@@ -633,7 +676,7 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 0.2rem;
-    padding: 0.1rem 0.38rem;
+    padding: 0.12rem 0.4rem;
     border-radius: var(--radius-xs);
     font-size: 0.64rem;
     font-weight: 600;
@@ -651,7 +694,7 @@ body {
     align-items: center;
     gap: 0.2rem;
     font-family: var(--font-mono);
-    font-size: 0.68rem;
+    font-size: 0.7rem;
     font-weight: 600;
     color: var(--tier-3);
     white-space: nowrap;
@@ -674,13 +717,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 0.25rem;
+    gap: 0.3rem;
     white-space: nowrap;
 }
 
 .mini-btn {
-    padding: 0.18rem 0.4rem;
-    font-size: 0.65rem;
+    padding: 0.22rem 0.45rem;
+    font-size: 0.68rem;
     font-weight: 600;
     border-radius: var(--radius-xs);
     border: 1px solid var(--border-muted);
@@ -702,7 +745,7 @@ body {
 
 /* Table Footer */
 .table-footer {
-    padding: 0.38rem 0.75rem;
+    padding: 0.4rem 0.75rem;
     border-top: 1px solid var(--border-muted);
     background: var(--bg-surface-raised);
     display: flex;
@@ -711,6 +754,7 @@ body {
     font-size: 0.7rem;
     color: var(--text-muted);
     flex-shrink: 0;
+    width: 100%;
 }
 
 /* Floating Comparison Dock */
@@ -728,6 +772,7 @@ body {
     align-items: center;
     gap: 0.75rem;
     z-index: 90;
+    max-width: calc(100% - 1rem);
 }
 
 /* Cards View Grid (Native Responsive Cards) */
@@ -737,19 +782,21 @@ body {
     gap: 0.65rem;
     overflow-y: auto;
     flex: 1;
+    width: 100%;
 }
 
 .clean-card {
     background: var(--bg-surface);
     border: 1px solid var(--border-muted);
     border-radius: var(--radius-md);
-    padding: 0.75rem;
+    padding: 0.75rem 0.85rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     gap: 0.55rem;
     cursor: pointer;
     transition: var(--transition-fast);
+    width: 100%;
 }
 
 .clean-card:hover {
@@ -767,7 +814,9 @@ body {
     display: none;
     align-items: center;
     justify-content: center;
-    padding: 0.75rem;
+    padding: 0.6rem;
+    width: 100%;
+    height: 100%;
 }
 
 .modal-panel {
@@ -807,6 +856,7 @@ body {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 0.4rem;
+    width: 100%;
 }
 
 .stat-box {
@@ -843,6 +893,7 @@ body {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    width: 100%;
 }
 .modal-tabs::-webkit-scrollbar { display: none; }
 
@@ -891,6 +942,7 @@ body {
     gap: 0.75rem;
     overflow-y: auto;
     flex: 1;
+    width: 100%;
 }
 
 .strategy-header {
@@ -902,12 +954,14 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
+    width: 100%;
 }
 
 .strategy-columns {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 0.65rem;
+    width: 100%;
 }
 
 .strategy-card-clean {
@@ -918,6 +972,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.45rem;
+    width: 100%;
 }
 
 /* -------------------------------------------------------------------------
@@ -954,27 +1009,32 @@ body {
     }
 }
 
-/* PHABLETS & MOBILE SCREENS (max-width: 768px) */
+/* PHABLETS & SMARTPHONES (max-width: 768px) */
 @media (max-width: 768px) {
     .navbar-container {
         flex-direction: column;
         align-items: stretch;
-        gap: 0.35rem;
+        gap: 0.38rem;
+        padding: 0.45rem 0.6rem;
     }
 
-    .nav-pills {
+    .navbar .nav-pills {
         width: 100%;
+        display: flex;
     }
 
     .nav-pill-btn {
-        flex: 1;
-        font-size: 0.68rem;
-        padding: 0.28rem 0.35rem;
+        flex: 1 1 0;
+        min-width: 0;
+        font-size: 0.66rem;
+        padding: 0.32rem 0.2rem;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
 
     .candidate-pill {
         font-size: 0.64rem;
-        padding: 0.2rem 0.5rem;
+        padding: 0.22rem 0.5rem;
         width: 100%;
         justify-content: flex-start;
     }
@@ -996,6 +1056,10 @@ body {
 
     .secondary-filters-row {
         grid-template-columns: 1fr 1fr;
+    }
+
+    .table-toolbar {
+        font-size: 0.68rem;
     }
 
     .dock-bar {
@@ -1038,10 +1102,20 @@ body {
     }
 
     .brand-title h1 {
-        font-size: 0.78rem;
+        font-size: 0.8rem;
     }
 
     .brand-title span {
+        display: none;
+    }
+
+    .nav-pill-btn {
+        font-size: 0.62rem;
+        padding: 0.3rem 0.15rem;
+        gap: 0.2rem;
+    }
+
+    .nav-pill-btn i {
         display: none;
     }
 
@@ -1068,5 +1142,19 @@ body {
 
     .stat-box strong {
         font-size: 0.72rem;
+    }
+
+    .table-toolbar {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        font-size: 0.66rem;
+    }
+
+    .table-toolbar > div:first-child {
+        font-size: 0.64rem;
+        white-space: nowrap;
     }
 }
