@@ -3,7 +3,7 @@
 <head>
     <!-- Character Encoding & Viewport -->
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
     <!-- Primary Metadata -->
@@ -35,16 +35,18 @@
     <!-- Header & Top Navigation Bar -->
     <header class="navbar" role="banner">
         <div class="navbar-container">
-            <!-- Brand -->
-            <div class="brand-section">
-                <div class="brand-badge" aria-hidden="true"><i class="fa-solid fa-code"></i></div>
-                <div class="brand-title">
-                    <h1>SENA · ADSO</h1>
-                    <span>Directorio Estratégico</span>
+            <!-- Brand & Quick Actions (Header Top/Left) -->
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                <div class="brand-section">
+                    <div class="brand-badge" aria-hidden="true"><i class="fa-solid fa-code"></i></div>
+                    <div class="brand-title">
+                        <h1>SENA · ADSO</h1>
+                        <span>Directorio Estratégico</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Main Navigation Pills (Unobtrusive Declarative Events) -->
+            <!-- Main Navigation Pills -->
             <nav class="nav-pills" role="navigation" aria-label="Navegación principal">
                 <button class="nav-pill-btn active" id="pillDirectory" data-action="switchNavTab" data-tab="directory" aria-current="page">
                     <i class="fa-solid fa-list-ul" aria-hidden="true"></i> Directorio <span class="count-badge" id="pillTotalCount">179</span>
@@ -58,7 +60,7 @@
             </nav>
 
             <!-- Candidate Profile & Action Tools -->
-            <div style="display: flex; align-items: center; gap: 0.4rem; flex-shrink: 0;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.4rem; flex-wrap: wrap;">
                 <div class="candidate-pill">
                     <i class="fa-solid fa-user-check" style="color: var(--brand-primary);" aria-hidden="true"></i>
                     <strong style="color: var(--text-main);">Juan Manuel Lagos</strong>
@@ -79,15 +81,17 @@
                         <i class="fa-brands fa-google-drive" aria-hidden="true"></i> Certificados
                     </a>
                 </div>
-                <button class="btn" data-action="exportData" data-format="xlsx" title="Descargar Excel (.xlsx)" aria-label="Exportar Excel">
-                    <i class="fa-solid fa-file-excel" style="color: #10b981;" aria-hidden="true"></i>
-                </button>
-                <button class="btn" data-action="exportData" data-format="csv" title="Descargar CSV (.csv)" aria-label="Exportar CSV">
-                    <i class="fa-solid fa-file-csv" style="color: #38bdf8;" aria-hidden="true"></i>
-                </button>
-                <button class="btn btn-icon" data-action="toggleTheme" id="themeBtn" title="Cambiar tema de color" aria-label="Cambiar tema">
-                    <i class="fa-solid fa-sun" id="themeIcon" aria-hidden="true"></i>
-                </button>
+                <div style="display: flex; align-items: center; gap: 0.3rem;">
+                    <button class="btn" data-action="exportData" data-format="xlsx" title="Descargar Excel (.xlsx)" aria-label="Exportar Excel">
+                        <i class="fa-solid fa-file-excel" style="color: #10b981;" aria-hidden="true"></i>
+                    </button>
+                    <button class="btn" data-action="exportData" data-format="csv" title="Descargar CSV (.csv)" aria-label="Exportar CSV">
+                        <i class="fa-solid fa-file-csv" style="color: #38bdf8;" aria-hidden="true"></i>
+                    </button>
+                    <button class="btn btn-icon" data-action="toggleTheme" id="themeBtn" title="Cambiar tema de color" aria-label="Cambiar tema">
+                        <i class="fa-solid fa-sun" id="themeIcon" aria-hidden="true"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </header>
@@ -98,7 +102,7 @@
         <!-- Anti-Blocking Operational Notice -->
         <aside class="notice-banner" id="antiBlockNotice" role="region" aria-label="Aviso de protocolo anti-bloqueo">
             <div style="display: flex; align-items: center; gap: 0.4rem;">
-                <i class="fa-solid fa-shield-halved" style="color: var(--tier-3);" aria-hidden="true"></i>
+                <i class="fa-solid fa-shield-halved" style="color: var(--tier-3); flex-shrink: 0;" aria-hidden="true"></i>
                 <span><strong>Protocolo Anti-Bloqueo:</strong> Contacta directamente a las empresas por <strong>Correo</strong>, <strong>WhatsApp</strong> o <strong>LinkedIn</strong> con tu CV para no bloquear tu perfil 15 días en SGVA.</span>
             </div>
             <button class="btn btn-icon" style="border: none; background: transparent; cursor: pointer; color: var(--text-muted);" data-action="dismissNotice" aria-label="Cerrar aviso">
@@ -118,7 +122,7 @@
                         <input type="search" id="mainSearch" placeholder="Buscar por empresa, NIT, ciudad, stack (React, Node, SQL) o funciones..." aria-label="Buscar vacantes">
                     </div>
 
-                    <!-- Tier Segments -->
+                    <!-- Tier Segments Track -->
                     <div class="tier-segments" role="group" aria-label="Filtrar por categoría de empresa">
                         <button class="tier-seg-btn active" data-action="filterTier" data-tier="">Todos <span class="seg-pill">179</span></button>
                         <button class="tier-seg-btn seg-1" data-action="filterTier" data-tier="TIER_1">Tier 1 · Software <span class="seg-pill">11</span></button>
@@ -133,7 +137,7 @@
                     </button>
                 </div>
 
-                <!-- Tech Stack Chips -->
+                <!-- Tech Stack Chips (Scrollable Track) -->
                 <div class="stack-row" role="group" aria-label="Filtrar por tecnologías">
                     <span>Stack ADSO:</span>
                     <button class="chip-btn active" data-action="filterStack" data-stack="">Todos</button>
@@ -149,7 +153,7 @@
                     <button class="chip-btn" data-action="filterStack" data-stack="ERP / Sistemas">ERP / Sistemas</button>
                 </div>
 
-                <!-- Secondary Filters -->
+                <!-- Secondary Filters Grid -->
                 <div class="secondary-filters-row" id="secondaryFiltersRow" style="display: none;">
                     <div class="filter-select-wrap">
                         <label for="filterChannel">Canal Directo</label>
@@ -202,7 +206,7 @@
                 </div>
             </div>
 
-            <!-- Table Container -->
+            <!-- Table Card Container -->
             <div class="table-card" id="tableCardWrap">
                 <div class="table-container">
                     <table class="data-table" role="table">
@@ -256,44 +260,46 @@
                     <div style="font-weight: 700; font-size: 0.8rem; color: var(--tier-1); display: flex; align-items: center; gap: 0.35rem;">
                         <i class="fa-solid fa-coins"></i> Ingresos Acumulados Proyectados (1 a 5 Años)
                     </div>
-                    <table style="width: 100%; border-collapse: collapse; font-size: 0.72rem; margin-top: 0.35rem;">
-                        <thead>
-                            <tr style="background: var(--bg-canvas); border-bottom: 1px solid var(--border-muted);">
-                                <th style="padding: 0.45rem; text-align: left;">Categoría</th>
-                                <th style="padding: 0.45rem;">Práctica (6m)</th>
-                                <th style="padding: 0.45rem;">Año 1 (Junior)</th>
-                                <th style="padding: 0.45rem;">Acumulado 3A</th>
-                                <th style="padding: 0.45rem;">Acumulado 5A</th>
-                                <th style="padding: 0.45rem; text-align: left;">Calidad de Vida</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr style="border-bottom: 1px solid var(--border-muted);">
-                                <td style="padding: 0.45rem;"><strong style="color: var(--tier-1);">Tier 1 · Software & Tech</strong></td>
-                                <td style="padding: 0.45rem; text-align: center;">$8.541.000 COP</td>
-                                <td style="padding: 0.45rem; text-align: center;">$45.000.000 COP</td>
-                                <td style="padding: 0.45rem; text-align: center;"><strong style="color: var(--brand-primary);">$185.000.000</strong></td>
-                                <td style="padding: 0.45rem; text-align: center;"><strong style="color: var(--tier-1);">$450M a $720M+ COP</strong></td>
-                                <td style="padding: 0.45rem; color: var(--text-muted);">Remoto / Híbrido, autonomía y valorización global.</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid var(--border-muted);">
-                                <td style="padding: 0.45rem;"><strong style="color: var(--tier-2);">Tier 2 · Sistemas & Datos</strong></td>
-                                <td style="padding: 0.45rem; text-align: center;">$8.541.000 COP</td>
-                                <td style="padding: 0.45rem; text-align: center;">$36.000.000 COP</td>
-                                <td style="padding: 0.45rem; text-align: center;">$150.000.000</td>
-                                <td style="padding: 0.45rem; text-align: center;"><strong>$320M a $480M COP</strong></td>
-                                <td style="padding: 0.45rem; color: var(--text-muted);">Gran estabilidad bancaria e industrial.</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid var(--border-muted);">
-                                <td style="padding: 0.45rem;"><strong style="color: var(--tier-3);">Tier 3 · Soporte TI</strong></td>
-                                <td style="padding: 0.45rem; text-align: center;">$8.541.000 COP</td>
-                                <td style="padding: 0.45rem; text-align: center;">$28.000.000 COP</td>
-                                <td style="padding: 0.45rem; text-align: center;">$115.000.000</td>
-                                <td style="padding: 0.45rem; text-align: center;">$210M a $310M COP</td>
-                                <td style="padding: 0.45rem; color: var(--text-muted);">Mayormente presencial y turnos técnicos.</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
+                        <table style="width: 100%; min-width: 600px; border-collapse: collapse; font-size: 0.72rem; margin-top: 0.35rem;">
+                            <thead>
+                                <tr style="background: var(--bg-canvas); border-bottom: 1px solid var(--border-muted);">
+                                    <th style="padding: 0.45rem; text-align: left;">Categoría</th>
+                                    <th style="padding: 0.45rem;">Práctica (6m)</th>
+                                    <th style="padding: 0.45rem;">Año 1 (Junior)</th>
+                                    <th style="padding: 0.45rem;">Acumulado 3A</th>
+                                    <th style="padding: 0.45rem;">Acumulado 5A</th>
+                                    <th style="padding: 0.45rem; text-align: left;">Calidad de Vida</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid var(--border-muted);">
+                                    <td style="padding: 0.45rem;"><strong style="color: var(--tier-1);">Tier 1 · Software & Tech</strong></td>
+                                    <td style="padding: 0.45rem; text-align: center;">$8.541.000 COP</td>
+                                    <td style="padding: 0.45rem; text-align: center;">$45.000.000 COP</td>
+                                    <td style="padding: 0.45rem; text-align: center;"><strong style="color: var(--brand-primary);">$185.000.000</strong></td>
+                                    <td style="padding: 0.45rem; text-align: center;"><strong style="color: var(--tier-1);">$450M a $720M+ COP</strong></td>
+                                    <td style="padding: 0.45rem; color: var(--text-muted);">Remoto / Híbrido, autonomía y valorización global.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border-muted);">
+                                    <td style="padding: 0.45rem;"><strong style="color: var(--tier-2);">Tier 2 · Sistemas & Datos</strong></td>
+                                    <td style="padding: 0.45rem; text-align: center;">$8.541.000 COP</td>
+                                    <td style="padding: 0.45rem; text-align: center;">$36.000.000 COP</td>
+                                    <td style="padding: 0.45rem; text-align: center;">$150.000.000</td>
+                                    <td style="padding: 0.45rem; text-align: center;"><strong>$320M a $480M COP</strong></td>
+                                    <td style="padding: 0.45rem; color: var(--text-muted);">Gran estabilidad bancaria e industrial.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border-muted);">
+                                    <td style="padding: 0.45rem;"><strong style="color: var(--tier-3);">Tier 3 · Soporte TI</strong></td>
+                                    <td style="padding: 0.45rem; text-align: center;">$8.541.000 COP</td>
+                                    <td style="padding: 0.45rem; text-align: center;">$28.000.000 COP</td>
+                                    <td style="padding: 0.45rem; text-align: center;">$115.000.000</td>
+                                    <td style="padding: 0.45rem; text-align: center;">$210M a $310M COP</td>
+                                    <td style="padding: 0.45rem; color: var(--text-muted);">Mayormente presencial y turnos técnicos.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <!-- Career Path Milestones -->
@@ -323,7 +329,7 @@
     <!-- FLOATING COMPARISON DOCK -->
     <div class="dock-bar" id="comparisonDock" role="region" aria-label="Barra de comparación">
         <span style="font-size: 0.72rem; font-weight: 700;"><i class="fa-solid fa-code-compare" style="color: var(--tier-1);"></i> Comparando <span class="count-badge" id="dockCount" style="margin-left: 2px;">0</span> de 3:</span>
-        <div id="dockList" style="display: flex; gap: 0.35rem;"></div>
+        <div id="dockList" style="display: flex; gap: 0.35rem; overflow-x: auto;"></div>
         <div style="display: flex; gap: 0.3rem;">
             <button class="btn btn-primary" style="padding: 0.2rem 0.5rem; font-size: 0.68rem;" data-action="openCompareModal">Ver Comparativa</button>
             <button class="btn" style="padding: 0.2rem 0.4rem; font-size: 0.68rem;" data-action="clearComparison">Limpiar</button>
@@ -341,7 +347,9 @@
                 <button class="btn btn-icon" data-action="closeCompareModal" aria-label="Cerrar modal"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
-                <table style="width: 100%; border-collapse: collapse; font-size: 0.72rem;" id="compareTable"></table>
+                <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
+                    <table style="width: 100%; min-width: 500px; border-collapse: collapse; font-size: 0.72rem;" id="compareTable"></table>
+                </div>
             </div>
         </div>
     </div>
@@ -381,16 +389,16 @@
                     </div>
                 </div>
 
-                <!-- Modal Tabs -->
+                <!-- Modal Tabs (Swipeable on Mobile) -->
                 <div class="modal-tabs" role="tablist">
                     <button class="modal-tab-item active" id="mTabOutreach" data-action="setModalTab" data-tab="outreach" role="tab">
                         <i class="fa-solid fa-paper-plane"></i> Contacto Directo
                     </button>
                     <button class="modal-tab-item" id="mTabInterview" data-action="setModalTab" data-tab="interview" role="tab">
-                        <i class="fa-solid fa-brain"></i> Simulador de Entrevista
+                        <i class="fa-solid fa-brain"></i> Simulador Entrevista
                     </button>
                     <button class="modal-tab-item" id="mTabCareer" data-action="setModalTab" data-tab="career" role="tab">
-                        <i class="fa-solid fa-chart-line"></i> Proyección & Finanzas
+                        <i class="fa-solid fa-chart-line"></i> Finanzas & Carrera
                     </button>
                     <button class="modal-tab-item" id="mTabDetails" data-action="setModalTab" data-tab="details" role="tab">
                         <i class="fa-solid fa-file-lines"></i> Perfil & Funciones
@@ -399,14 +407,14 @@
 
                 <!-- SUBSECTION 1: OUTREACH -->
                 <div id="mSecOutreach" style="display: flex; flex-direction: column; gap: 0.65rem;">
-                    <div style="display: flex; gap: 0.35rem;">
-                        <button class="btn btn-primary" id="mChEmail" data-action="setModalChannel" data-channel="email" style="flex: 1;"><i class="fa-solid fa-envelope"></i> Correo Formal</button>
-                        <button class="btn" id="mChWA" data-action="setModalChannel" data-channel="wa" style="flex: 1;"><i class="fa-brands fa-whatsapp"></i> WhatsApp Directo</button>
-                        <button class="btn" id="mChLinkedIn" data-action="setModalChannel" data-channel="linkedin" style="flex: 1;"><i class="fa-brands fa-linkedin"></i> Nota LinkedIn</button>
+                    <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
+                        <button class="btn btn-primary" id="mChEmail" data-action="setModalChannel" data-channel="email" style="flex: 1; min-width: 100px;"><i class="fa-solid fa-envelope"></i> Correo</button>
+                        <button class="btn" id="mChWA" data-action="setModalChannel" data-channel="wa" style="flex: 1; min-width: 100px;"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
+                        <button class="btn" id="mChLinkedIn" data-action="setModalChannel" data-channel="linkedin" style="flex: 1; min-width: 100px;"><i class="fa-brands fa-linkedin"></i> LinkedIn</button>
                     </div>
 
                     <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-sm); padding: 0.75rem;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.4rem; margin-bottom: 0.4rem;">
                             <strong style="font-size: 0.74rem;" id="mOutreachHeading">Carta Formal de Postulación Institucional</strong>
                             <div id="mOutreachActions" style="display: flex; gap: 0.3rem;"></div>
                         </div>
@@ -414,7 +422,7 @@
                     </div>
 
                     <!-- Contact Details -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem; font-size: 0.72rem; background: var(--bg-subtle); padding: 0.65rem; border-radius: var(--radius-xs); border: 1px solid var(--border-muted);">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.5rem; font-size: 0.72rem; background: var(--bg-subtle); padding: 0.65rem; border-radius: var(--radius-xs); border: 1px solid var(--border-muted);">
                         <div><span style="color: var(--text-dim);">Contacto / RRHH:</span> <strong id="mContactName"></strong></div>
                         <div><span style="color: var(--text-dim);">Correo:</span> <strong id="mContactEmail" style="font-family: var(--font-mono);"></strong></div>
                         <div><span style="color: var(--text-dim);">Teléfono / WhatsApp:</span> <strong id="mContactPhone" style="font-family: var(--font-mono);"></strong></div>
@@ -433,7 +441,7 @@
                         <strong style="color: var(--tier-1); font-size: 0.76rem;" id="mCurvaTitulo"></strong>
                         <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.2rem;" id="mCurvaDetalle"></p>
                     </div>
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem;" id="mTimelineGrid"></div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.4rem;" id="mTimelineGrid"></div>
                     <div style="background: var(--tier-1-bg); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: var(--radius-xs); padding: 0.55rem 0.75rem; font-size: 0.72rem;">
                         <strong style="color: var(--tier-1);">Acumulado 5 Años:</strong> <span id="mFinAcumulado5A"></span> • <span id="mFinDiferencial" style="color: var(--brand-primary); font-weight: 600;"></span>
                     </div>
@@ -453,8 +461,8 @@
             </div>
 
             <!-- Modal Footer -->
-            <div style="padding: 0.65rem 1.25rem; border-top: 1px solid var(--border-muted); display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface-raised);">
-                <span style="font-size: 0.7rem; color: var(--text-dim);">Cierre de Convocatoria: <strong id="mClosingDate" style="color: var(--tier-3); font-family: var(--font-mono);"></strong></span>
+            <div style="padding: 0.65rem 1rem; border-top: 1px solid var(--border-muted); display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface-raised); position: sticky; bottom: 0;">
+                <span style="font-size: 0.7rem; color: var(--text-dim);">Cierre: <strong id="mClosingDate" style="color: var(--tier-3); font-family: var(--font-mono);"></strong></span>
                 <button class="btn btn-primary" data-action="closeDetailModal">Listo</button>
             </div>
         </div>
@@ -463,7 +471,7 @@
     <!-- Notification Toast Element -->
     <div class="toast-msg" id="toastMsg" role="alert" aria-live="polite">Mensaje</div>
 
-    <!-- Data Module & Clean Application Architecture -->
+    <!-- Data Module & Application Core -->
     <script src="assets/js/data.js"></script>
     <script src="assets/js/app.js"></script>
 </body>

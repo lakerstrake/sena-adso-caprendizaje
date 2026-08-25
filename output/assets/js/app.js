@@ -1,6 +1,6 @@
 /**
  * SGVA SENA ADSO - Clean Architecture Application Controller
- * Patterns: MVVM / Store Pattern + Event Delegation + Observer
+ * Patterns: MVVM / Store Pattern + Event Delegation + Responsive Adaptations
  * Security: OWASP Top 10 Compliant (Zero Inline JS, Strict Contextual Escaping)
  * Accessibility: WCAG 2.1 AA / ISO 9241-210 Compliant
  */
@@ -61,7 +61,11 @@ class AppStore {
         this.activeTier = '';
         this.activeStack = '';
         this.filterFavs = false;
-        this.viewMode = 'table'; // 'table' | 'cards'
+        
+        // Smart responsive view mode default
+        const isMobileScreen = typeof window !== 'undefined' && window.innerWidth < 768;
+        this.viewMode = isMobileScreen ? 'cards' : 'table';
+        
         this.currentPage = 1;
         this.pageSize = CONFIG.PAGINATION.DEFAULT_PAGE_SIZE;
         this.sortCol = 'ranking_posicion';
@@ -149,6 +153,7 @@ class AppController {
         this.bindEvents();
         this.updateFavCounter();
         this.updateCompareDock();
+        this.setLayout(this.store.viewMode);
         this.applyFilters();
     }
 
@@ -299,10 +304,8 @@ class AppController {
 
     /**
      * Unobtrusive Event Delegation Listener.
-     * Captures all actions declaratively via data-action.
      */
     bindEvents() {
-        // Global Click Event Delegator
         document.addEventListener('click', (e) => {
             const actionEl = e.target.closest('[data-action]');
             if (!actionEl) return;
@@ -311,7 +314,6 @@ class AppController {
             this.handleAction(action, actionEl, e);
         });
 
-        // Search Input
         if (this.dom.mainSearch) {
             this.dom.mainSearch.addEventListener('input', () => {
                 this.store.currentPage = 1;
@@ -319,7 +321,6 @@ class AppController {
             });
         }
 
-        // Dropdown Filters
         ['filterChannel', 'filterCompetition', 'filterDpto', 'filterCity', 'filterSort'].forEach(id => {
             const el = this.dom[id];
             if (el) {
@@ -331,7 +332,6 @@ class AppController {
             }
         });
 
-        // Keyboard Access: Escape
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 this.closeDetailModal();
@@ -340,9 +340,6 @@ class AppController {
         });
     }
 
-    /**
-     * Action Dispatcher
-     */
     handleAction(action, el, event) {
         switch (action) {
             case 'switchNavTab':
@@ -660,52 +657,101 @@ class AppController {
 
     goToPage(p) {
         this.store.currentPage = p;
-        this.renderTable();
+        if (this.store.viewMode === 'table') this.renderTable();
+        else this.renderCards();
     }
 
     renderCards() {
         const grid = this.dom.cardsGridWrap;
         if (!grid) return;
         grid.innerHTML = '';
-        this.store.filteredData.forEach(it => {
+        
+        const total = this.store.filteredData.length;
+        const totalPages = Math.ceil(total / this.store.pageSize) || 1;
+        if (this.store.currentPage > totalPages) this.store.currentPage = totalPages;
+
+        const start = (this.store.currentPage - 1) * this.store.pageSize;
+        const pageSlice = this.store.filteredData.slice(start, start + this.store.pageSize);
+
+        if (total === 0) {
+            grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 2.5rem; color: var(--text-dim);">No se encontraron vacantes con los criterios seleccionados.</div>`;
+            if (this.dom.lblPagination) this.dom.lblPagination.textContent = '0 resultados';
+            if (this.dom.paginationPages) this.dom.paginationPages.innerHTML = '';
+            return;
+        }
+
+        pageSlice.forEach(it => {
             const card = document.createElement('article');
             card.className = 'clean-card';
             card.setAttribute('data-action', 'openDetailModal');
             card.setAttribute('data-id', it.solicitud_id);
+
+            const isFav = this.store.isFavorite(it.solicitud_id);
+            const isComp = this.store.isCompared(it.solicitud_id);
+            const favIcon = isFav ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark';
+            const favColor = isFav ? 'color: var(--tier-3);' : '';
+
+            let tierClass = 'pill-tier-1';
+            if (it.cat_id === 'TIER_2') tierClass = 'pill-tier-2';
+            else if (it.cat_id === 'TIER_3') tierClass = 'pill-tier-3';
+            else if (it.cat_id === 'TIER_4') tierClass = 'pill-tier-4';
+            else if (it.cat_id === 'TIER_5') tierClass = 'pill-tier-5';
+
+            const hasEmail = it.email && it.email.includes('@');
+            const posFormatted = (it.ranking_posicion || 1) < 10 ? '0' + it.ranking_posicion : it.ranking_posicion;
+
             card.innerHTML = `
                 <div>
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.35rem;">
-                        <span class="pill-badge pill-tier-1">${SecurityService.escapeHtml(it.cat_badge || 'Tier')}</span>
-                        <span class="rating-chip"><i class="fa-solid fa-star"></i> ${(it.reputacion_rating || 3.8).toFixed(1)}</span>
+                        <div style="display: flex; align-items: center; gap: 0.4rem;">
+                            <span style="font-family: var(--font-mono); font-weight: 700; color: var(--text-dim); font-size: 0.72rem;">#${posFormatted}</span>
+                            <span class="pill-badge ${tierClass}">${SecurityService.escapeHtml(it.cat_badge || 'Tier')}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.4rem;">
+                            <span class="rating-chip"><i class="fa-solid fa-star"></i> ${(it.reputacion_rating || 3.8).toFixed(1)}</span>
+                            <i class="${favIcon}" style="cursor: pointer; font-size: 0.82rem; ${favColor}" data-action="toggleFavorite" data-id="${SecurityService.escapeHtml(it.solicitud_id)}"></i>
+                        </div>
                     </div>
-                    <h3 style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); line-height: 1.3;">${SecurityService.escapeHtml(it.empresa)}</h3>
-                    <div style="font-size: 0.66rem; color: var(--text-dim); margin-top: 0.15rem;">${SecurityService.escapeHtml(it.ciudad || '')}, ${SecurityService.escapeHtml(it.departamento || '')}</div>
+                    <h3 style="font-size: 0.84rem; font-weight: 700; color: var(--text-main); line-height: 1.3;">${SecurityService.escapeHtml(it.empresa)}</h3>
+                    <div style="font-size: 0.66rem; color: var(--text-dim); margin-top: 0.15rem;">${SecurityService.escapeHtml(it.ciudad || '')}, ${SecurityService.escapeHtml(it.departamento || '')} • ${it.vacantes || 1} vac · ${it.postulados || 0} post</div>
                 </div>
+
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.3rem; background: var(--bg-canvas); padding: 0.35rem; border-radius: var(--radius-xs); text-align: center;">
                     <div><span style="font-size: 0.58rem; color: var(--text-dim);">PUNTOS</span><div style="font-weight: 700; color: var(--tier-1);">${it.puntaje_exito || 0}</div></div>
                     <div><span style="font-size: 0.58rem; color: var(--text-dim);">ESCALA</span><div style="font-weight: 700; color: var(--tier-2);">${it.escalabilidad_score || 70}</div></div>
-                    <div><span style="font-size: 0.58rem; color: var(--text-dim);">VACANTES</span><div style="font-weight: 700; color: var(--brand-primary);">${it.vacantes || 1}</div></div>
+                    <div><span style="font-size: 0.58rem; color: var(--text-dim);">5A SALARIO</span><div style="font-weight: 700; color: var(--brand-primary); font-size: 0.64rem;">${SecurityService.escapeHtml(it.techo_salarial_5anios ? it.techo_salarial_5anios.split('(')[0].trim() : '')}</div></div>
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.66rem; color: var(--text-muted); border-top: 1px solid var(--border-muted); padding-top: 0.35rem;">
-                    <span><strong>Práctica:</strong> $1.423.500 COP</span>
-                    <span style="color: var(--tier-1); font-weight: 600;">5A: ${SecurityService.escapeHtml(it.techo_salarial_5anios ? it.techo_salarial_5anios.split('(')[0].trim() : '')}</span>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-muted); padding-top: 0.4rem;">
+                    <span style="color: var(--brand-primary); font-weight: 600; font-family: var(--font-mono); font-size: 0.72rem;">$1.423.500 COP</span>
+                    <div class="row-actions">
+                        ${hasEmail ? `<a href="mailto:${SecurityService.escapeHtml(it.email)}?subject=Postulaci%C3%B3n+Contrato+ADSO+-+Juan+Manuel+Lagos&body=${encodeURIComponent(it.correo_formal_completo || '')}" class="mini-btn mini-mail" title="Enviar correo"><i class="fa-solid fa-envelope"></i></a>` : ''}
+                        ${it.is_whatsapp && it.whatsapp_url ? `<a href="${SecurityService.escapeHtml(it.whatsapp_url)}" target="_blank" rel="noopener noreferrer" class="mini-btn mini-wa" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
+                        <button class="mini-btn" style="font-weight: 700;" data-action="openDetailModal" data-id="${SecurityService.escapeHtml(it.solicitud_id)}">Ver Detalle</button>
+                    </div>
                 </div>
             `;
             grid.appendChild(card);
         });
+
+        if (this.dom.lblPagination) {
+            this.dom.lblPagination.textContent = `Mostrando ${start + 1}-${Math.min(start + this.store.pageSize, total)} de ${total} vacantes`;
+        }
+
+        this.renderPagination(totalPages);
     }
 
     setLayout(mode) {
         this.store.viewMode = mode;
         if (mode === 'cards') {
-            this.dom.tableCardWrap.style.display = 'none';
-            this.dom.cardsGridWrap.style.display = 'grid';
+            if (this.dom.tableCardWrap) this.dom.tableCardWrap.style.display = 'none';
+            if (this.dom.cardsGridWrap) this.dom.cardsGridWrap.style.display = 'grid';
             this.dom.btnLayoutCards?.classList.add('active');
             this.dom.btnLayoutTable?.classList.remove('active');
             this.renderCards();
         } else {
-            this.dom.tableCardWrap.style.display = 'flex';
-            this.dom.cardsGridWrap.style.display = 'none';
+            if (this.dom.tableCardWrap) this.dom.tableCardWrap.style.display = 'flex';
+            if (this.dom.cardsGridWrap) this.dom.cardsGridWrap.style.display = 'none';
             this.dom.btnLayoutTable?.classList.add('active');
             this.dom.btnLayoutCards?.classList.remove('active');
             this.renderTable();
