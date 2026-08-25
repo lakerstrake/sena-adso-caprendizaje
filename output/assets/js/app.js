@@ -49,6 +49,31 @@ class SecurityService {
             .replace(/"/g, '&quot;')
             .replace(/'/g, '&#039;');
     }
+
+    /**
+     * Validates if a phone string is a real, non-dummy Colombian mobile phone (starts with 3, 10 digits).
+     * @param {*} phone 
+     * @returns {boolean}
+     */
+    static isValidMobile(phone) {
+        if (!phone) return false;
+        const digits = String(phone).replace(/\D/g, '');
+        if (digits.length === 10 && digits.startsWith('3')) {
+            // Reject dummy sequences like 3333333333, 3000000000, 3111111111
+            if (/^(\d)\1+$/.test(digits)) return false;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Constructs a safe, clean WhatsApp URL if phone is valid mobile.
+     */
+    static getWhatsAppUrl(phone, message) {
+        if (!SecurityService.isValidMobile(phone)) return '';
+        const digits = String(phone).replace(/\D/g, '');
+        return `https://wa.me/57${digits}?text=${encodeURIComponent(message || '')}`;
+    }
 }
 
 // =========================================================================
@@ -829,7 +854,20 @@ class AppController {
         const pageSlice = this.store.filteredData.slice(start, start + this.store.pageSize);
 
         if (total === 0) {
-            tbody.innerHTML = `<tr><td colspan="11" style="text-align: center; padding: 2.5rem; color: var(--text-dim);">No se encontraron vacantes con los criterios seleccionados.</td></tr>`;
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="11" style="text-align: center; padding: 3.5rem 1rem;">
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 0.6rem; color: var(--text-muted);">
+                            <i class="fa-solid fa-magnifying-glass" style="font-size: 1.8rem; color: var(--text-dim);" aria-hidden="true"></i>
+                            <strong style="color: var(--text-main); font-size: 0.86rem;">No se encontraron vacantes con los criterios seleccionados</strong>
+                            <p style="font-size: 0.72rem; max-width: 380px;">Prueba ajustando los términos de búsqueda o restableciendo los filtros para ver las 179 oportunidades.</p>
+                            <button class="btn btn-primary" data-action="resetFilters" style="margin-top: 0.3rem;">
+                                <i class="fa-solid fa-rotate-left"></i> Restablecer Filtros
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
             if (this.dom.lblPagination) this.dom.lblPagination.textContent = '0 resultados';
             if (this.dom.paginationPages) this.dom.paginationPages.innerHTML = '';
             return;
@@ -857,16 +895,19 @@ class AppController {
             else if (it.competencia_ratio > 1.0) dotClass = 'ratio-blue';
 
             const hasEmail = it.email && it.email.includes('@');
+            const hasValidWA = SecurityService.isValidMobile(it.telefono);
+            const waUrl = hasValidWA ? SecurityService.getWhatsAppUrl(it.telefono, it.whatsapp_message) : '';
+
             const cleanApoyo = "$1.423.500 COP";
             const cleanTecho5A = it.techo_salarial_5anios ? it.techo_salarial_5anios.split('(')[0].replace('COP','').trim() : '$10M-$22M';
             const posFormatted = (it.ranking_posicion || 1) < 10 ? '0' + it.ranking_posicion : it.ranking_posicion;
 
             tr.innerHTML = `
                 <td style="text-align: center;">
-                    <input type="checkbox" ${isComp ? 'checked' : ''} data-action="toggleCompare" data-id="${SecurityService.escapeHtml(it.solicitud_id)}">
+                    <input type="checkbox" ${isComp ? 'checked' : ''} data-action="toggleCompare" data-id="${SecurityService.escapeHtml(it.solicitud_id)}" aria-label="Comparar empresa">
                 </td>
                 <td>
-                    <i class="${favIcon}" style="cursor: pointer; ${favColor}" data-action="toggleFavorite" data-id="${SecurityService.escapeHtml(it.solicitud_id)}"></i>
+                    <i class="${favIcon}" style="cursor: pointer; ${favColor}" data-action="toggleFavorite" data-id="${SecurityService.escapeHtml(it.solicitud_id)}" aria-label="Marcar como favorita"></i>
                 </td>
                 <td style="font-family: var(--font-mono); font-weight: 700; color: var(--text-dim);">#${posFormatted}</td>
                 <td>
@@ -894,8 +935,8 @@ class AppController {
                 <td style="text-align: right;">
                     <div class="row-actions">
                         ${hasEmail ? `<a href="mailto:${SecurityService.escapeHtml(it.email)}?subject=Postulaci%C3%B3n+Contrato+ADSO+-+Juan+Manuel+Lagos&body=${encodeURIComponent(it.correo_formal_completo || '')}" class="mini-btn mini-mail" title="Enviar correo formal"><i class="fa-solid fa-envelope"></i></a>` : ''}
-                        ${it.is_whatsapp && it.whatsapp_url ? `<a href="${SecurityService.escapeHtml(it.whatsapp_url)}" target="_blank" rel="noopener noreferrer" class="mini-btn mini-wa" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
-                        ${it.linkedin_contact_search_url ? `<a href="${SecurityService.escapeHtml(it.linkedin_contact_search_url)}" target="_blank" rel="noopener noreferrer" class="mini-btn" title="LinkedIn"><i class="fa-brands fa-linkedin" style="color: var(--linkedin-color);"></i></a>` : ''}
+                        ${hasValidWA ? `<a href="${SecurityService.escapeHtml(waUrl)}" target="_blank" rel="noopener noreferrer" class="mini-btn mini-wa" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
+                        ${it.linkedin_contact_search_url ? `<a href="${SecurityService.escapeHtml(it.linkedin_contact_search_url)}" target="_blank" rel="noopener noreferrer" class="mini-btn" title="Buscar en LinkedIn"><i class="fa-brands fa-linkedin" style="color: var(--linkedin-color);"></i></a>` : ''}
                         <button class="mini-btn" style="font-weight: 700;" data-action="openDetailModal" data-id="${SecurityService.escapeHtml(it.solicitud_id)}">Detalle</button>
                     </div>
                 </td>
@@ -912,13 +953,46 @@ class AppController {
 
     renderPagination(totalPages) {
         if (!this.dom.paginationPages) return;
-        let pagesHtml = '';
-        for (let i = 1; i <= totalPages; i++) {
-            if (totalPages > 6 && Math.abs(i - this.store.currentPage) > 2 && i !== 1 && i !== totalPages) continue;
-            const activeStyle = i === this.store.currentPage ? 'background: var(--brand-primary); color: #fff;' : '';
-            pagesHtml += `<button class="btn" style="padding: 0.15rem 0.45rem; font-size: 0.68rem; ${activeStyle}" data-action="goToPage" data-page="${i}">${i}</button>`;
+        if (totalPages <= 1) {
+            this.dom.paginationPages.innerHTML = '';
+            return;
         }
-        this.dom.paginationPages.innerHTML = pagesHtml;
+
+        const isMobile = window.innerWidth < 640;
+        let html = '';
+
+        if (isMobile) {
+            html = `
+                <div style="display: flex; align-items: center; gap: 0.35rem;">
+                    <button class="btn" style="padding: 0.2rem 0.45rem; font-size: 0.68rem;" data-action="goToPage" data-page="${Math.max(1, this.store.currentPage - 1)}" ${this.store.currentPage === 1 ? 'disabled style="opacity: 0.4; cursor: not-allowed;"' : ''} aria-label="Página anterior">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <span style="font-size: 0.68rem; font-family: var(--font-mono); color: var(--text-main); font-weight: 600; padding: 0 0.2rem;">
+                        ${this.store.currentPage} / ${totalPages}
+                    </span>
+                    <button class="btn" style="padding: 0.2rem 0.45rem; font-size: 0.68rem;" data-action="goToPage" data-page="${Math.min(totalPages, this.store.currentPage + 1)}" ${this.store.currentPage === totalPages ? 'disabled style="opacity: 0.4; cursor: not-allowed;"' : ''} aria-label="Página siguiente">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            `;
+        } else {
+            html += `<button class="btn" style="padding: 0.18rem 0.45rem; font-size: 0.68rem;" data-action="goToPage" data-page="${Math.max(1, this.store.currentPage - 1)}" ${this.store.currentPage === 1 ? 'disabled style="opacity: 0.4; cursor: not-allowed;"' : ''}><i class="fa-solid fa-chevron-left"></i></button>`;
+
+            for (let i = 1; i <= totalPages; i++) {
+                if (totalPages > 6 && Math.abs(i - this.store.currentPage) > 2 && i !== 1 && i !== totalPages) {
+                    if (i === 2 || i === totalPages - 1) {
+                        html += `<span style="color: var(--text-dim); padding: 0 0.15rem;">...</span>`;
+                    }
+                    continue;
+                }
+                const activeStyle = i === this.store.currentPage ? 'background: var(--brand-primary); color: #fff; border-color: var(--brand-primary);' : '';
+                html += `<button class="btn" style="padding: 0.18rem 0.45rem; font-size: 0.68rem; min-width: 26px; ${activeStyle}" data-action="goToPage" data-page="${i}">${i}</button>`;
+            }
+
+            html += `<button class="btn" style="padding: 0.18rem 0.45rem; font-size: 0.68rem;" data-action="goToPage" data-page="${Math.min(totalPages, this.store.currentPage + 1)}" ${this.store.currentPage === totalPages ? 'disabled style="opacity: 0.4; cursor: not-allowed;"' : ''}><i class="fa-solid fa-chevron-right"></i></button>`;
+        }
+
+        this.dom.paginationPages.innerHTML = html;
     }
 
     goToPage(p) {
@@ -940,7 +1014,18 @@ class AppController {
         const pageSlice = this.store.filteredData.slice(start, start + this.store.pageSize);
 
         if (total === 0) {
-            grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 2.5rem; color: var(--text-dim);">No se encontraron vacantes con los criterios seleccionados.</div>`;
+            grid.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 3.5rem 1rem; background: var(--bg-surface); border: 1px solid var(--border-muted); border-radius: var(--radius-md);">
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 0.6rem; color: var(--text-muted);">
+                        <i class="fa-solid fa-magnifying-glass" style="font-size: 1.8rem; color: var(--text-dim);" aria-hidden="true"></i>
+                        <strong style="color: var(--text-main); font-size: 0.86rem;">No se encontraron vacantes con los filtros actuales</strong>
+                        <p style="font-size: 0.72rem; max-width: 380px;">Prueba ajustando los términos de búsqueda o restableciendo los filtros para ver las 179 oportunidades.</p>
+                        <button class="btn btn-primary" data-action="resetFilters" style="margin-top: 0.3rem;">
+                            <i class="fa-solid fa-rotate-left"></i> Restablecer Filtros
+                        </button>
+                    </div>
+                </div>
+            `;
             if (this.dom.lblPagination) this.dom.lblPagination.textContent = '0 resultados';
             if (this.dom.paginationPages) this.dom.paginationPages.innerHTML = '';
             return;
@@ -953,7 +1038,6 @@ class AppController {
             card.setAttribute('data-id', it.solicitud_id);
 
             const isFav = this.store.isFavorite(it.solicitud_id);
-            const isComp = this.store.isCompared(it.solicitud_id);
             const favIcon = isFav ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark';
             const favColor = isFav ? 'color: var(--tier-3);' : '';
 
@@ -964,6 +1048,9 @@ class AppController {
             else if (it.cat_id === 'TIER_5') tierClass = 'pill-tier-5';
 
             const hasEmail = it.email && it.email.includes('@');
+            const hasValidWA = SecurityService.isValidMobile(it.telefono);
+            const waUrl = hasValidWA ? SecurityService.getWhatsAppUrl(it.telefono, it.whatsapp_message) : '';
+
             const posFormatted = (it.ranking_posicion || 1) < 10 ? '0' + it.ranking_posicion : it.ranking_posicion;
 
             card.innerHTML = `
@@ -992,7 +1079,8 @@ class AppController {
                     <span style="color: var(--brand-primary); font-weight: 600; font-family: var(--font-mono); font-size: 0.72rem;">$1.423.500 COP</span>
                     <div class="row-actions">
                         ${hasEmail ? `<a href="mailto:${SecurityService.escapeHtml(it.email)}?subject=Postulaci%C3%B3n+Contrato+ADSO+-+Juan+Manuel+Lagos&body=${encodeURIComponent(it.correo_formal_completo || '')}" class="mini-btn mini-mail" title="Enviar correo"><i class="fa-solid fa-envelope"></i></a>` : ''}
-                        ${it.is_whatsapp && it.whatsapp_url ? `<a href="${SecurityService.escapeHtml(it.whatsapp_url)}" target="_blank" rel="noopener noreferrer" class="mini-btn mini-wa" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
+                        ${hasValidWA ? `<a href="${SecurityService.escapeHtml(waUrl)}" target="_blank" rel="noopener noreferrer" class="mini-btn mini-wa" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
+                        ${it.linkedin_contact_search_url ? `<a href="${SecurityService.escapeHtml(it.linkedin_contact_search_url)}" target="_blank" rel="noopener noreferrer" class="mini-btn" title="LinkedIn"><i class="fa-brands fa-linkedin" style="color: var(--linkedin-color);"></i></a>` : ''}
                         <button class="mini-btn" style="font-weight: 700;" data-action="openDetailModal" data-id="${SecurityService.escapeHtml(it.solicitud_id)}">Ver Detalle</button>
                     </div>
                 </div>
@@ -1248,10 +1336,13 @@ class AppController {
         } else if (ch === 'wa') {
             if (this.dom.mOutreachHeading) this.dom.mOutreachHeading.textContent = 'Mensaje de WhatsApp Directo';
             if (this.dom.mOutreachBody) this.dom.mOutreachBody.textContent = it.whatsapp_message || '';
+            const hasValidWA = SecurityService.isValidMobile(it.telefono);
+            const waUrl = hasValidWA ? SecurityService.getWhatsAppUrl(it.telefono, it.whatsapp_message) : '';
+
             if (this.dom.mOutreachActions) {
                 this.dom.mOutreachActions.innerHTML = `
                     <button class="btn" style="padding: 0.2rem 0.5rem;" data-action="copyOutreach"><i class="fa-regular fa-copy"></i> Copiar Mensaje</button>
-                    ${it.is_whatsapp && it.whatsapp_url ? `<a href="${SecurityService.escapeHtml(it.whatsapp_url)}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="padding: 0.2rem 0.5rem;"><i class="fa-brands fa-whatsapp"></i> Abrir Chat</a>` : '<span style="font-size: 0.68rem; color: var(--text-dim);">Teléfono fijo (usa correo)</span>'}
+                    ${hasValidWA ? `<a href="${SecurityService.escapeHtml(waUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="padding: 0.2rem 0.5rem;"><i class="fa-brands fa-whatsapp"></i> Abrir Chat</a>` : '<span style="font-size: 0.68rem; color: var(--text-dim);"><i class="fa-solid fa-phone"></i> Teléfono PBX / Fijo (usa correo o LinkedIn)</span>'}
                 `;
             }
         } else if (ch === 'linkedin') {
@@ -1268,12 +1359,38 @@ class AppController {
 
     copyToClipboard(elementId) {
         const el = document.getElementById(elementId);
-        if (el) {
-            navigator.clipboard.writeText(el.textContent).then(() => {
-                this.showToast('Texto copiado al portapapeles');
+        if (!el) return;
+        const text = el.textContent || el.value || '';
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(() => {
+                this.showToast('✓ Texto copiado al portapapeles');
             }).catch(() => {
-                this.showToast('No se pudo copiar');
+                this.fallbackCopyText(text);
             });
+        } else {
+            this.fallbackCopyText(text);
+        }
+    }
+
+    fallbackCopyText(text) {
+        try {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            const successful = document.execCommand('copy');
+            document.body.removeChild(textArea);
+            if (successful) {
+                this.showToast('✓ Texto copiado al portapapeles');
+            } else {
+                this.showToast('No se pudo copiar automáticamente');
+            }
+        } catch (err) {
+            this.showToast('No se pudo copiar automáticamente');
         }
     }
 

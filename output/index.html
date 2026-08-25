@@ -104,15 +104,24 @@
     <!-- Main Application Workspace -->
     <main class="main-content" role="main">
 
-        <!-- Anti-Blocking Operational Notice -->
-        <aside class="notice-banner" id="antiBlockNotice" role="region" aria-label="Aviso de protocolo anti-bloqueo">
-            <div style="display: flex; align-items: center; gap: 0.4rem;">
-                <i class="fa-solid fa-shield-halved" style="color: var(--tier-3); flex-shrink: 0;" aria-hidden="true"></i>
-                <span><strong>Protocolo Anti-Bloqueo:</strong> Contacta directamente a las empresas por <strong>Correo</strong>, <strong>WhatsApp</strong> o <strong>LinkedIn</strong> con tu CV para no bloquear tu perfil 15 días en SGVA.</span>
+        <!-- Candidate Value & Availability Banner -->
+        <aside class="notice-banner" id="candidateBanner" role="region" aria-label="Disponibilidad del candidato">
+            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                <span class="pill-badge" style="background: rgba(16, 185, 129, 0.15); color: var(--brand-primary); font-weight: 700;">
+                    <i class="fa-solid fa-circle-check"></i> DISPONIBLE
+                </span>
+                <span style="font-size: 0.72rem; color: var(--text-main);">
+                    <strong>Juan Manuel Lagos Monroy</strong> · Tecnólogo ADSO SENA para <strong>Etapa Productiva (Septiembre 2026 – Marzo 2027)</strong> · Desarrollo Full-Stack, Java, React, SQL & Cloud.
+                </span>
             </div>
-            <button class="btn btn-icon" style="border: none; background: transparent; cursor: pointer; color: var(--text-muted); flex-shrink: 0;" data-action="dismissNotice" aria-label="Cerrar aviso">
-                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-            </button>
+            <div style="display: flex; align-items: center; gap: 0.35rem; flex-shrink: 0;">
+                <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="padding: 0.22rem 0.55rem; font-size: 0.68rem;">
+                    <i class="fa-solid fa-file-pdf"></i> Ver Hoja de Vida
+                </a>
+                <button class="btn btn-icon" style="border: none; background: transparent; cursor: pointer; color: var(--text-muted); width: 24px; height: 24px;" data-action="dismissNotice" aria-label="Cerrar aviso">
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                </button>
+            </div>
         </aside>
 
         <!-- SECTION 1: DIRECTORY WORKSPACE -->
@@ -374,7 +383,10 @@
                     <h2 id="mTitle" style="font-size: 0.96rem; font-weight: 700;">Empresa</h2>
                     <span id="mSubtitle" style="font-size: 0.7rem; color: var(--text-muted);">Ubicación • NIT</span>
                 </div>
-                <div style="display: flex; gap: 0.35rem;">
+                <div style="display: flex; align-items: center; gap: 0.35rem;">
+                    <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="padding: 0.22rem 0.5rem; font-size: 0.68rem;" title="Ver Hoja de Vida y Certificados de Juan Manuel Lagos">
+                        <i class="fa-solid fa-file-pdf"></i> Hoja de Vida
+                    </a>
                     <button class="btn btn-icon" id="mFavBtn" data-action="toggleModalFavorite" aria-label="Favorito"><i class="fa-regular fa-bookmark"></i></button>
                     <button class="btn btn-icon" data-action="closeDetailModal" aria-label="Cerrar modal"><i class="fa-solid fa-xmark"></i></button>
                 </div>
