@@ -685,5 +685,35 @@
     <!-- Data Module & Application Core -->
     <script src="assets/js/data.js"></script>
     <script src="assets/js/app.js"></script>
+
+    <!-- ─── Sync Status Badge ─── -->
+    <div id="syncBadge" style="
+        position: fixed; bottom: 1rem; right: 1rem; z-index: 9999;
+        background: rgba(15,23,42,0.92); backdrop-filter: blur(12px);
+        border: 1px solid rgba(99,102,241,0.35); border-radius: 0.6rem;
+        padding: 0.45rem 0.85rem; font-size: 0.68rem; font-family: 'JetBrains Mono', monospace;
+        color: #a5b4fc; display: flex; align-items: center; gap: 0.55rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.4); cursor: pointer;
+        transition: opacity 0.3s; max-width: 340px;"
+        title="Haz clic para ocultar"
+        onclick="this.style.opacity='0'; setTimeout(()=>this.style.display='none',300)">
+        <span style="display:inline-block; width:7px; height:7px; border-radius:50%;
+            background:#10b981; box-shadow:0 0 6px #10b981; flex-shrink:0;
+            animation: pulse-dot 2s infinite;"></span>
+        <span>
+            <span style="color:#10b981; font-weight:700;">GitHub → Cloudflare</span>
+            <span style="color:#64748b;"> · </span>
+            <span id="syncDate" style="color:#e2e8f0;">25 ago 2026, 16:15</span>
+            <br>
+            <span id="syncMsg" style="color:#94a3b8; font-size:0.63rem; display:block; margin-top:0.1rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:270px;">fix(cv-link): corrected cvDrive PDF link in CONFIG and re...</span>
+        </span>
+        <span style="color:#475569; font-size:0.6rem; margin-left:auto; flex-shrink:0;">✕</span>
+    </div>
+    <style>
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; box-shadow: 0 0 6px #10b981; }
+            50% { opacity: 0.6; box-shadow: 0 0 12px #10b981; }
+        }
+    </style>
 </body>
 </html>

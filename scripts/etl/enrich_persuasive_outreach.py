@@ -153,7 +153,8 @@ def build_high_conversion_email(empresa, contacto_info, perfil, funciones, solic
     saludo = contacto_info["saludo_email"]
     persona_o_equipo = contacto_info["name"]
     tech_match = extract_tech_match(funciones, perfil)
-    cv_url = get_tracking_cv_url(empresa, solicitud_id, contacto_info["name"], "email")
+    # Usar el link directo del PDF en Google Drive (funciona siempre, sin depender de Cloudflare redirect)
+    cv_url = CANDIDATE["cv_pdf_url"]
 
     # Asunto de alta tasa de apertura (Open Rate > 85%)
     if contacto_info["type"] == "person":
@@ -196,7 +197,8 @@ def build_high_conversion_whatsapp(empresa, contacto_info, funciones, solicitud_
     """
     saludo = contacto_info["saludo_wa"]
     tech_match = extract_tech_match(funciones, "")
-    cv_url = get_tracking_cv_url(empresa, solicitud_id, contacto_info["name"], "whatsapp")
+    # Usar el link directo del PDF en Google Drive
+    cv_url = CANDIDATE["cv_pdf_url"]
 
     return (
         f"{saludo} Mi nombre es {CANDIDATE['name']}, aprendiz del Tecnólogo en Análisis y Desarrollo de Software (ADSO) del SENA.\n\n"
