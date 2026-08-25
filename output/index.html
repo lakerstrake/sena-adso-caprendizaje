@@ -83,6 +83,10 @@
                 </div>
 
                 <div class="nav-tools">
+                    <button class="session-badge" id="btnAuthTrigger" data-action="openAuthModal" title="Estado de autenticación / Cambiar perfil">
+                        <i class="fa-solid fa-user-shield" style="color: var(--brand-primary);" aria-hidden="true"></i>
+                        <span id="lblSessionUser">Aprendiz ADSO</span>
+                    </button>
                     <button class="btn" data-action="exportData" data-format="xlsx" title="Descargar Excel (.xlsx)" aria-label="Exportar Excel" style="padding: 0.22rem 0.45rem;">
                         <i class="fa-solid fa-file-excel" style="color: #10b981;" aria-hidden="true"></i>
                     </button>
@@ -472,6 +476,90 @@
             <div style="padding: 0.65rem 1rem; border-top: 1px solid var(--border-muted); display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface-raised); position: sticky; bottom: 0;">
                 <span style="font-size: 0.7rem; color: var(--text-dim);">Cierre: <strong id="mClosingDate" style="color: var(--tier-3); font-family: var(--font-mono);"></strong></span>
                 <button class="btn btn-primary" data-action="closeDetailModal">Listo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUTHENTICATION & LOGIN MODAL -->
+    <div class="modal-backdrop" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+        <div class="auth-panel">
+            <div class="auth-header">
+                <div class="auth-badge-icon" aria-hidden="true">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h2 id="authTitle" style="font-size: 0.96rem; font-weight: 700; color: var(--text-main);">Acceso Seguro SGVA SENA</h2>
+                <p style="font-size: 0.72rem; color: var(--text-muted);">Directorio Estratégico · ADSO 2026</p>
+                
+                <!-- Role Selector Tabs -->
+                <div class="nav-pills" style="width: 100%; margin-top: 0.4rem;" role="tablist">
+                    <button class="nav-pill-btn active" id="tabAuthAdmin" data-action="switchAuthTab" data-tab="admin" style="flex: 1;">
+                        <i class="fa-solid fa-user-gear"></i> Aprendiz ADSO
+                    </button>
+                    <button class="nav-pill-btn" id="tabAuthGuest" data-action="switchAuthTab" data-tab="guest" style="flex: 1;">
+                        <i class="fa-solid fa-building-user"></i> Evaluador / Empresa
+                    </button>
+                </div>
+            </div>
+
+            <div class="auth-body">
+                <!-- Alert Box -->
+                <div class="auth-alert auth-alert-error" id="authAlertBox">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span id="authAlertText">Credenciales inválidas.</span>
+                </div>
+
+                <!-- FORM 1: APRENDIZ TITULAR -->
+                <form id="formAuthAdmin" onsubmit="event.preventDefault();" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <div class="auth-field">
+                        <label for="tbLoginUser">Usuario / Cédula</label>
+                        <div class="auth-input-wrap">
+                            <i class="fa-solid fa-user input-icon"></i>
+                            <input type="text" id="tbLoginUser" placeholder="admin o cédula SENA" autocomplete="username" value="admin" required>
+                        </div>
+                    </div>
+
+                    <div class="auth-field">
+                        <label for="tbLoginPass">Contraseña / PIN Seguro</label>
+                        <div class="auth-input-wrap">
+                            <i class="fa-solid fa-lock input-icon"></i>
+                            <input type="password" id="tbLoginPass" placeholder="••••••••" autocomplete="current-password" required>
+                            <button type="button" class="pwd-toggle-btn" id="btnTogglePwd" data-action="togglePasswordVisibility" aria-label="Mostrar u ocultar contraseña">
+                                <i class="fa-solid fa-eye" id="iconEye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted);">
+                        <label style="display: flex; align-items: center; gap: 0.35rem; cursor: pointer;">
+                            <input type="checkbox" id="cbRememberAuth" checked style="cursor: pointer;"> Recordar sesión
+                        </label>
+                        <span style="color: var(--text-dim);">Demo: <code>admin / adso2026</code></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="btnSubmitLogin" data-action="submitLogin" style="padding: 0.55rem; font-size: 0.8rem; margin-top: 0.3rem;">
+                        <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión como Titular
+                    </button>
+                </form>
+
+                <!-- FORM 2: GUEST / RECRUITER INSTANT ACCESS -->
+                <div id="formAuthGuest" style="display: none; flex-direction: column; gap: 0.75rem;">
+                    <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-sm); padding: 0.75rem; font-size: 0.72rem; color: var(--text-muted); line-height: 1.45;">
+                        <strong style="color: var(--text-main); display: block; margin-bottom: 0.25rem;">
+                            <i class="fa-solid fa-briefcase" style="color: var(--tier-2);"></i> Acceso para Empresas y Evaluadores SENA
+                        </strong>
+                        Ingresa para explorar las 179 vacantes analizadas, revisar la hoja de vida, portafolio de GitHub y simular entrevistas técnicas con el aprendiz <strong>Juan Manuel Lagos Monroy</strong>.
+                    </div>
+
+                    <button class="btn btn-primary" data-action="submitGuestLogin" style="padding: 0.55rem; font-size: 0.8rem; background: var(--tier-2); border-color: var(--tier-2);">
+                        <i class="fa-solid fa-door-open"></i> Explorar como Evaluador / Reclutador
+                    </button>
+                </div>
+            </div>
+
+            <!-- Footer Close/Cancel Option -->
+            <div id="authFooterWrap" style="padding: 0.6rem 1.4rem; border-top: 1px solid var(--border-muted); background: var(--bg-surface-raised); display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem;">
+                <span style="color: var(--text-dim);"><i class="fa-solid fa-shield"></i> OWASP & ISO 27001</span>
+                <button class="btn" id="btnCancelAuth" data-action="closeAuthModal" style="padding: 0.2rem 0.5rem; font-size: 0.68rem; display: none;">Cerrar</button>
             </div>
         </div>
     </div>

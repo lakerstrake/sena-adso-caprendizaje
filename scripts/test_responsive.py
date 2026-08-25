@@ -26,6 +26,18 @@ def test_all_viewports():
             # Screenshot directory
             page.screenshot(path=f"output/test_screenshots/{vp['name']}_dir.png")
             
+            # Open Auth Modal
+            page.click("[data-action='openAuthModal']")
+            page.wait_for_selector("#authModal[style*='display: flex']", timeout=3000)
+            page.screenshot(path=f"output/test_screenshots/{vp['name']}_auth.png")
+            
+            # Switch to guest tab
+            page.click("[data-action='switchAuthTab'][data-tab='guest']")
+            page.screenshot(path=f"output/test_screenshots/{vp['name']}_auth_guest.png")
+            
+            # Click guest login to authenticate and close modal
+            page.click("[data-action='submitGuestLogin']")
+            
             # Open detail modal on first item
             first_item = page.locator("[data-action='openDetailModal']").first
             first_item.click()
