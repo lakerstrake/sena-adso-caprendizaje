@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hoja de Vida Oficial · Juan Manuel Lagos Monroy | ADSO SENA</title>
-    <meta name="description" content="Hoja de vida oficial, certificados académicos y portafolio de Juan Manuel Lagos Monroy - Tecnólogo en Análisis y Desarrollo de Software (ADSO) SENA.">
-    <meta http-equiv="refresh" content="1; url=https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN">
-    <link rel="canonical" href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN">
+    <title>Hoja de Vida Oficial (PDF) · Juan Manuel Lagos Monroy | ADSO SENA</title>
+    <meta name="description" content="Hoja de vida oficial en PDF, certificados académicos y portafolio de Juan Manuel Lagos Monroy - Tecnólogo en Análisis y Desarrollo de Software (ADSO) SENA.">
+    <meta http-equiv="refresh" content="1; url=https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing">
+    <link rel="canonical" href="https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing">
     
     <!-- Open Graph / Meta -->
     <meta property="og:title" content="Hoja de Vida Oficial · Juan Manuel Lagos Monroy">
     <meta property="og:description" content="Aprendiz en Etapa Productiva ADSO SENA · 7 semestres de Ingeniería Mecatrónica + Técnico en Sistemas">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN">
+    <meta property="og:url" content="https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -130,6 +130,11 @@
             50% { left: 30%; width: 50%; }
             100% { left: 100%; width: 40%; }
         }
+        .actions-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+        }
         .btn-drive {
             display: inline-flex;
             align-items: center;
@@ -151,6 +156,26 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 24px rgba(16, 185, 129, 0.5);
             color: #022c22;
+        }
+        .btn-certs-gateway {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            width: 100%;
+            padding: 0.65rem 1.2rem;
+            background: rgba(52, 168, 83, 0.12);
+            border: 1px solid rgba(52, 168, 83, 0.4);
+            color: #34d399;
+            font-size: 0.82rem;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        .btn-certs-gateway:hover {
+            background: rgba(52, 168, 83, 0.25);
+            color: #ffffff;
         }
         .links-secondary {
             display: flex;
@@ -189,12 +214,17 @@
         
         <div class="spinner-bar" aria-hidden="true"></div>
         <p style="font-size: 0.78rem; color: #38bdf8; margin-bottom: 1.2rem;">
-            <i class="fa-solid fa-cloud-arrow-down fa-bounce" aria-hidden="true"></i> Conectando con Google Drive oficial...
+            <i class="fa-solid fa-cloud-arrow-down fa-bounce" aria-hidden="true"></i> Conectando con Hoja de Vida oficial (PDF)...
         </p>
 
-        <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN" id="btnManualRedirect" class="btn-drive">
-            <i class="fa-solid fa-file-lines" aria-hidden="true"></i> Abrir Hoja de Vida (CV Oficial)
-        </a>
+        <div class="actions-group">
+            <a href="https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing" id="btnManualRedirect" class="btn-drive">
+                <i class="fa-solid fa-file-pdf" aria-hidden="true"></i> Abrir Hoja de Vida (PDF Oficial)
+            </a>
+            <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-certs-gateway">
+                <i class="fa-brands fa-google-drive" aria-hidden="true"></i> Ver Carpeta de Certificados Académicos
+            </a>
+        </div>
 
         <div class="links-secondary">
             <a href="https://github.com/lakerstrake" target="_blank" rel="noopener noreferrer">
@@ -211,7 +241,7 @@
 
     <script>
         (function() {
-            const DRIVE_URL = "https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN";
+            const PDF_URL = "https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing";
             
             try {
                 // Parse tracking telemetry params
@@ -253,9 +283,9 @@
                 console.warn('[CV Tracker]', err);
             }
 
-            // Smooth redirect to Google Drive
+            // Smooth redirect to PDF
             setTimeout(function() {
-                window.location.replace(DRIVE_URL);
+                window.location.replace(PDF_URL);
             }, 800);
         })();
     </script>

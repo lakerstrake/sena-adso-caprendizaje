@@ -251,13 +251,15 @@ def test_privacy_and_rbac():
                 .replace("jmlagos2003@gmail.com", "[correo_contacto@ejemplo.com]")
                 .replace("(+57) 300 727 9875", "[+57 300 000 0000]")
                 .replace("300 727 9875", "[300 000 0000]")
-                .replace("https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN", "[Enlace a Hoja de Vida / Drive]")
+                .replace("https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing", "[Enlace a Hoja de Vida / Drive]")
+                .replace("https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN?usp=sharing", "[Enlace a Certificados / Drive]")
+                .replace("https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN", "[Enlace a Certificados / Drive]")
                 .replace("https://github.com/lakerstrake", "[https://github.com/tu-usuario]")
                 .replace("https://linkedin.com/in/juan-manuel-lagos-monroy", "[https://linkedin.com/in/tu-perfil]"))
 
     raw_sample = (
         "Hola, soy Juan Manuel Lagos Monroy, aprendiz ADSO. Mi correo es jmlagos2003@gmail.com "
-        "y mi teléfono es (+57) 300 727 9875. Ver CV en https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN"
+        "y mi teléfono es (+57) 300 727 9875. Ver CV en https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing"
     )
 
     sanitized = sanitize_for_guest(raw_sample)
@@ -267,7 +269,8 @@ def test_privacy_and_rbac():
     if "Juan Manuel" in sanitized: leaks.append("Nombre")
     if "jmlagos2003" in sanitized: leaks.append("Correo")
     if "300 727" in sanitized: leaks.append("Teléfono")
-    if "1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN" in sanitized: leaks.append("Google Drive CV")
+    if "1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln" in sanitized: leaks.append("Google Drive PDF CV")
+    if "1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN" in sanitized: leaks.append("Google Drive Certs")
 
     log_test("Enmascaramiento de Datos Privados para Invitados", len(leaks) == 0, f"Fugas detectadas: {leaks if leaks else '0 (Privacidad 100% Protegida)'}")
 

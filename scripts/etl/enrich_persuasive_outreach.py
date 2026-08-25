@@ -40,7 +40,8 @@ CANDIDATE = {
     "phone": "(+57) 300 727 9875",
     "phone_clean": "573007279875",
     "cv_base_url": "https://sena-adso-caprendizaje.pages.dev/cv",
-    "cv_drive_fallback": "https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN",
+    "cv_pdf_url": "https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing",
+    "certs_drive_url": "https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN?usp=sharing",
     "github_url": "https://github.com/lakerstrake",
     "linkedin_url": "https://linkedin.com/in/juan-manuel-lagos-monroy"
 }
@@ -173,8 +174,9 @@ def build_high_conversion_email(empresa, contacto_info, perfil, funciones, solic
         f"Mecatrónica y título como Técnico en Sistemas), lo que me permite comprender tanto la lógica algorítmica profunda como la arquitectura de software moderna.\n"
         f"2. Stack aplicado: Experiencia desarrollando con JavaScript (React, Node.js), Java (Spring Boot), bases de datos SQL relacionales, control de versiones Git/GitHub y despliegue cloud.\n"
         f"3. Disponibilidad total e inmediata: Mi contrato de aprendizaje está 100% avalado por el SENA para formalización inmediata.\n\n"
-        f"Pongo a tu disposición mi Hoja de Vida detallada con certificados académicos y mi repositorio de código:\n"
-        f"📄 Hoja de Vida (CV) y Certificados: {cv_url}\n"
+        f"Pongo a tu disposición mi Hoja de Vida oficial (PDF), certificados académicos y mi repositorio de código:\n"
+        f"📄 Hoja de Vida (PDF Oficial): {cv_url}\n"
+        f"🎓 Certificados y Documentación: {CANDIDATE['certs_drive_url']}\n"
         f"💻 Portafolio de Código en GitHub: {CANDIDATE['github_url']}\n"
         f"🔗 Perfil Profesional en LinkedIn: {CANDIDATE['linkedin_url']}\n\n"
         f"Si te parece bien, ¿podríamos conversar brevemente 5 minutos esta semana para revisar cómo puedo integrarme "
@@ -201,7 +203,8 @@ def build_high_conversion_whatsapp(empresa, contacto_info, funciones, solicitud_
         f"Me comunico con mucho interés tras ver la vacante de Contrato de Aprendizaje para *{empresa}* en Caprendizaje. "
         f"Cuento con preparación práctica en *{tech_match}*, 7 semestres de Ingeniería Mecatrónica y disponibilidad inmediata para iniciar etapa productiva.\n\n"
         f"Comparto mi Hoja de Vida y proyectos de código:\n"
-        f"📄 *CV y Certificados:* {cv_url}\n"
+        f"📄 *Hoja de Vida (PDF):* {cv_url}\n"
+        f"🎓 *Certificados Académicos:* {CANDIDATE['certs_drive_url']}\n"
         f"💻 *GitHub:* {CANDIDATE['github_url']}\n"
         f"🔗 *LinkedIn:* {CANDIDATE['linkedin_url']}\n\n"
         f"¿Me indicarías por favor con quién o a qué correo puedo coordinar una breve entrevista técnica? ¡Muchas gracias!"

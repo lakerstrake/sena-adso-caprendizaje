@@ -391,6 +391,40 @@ body {
     background: rgba(0, 0, 0, 0.3);
 }
 
+.btn-certs-link {
+    background: rgba(52, 168, 83, 0.12);
+    border: 1px solid rgba(52, 168, 83, 0.38);
+    color: #34d399 !important;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.65rem;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+.btn-certs-link:hover {
+    background: rgba(52, 168, 83, 0.28);
+    border-color: #34d399;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+.btn-certs-link .cv-mini-badge {
+    background: rgba(52, 168, 83, 0.25);
+    color: #34d399;
+    font-size: 0.56rem;
+    font-weight: 800;
+    padding: 0.05rem 0.3rem;
+    border-radius: 3px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+.btn-certs-link:hover .cv-mini-badge {
+    background: rgba(0, 0, 0, 0.35);
+    color: #ffffff;
+}
+
 .btn-github-link {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.15);

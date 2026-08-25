@@ -126,7 +126,8 @@ npm run deploy
 - **Contacto:** [jmlagos2003@gmail.com](mailto:jmlagos2003@gmail.com) | (+57) 300 727 9875
 - **Portafolio GitHub:** [github.com/lakerstrake](https://github.com/lakerstrake)
 - **LinkedIn:** [linkedin.com/in/juan-manuel-lagos-monroy](https://linkedin.com/in/juan-manuel-lagos-monroy)
-- **Hoja de Vida Oficial:** [Google Drive Folder](https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN)
+- **Hoja de Vida Oficial (PDF):** [Google Drive PDF](https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing)
+- **Certificados Académicos:** [Google Drive Folder](https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN?usp=sharing)
 
 ---
 

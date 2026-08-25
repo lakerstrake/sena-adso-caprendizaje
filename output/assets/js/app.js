@@ -584,10 +584,10 @@ class AppController {
                         </div>
                     </div>
                     <div class="candidate-banner-actions">
-                        <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN" target="_blank" rel="noopener noreferrer" class="btn-cv-drive" title="Ver Hoja de Vida oficial (CV) en Google Drive">
+                        <a href="https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-cv-drive" title="Ver Hoja de Vida oficial (PDF) en Google Drive">
                             <i class="fa-solid fa-file-pdf" aria-hidden="true"></i>
                             <span>Hoja de Vida (CV)</span>
-                            <span class="cv-mini-badge">Drive</span>
+                            <span class="cv-mini-badge">PDF</span>
                         </a>
                         <a href="https://github.com/lakerstrake" target="_blank" rel="noopener noreferrer" class="btn-github-link" title="Explorar portafolio de código en GitHub">
                             <i class="fa-brands fa-github" aria-hidden="true"></i>
@@ -597,9 +597,10 @@ class AppController {
                             <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
                             <span>LinkedIn</span>
                         </a>
-                        <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN" target="_blank" rel="noopener noreferrer" class="btn-certs-link" title="Ver Certificados Académicos Oficiales">
+                        <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-certs-link" title="Ver Carpeta de Certificados Académicos en Google Drive">
                             <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
                             <span>Certificados</span>
+                            <span class="cv-mini-badge">Drive</span>
                         </a>
                         <button class="btn-dismiss-banner" data-action="dismissNotice" title="Ocultar banner" aria-label="Ocultar banner">
                             <i class="fa-solid fa-xmark" aria-hidden="true"></i>
@@ -1682,7 +1683,8 @@ class AppController {
                     ${hasEmail ? `<a href="${SecurityService.escapeHtml(gmailLink)}" target="_blank" rel="noopener noreferrer" class="btn btn-gmail" style="padding: 0.22rem 0.52rem;" title="Redactar correo de postulación directamente en Gmail"><i class="fa-brands fa-google"></i> Redactar en Gmail</a>` : '<span style="font-size: 0.68rem; color: var(--text-dim);">Sin correo registrado</span>'}
                     ${hasEmail ? `<a href="${mailtoLink}" class="btn" style="padding: 0.22rem 0.52rem;" title="Abrir en cliente de correo local (Outlook / Apple Mail)"><i class="fa-solid fa-envelope"></i> Correo (App)</a>` : ''}
                     ${isMaster 
-                        ? `<a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN" target="_blank" rel="noopener noreferrer" class="btn-cv-drive" style="padding: 0.22rem 0.52rem; font-size: 0.68rem;" title="Abrir Hoja de Vida oficial en Google Drive"><i class="fa-solid fa-file-pdf"></i> Hoja de Vida <span class="cv-mini-badge">PDF</span></a>` 
+                        ? `<a href="https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-cv-drive" style="padding: 0.22rem 0.52rem; font-size: 0.68rem;" title="Abrir Hoja de Vida oficial (PDF)"><i class="fa-solid fa-file-pdf"></i> Hoja de Vida <span class="cv-mini-badge">PDF</span></a>
+                           <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-certs-link" style="padding: 0.22rem 0.52rem; font-size: 0.68rem;" title="Abrir Carpeta de Certificados Académicos en Google Drive"><i class="fa-brands fa-google-drive"></i> Certificados <span class="cv-mini-badge">DRIVE</span></a>` 
                         : `<span style="font-size: 0.68rem; color: var(--text-dim); display: inline-flex; align-items: center; gap: 0.25rem;"><i class="fa-solid fa-shield-halved" style="color: #38bdf8;"></i> CV oficial reservado al Titular</span>`
                     }
                 `;

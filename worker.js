@@ -53,7 +53,8 @@ const LOCKOUT_DURATION_MS = 15 * 60 * 1000; // 15 minutes lockout
 
 // CV Events Buffer
 const RECENT_CV_EVENTS = [];
-const CANDIDATE_CV_DESTINATION = "https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN";
+const CANDIDATE_CV_DESTINATION = "https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing";
+const CANDIDATE_CERTS_DESTINATION = "https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN?usp=sharing";
 
 export default {
   async fetch(request, env, ctx) {
