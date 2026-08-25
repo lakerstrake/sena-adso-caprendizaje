@@ -1,0 +1,655 @@
+
+
+
+<!DOCTYPE html>
+
+<html lang="es-co">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="/sgva/Content/bootstrap.min.css" rel="stylesheet" />
+
+    
+    <link rel="stylesheet" type="text/css" href="/sgva/Content/jquery-ui/themes/bootstrap/jquery-ui-1.10.0.custom.css" />
+    <link rel="stylesheet" type="text/css" href="/sgva/Content/datatables/css/jquery.dataTables.css" />
+    <link rel="stylesheet" type="text/css" href="/sgva/Content/dataTables.tableTools/css/dataTables.tableTools.min.css" />
+    <link rel="stylesheet" type="text/css" href="/sgva/Content/dataTables.responsive/dataTables.responsive.css" />
+    <link rel="stylesheet" type="text/css" href="/sgva/Content/CSS/Aprendiz/aprendiz.css" />
+    <link rel="stylesheet" type="text/css" href="/sgva/Content/CSS/Aprendiz/aprendizFormulario.css" />
+
+    <link href="/sgva/Content/sgva.css" rel="stylesheet" />
+
+    
+    <script src="/sgva/Scripts/jquery-1.10.2.min.js"></script>
+    
+    <script src="/sgva/Scripts/bootstrap.js"></script>
+    
+    <script src="/sgva/Scripts/jquery-ui-1.11.4.min.js" type="text/javascript"></script>
+
+    <script src="/sgva/Scripts/autoNumeric.js"></script>
+    <script src="/sgva/Scripts/datepicker-es.js"></script>
+
+    <script src="/sgva/Scripts/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="/sgva/Scripts/dataTables.tableTools/js/dataTables.tableTools.min.js" type="text/javascript"></script>
+    <script src="/sgva/Scripts/dataTables.responsive/dataTables.responsive.js" type="text/javascript"></script>
+    <script src="/sgva/Scripts/dataTables.fnReloadAjax/fnReloadAjax.js" type="text/javascript"></script>
+
+
+    <script src="/sgva/Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="/sgva/Scripts/is/is.min.js"></script>
+
+    
+
+    <title>Buscar empresas</title>
+
+    
+
+</head>
+<body class="bodyAprendiz">
+    <!-- MAIN -->
+    <div class="container-fluid">
+        <!-- Encabezado -->
+        <div class="col-xs-12 col-md-12 aprendizHeader">
+            <div class="col-xs-12 col-md-12 aprendizLogoSENA"><img src="/sgva/Content/images/empresa/logo_sena_sgva_200.png" class="aprendizLogoSENA" /></div>
+            <!--<div class="col-md-2"></div>
+            <div class="col-xs-12 col-md-4">
+                <div class="col-xs-6 col-md-12">
+                    <label class="aprendizLabelTextoRegular">Bienvenido(a) JUAN MANUEL LAGOS MONROY</label>
+                </div>
+                <div class="col-xs-6 col-md-12">
+                    <a class="aprendizBtnCerrarSesion" href="/sgva/Account/LogOff">Cerrar Sesión</a>
+                </div>
+            </div>-->
+        </div>
+        <div class="container-fluid">
+            <!--Navbar-->
+            <nav class="navbarSGVAApr">
+                <div class="navbarSGVAApr-header">
+                    <button type="button" class="navbarSGVAApr-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbarSGVAApr-brand" href="" id="btnInicio"><img src="/sgva/Content/images/aprendiz/menu_home.png" />Inicio</a>
+                </div>
+                <div class="collapse navbarSGVAApr-collapse" id="bs-example-navbar-collapse-2">
+                    <ul class="navbarSGVAApr-nav">
+                        <li><div></div><a href="" id="btnPerfil"><img src="/sgva/Content/images/aprendiz/menu_perfil.png" />Perfil</a></li>
+                        <li><div></div><a href="" id="btnBuscarEmpresa"><img src="/sgva/Content/images/aprendiz/menu_empresa.png" />Buscar empresa</a></li>
+                        <li><div></div><a href="" id="btnConsultarAplicaciones"><img src="/sgva/Content/images/aprendiz/menu_aplicaciones.png" />Consultar aplicaciones</a></li>
+                        <li><div></div><a href="" id="btnContratos"><img src="/sgva/Content/images/aprendiz/menu_contrato.png" />Contratos</a></li>
+                        <li><div></div><a href="" id="btnEncuesta"><img src="/sgva/Content/images/aprendiz/menu_encuesta.png" />Encuesta</a></li>
+                    </ul>
+                    <ul class="navbarSGVAApr-nav navbarSGVAApr-right">
+                        <li><a href="/sgva/Account/LogOff"><img src="/sgva/Content/images/aprendiz/menu_logout.png" />Cerrar sesión</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="col-xs-12 col-md-12 aprendizDIVLine"></div>
+            <!--Fin Navbar-->
+            <!-- BARRA LATERAL -->
+            <div id="barraLateral" class="col-xs-2 col-sm-2 col-md-1" style="display:none;">
+                <div class="aprendizMenuLateral" id="div_btn_inicio"></div>
+                <div class="aprendizMenuLateral" id="div_btn_perfil"></div>
+                <div class="aprendizMenuLateral" id="div_btn_buscar"></div>
+                <div class="aprendizMenuLateral" id="div_btn_aplicaciones"></div>
+                <div class="aprendizMenuLateral" id="div_btn_contratos"></div>
+                <div class="aprendizMenuLateral" id="div_btn_encuesta"></div>
+            </div>
+            <div id="barraLateral_old" class="col-xs-2 col-sm-2 col-md-1" style="display:none">
+                <div class="aprendizMenuLateral">
+                    <div id="index">
+                        <a href="/sgva/APRENDICES/pag/mensajes_aprendices.aspx" id="a_inicio">
+                            <img class="imagenBotonLateral" src="/sgva/APRENDICES/Recursos/imagenes/Iconos/Home.png" data-icono="Home">
+                        </a>
+                    </div>
+                    <div>
+                        <p>Inicio</p>
+                    </div>
+                </div>
+                <div class="aprendizMenuLateral">
+                    <div id="crearEmpresa">
+                        <a href="/sgva/APRENDICES/pag/editarPerfil.aspx" id="a_inicio">
+                            <img class="imagenBotonLateral" src="/sgva/APRENDICES/Recursos/imagenes/Iconos/Usuario.png" data-icono="Usuario">
+                        </a>
+                    </div>
+                    <div>
+                        <p>Perfil </p>
+                    </div>
+                </div>
+                <div class="aprendizMenuLateral">
+                    <div id="ConsultarContrato">
+                        <a href="/sgva/APRENDICES/pag/AplicarAprendiz.aspx" id="a_inicio">
+                            <img class="imagenBotonLateral" src="/sgva/APRENDICES/Recursos/imagenes/Iconos/empresa.png" data-icono="Empresa">
+                        </a>
+                    </div>
+                    <div>
+                        <p>Buscar Empresas</p>
+                    </div>
+                </div>
+                <div class="aprendizMenuLateral">
+                    <div id="ConsultarAplicaciones">
+                        <a href="/sgva/APRENDICES/pag/Aplicaciones.aspx" id="a_inicio">
+                            <img class="imagenBotonLateral" src="/sgva/APRENDICES/Recursos/imagenes/Iconos/citacion.png" data-icono="Citacion">
+                        </a>
+                    </div>
+                    <div>
+                        <p>Consultar Aplicaciones</p>
+                    </div>
+                </div>
+                <div class="aprendizMenuLateral">
+                    <div id="crearContrato">
+                        <a href="/sgva/APRENDICES/pag/contractAprendiz.aspx" id="a_inicio">
+                            <img class="imagenBotonLateral" src="/sgva/APRENDICES/Recursos/imagenes/Iconos/contrato.png" data-icono="Contrato">
+                        </a>
+                    </div>
+                    <div>
+                        <p>Consultar Contratos</p>
+                    </div>
+                </div>
+                <div class="aprendizMenuLateral">
+                    <div id="RealizarEncuesta">
+                        <a href="/sgva/APRENDICES/pag/Encuesta_Aprendiz.aspx" id="a_inicio">
+                            <img class="imagenBotonLateral" src="/sgva/APRENDICES/Recursos/imagenes/Iconos/encuesta.png" data-icono="Encuesta">
+                        </a>
+                    </div>
+                    <div>
+                        <p>Realizar Encuesta</p>
+                    </div>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="col-xs-12 col-sm-12 col-md-12" style="padding: 0px;">
+                <!-- Titulo de la página -->
+                <div class="aprendizTituloPagina">
+    Buscar empresas
+</div>
+                <div style="padding: 10px;">
+                    
+
+<!--Botones superiores-->
+<div class="col-xs-12 col-sm-12 col-md-12">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <button type="button" id="btn_tutorial" class="aprendizBotonInterno" data-toggle="modal" data-target="#modalTutorial">Ver instructivo</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-xs-12 col-sm-12 col-md-12" id="div_formulario_busqueda">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <form id="form-buscar" name="form-buscar" class="form-horizontal" action="" autocomplete="on">
+            <div class="col-xs-12 col-sm-12 col-md-12 aprendizDIVSubrayadoBottom">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <label class="col-xs-12 col-sm-12 col-md-12 aprendizLabelTitulo4Centrado" id="lbl_aprendices_postulados">Buscar solicitudes de aprendices</label>
+                </div>
+                <div class="form-group col-xs-12 col-sm-12 col-md-4">
+                    <div class="col-xs-12 col-sm-5 col-md-5">
+                        <label class="aprendizLabel" for="regional">Departamento</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-7 col-md-7">
+                        <div class="input-group" style="width: 100%">
+                            <select id="sel_departamento" name="sel_departamento" form="form-buscar" class="form-control input-sm empSelect">
+                                    <option value="0">Seleccione un departamento</option>
+                                    <option value="91">AMAZONAS                                          </option>
+                                    <option value="5">ANTIOQUIA                                         </option>
+                                    <option value="81">ARAUCA                                            </option>
+                                    <option value="8">ATLANTICO                                         </option>
+                                    <option value="11">BOGOTA D.C.                                       </option>
+                                    <option value="13">BOLIVAR                                           </option>
+                                    <option value="15">BOYACA                                            </option>
+                                    <option value="17">CALDAS                                            </option>
+                                    <option value="18">CAQUETA                                           </option>
+                                    <option value="85">CASANARE                                          </option>
+                                    <option value="19">CAUCA                                             </option>
+                                    <option value="20">CESAR                                             </option>
+                                    <option value="27">CHOCO                                             </option>
+                                    <option value="23">CORDOBA                                           </option>
+                                    <option value="25">CUNDINAMARCA                                      </option>
+                                    <option value="94">GUAINIA                                           </option>
+                                    <option value="44">GUAJIRA                                           </option>
+                                    <option value="95">GUAVIARE                                          </option>
+                                    <option value="41">HUILA                                             </option>
+                                    <option value="47">MAGDALENA                                         </option>
+                                    <option value="50">META                                              </option>
+                                    <option value="52">NARI&#209;O                                            </option>
+                                    <option value="54">NORTE DE SANTANDER                                </option>
+                                    <option value="86">PUTUMAYO                                          </option>
+                                    <option value="63">QUINDIO                                           </option>
+                                    <option value="66">RISARALDA                                         </option>
+                                    <option value="88">SAN ANDRES Y PROVIDENCIA                          </option>
+                                    <option value="68">SANTANDER                                         </option>
+                                    <option value="70">SUCRE                                             </option>
+                                    <option value="73">TOLIMA                                            </option>
+                                    <option value="76">VALLE                                             </option>
+                                    <option value="97">VAUPES                                            </option>
+                                    <option value="99">VICHADA                                           </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-sm-12 col-md-4">
+                    <div class="col-xs-12 col-sm-5 col-md-5">
+                        <label class="aprendizLabel" for="regional">Ciudad</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-7 col-md-7">
+                        <div class="input-group" style="width: 100%">
+                            <select id="sel_ciudad" name="sel_ciudad" form="form-buscar" class="form-control input-sm empSelect"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-sm-12 col-md-4">
+                    <div class="col-xs-12 col-sm-5 col-md-5">
+                        <label class="aprendizLabel" for="regional">Empresa:</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-7 col-md-7">
+                        <div class="input-group" style="width: 100%">
+                            <input type="text" id="txt_buscar_rsocial" style="width:100%;"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="hidden-xs hidden-sm col-md-8"></div>
+                    <div class="col-xs-12 col-sm-12 col-md-4" style="text-align:center;">
+                        <button type="button" id="btn_buscar_solicitud" form="form-buscar" class="aprendizBotonInterno">Buscar</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div id="div_solicitudes_requeridas" class="col-xs-12 col-sm-12 col-md-12" style="display:none;">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <label class="col-xs-12 col-sm-12 col-md-12 aprendizLabelTitulo4Centrado" id="lbl_solic">Solicitudes de aprendices</label>
+        <div class="" id="div_solicitudes"></div>
+        <div class="col-xs-12 col-sm-12 col-md-12" id="div_solicitudes_paginas">
+            <div class="hidden-xs col-sm-3 col-md-4"></div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <div class="col-xs-4 col-sm-3 col-md-3 ">
+                    <button class="aprendizBotonInternoSinEstilo" id="btn_pagina_anterior">Anterior</button>
+                </div>
+                <label class="col-xs-4 col-sm-6 col-md-6 aprendizLabelTextoCentrado" id="lbl_total_solicitudes"></label>
+                <div class="col-xs-4 col-sm-3 col-md-3 ">
+                    <button class="aprendizBotonInternoSinEstilo" id="btn_pagina_siguiente">Siguiente</button>
+                </div>
+            </div>
+            <div class="hidden-xs col-sm-3 col-md-4"></div>
+        </div>
+    </div>
+</div>
+<div class="col-xs-12 col-sm-12 col-md-12" id="div_solicitudes_vacio" style="display:none;">
+    <label class="aprendizLabelTitulo4Centrado" id="lbl_solicitudes_vacio"></label>
+</div>
+
+<div class="modalCargando"></div>
+
+<!--Modal de detalle de la solicitud-->
+<div class="modal fade" id="modalSolicitud">
+    <div class="modal-dialog">
+        <div class="modal-content aprendizModal">
+            <div class="modal-header aprendizModalTitulo">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Detalle de la solicitud</h4>
+            </div>
+            <div class="modal-body aprendizModalCuerpo">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <label class="col-xs-12 col-sm-12 col-md-12 aprendizLabelTitulo4Centrado" id="lbl_modal_solicitud_especialidad"></label>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 aprendizDIVSubrayadoBottom">
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <p class="aprendizLabel">Departamento:  <label class="aprendizLabelTexto" id="lbl_modal_solicitud_dpto"></label></p>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <p class="aprendizLabel">Ciudad:  <label class="aprendizLabelTexto" id="lbl_modal_solicitud_ciudad"></label></p>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 aprendizDIVSubrayadoBottom">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <p class="aprendizLabel">Persona de contacto:  <label class="aprendizLabelTexto" id="lbl_modal_solicitud_contacto"></label></p>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <p class="aprendizLabel">Dirección:  <label class="aprendizLabelTexto" id="lbl_modal_solicitud_direccion"></label></p>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <p class="aprendizLabel">Teléfono:  <label class="aprendizLabelTexto" id="lbl_modal_solicitud_telefono"></label></p>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <p class="aprendizLabel">Correo electrónico:  <label class="aprendizLabelTexto" id="lbl_modal_solicitud_email"></label></p>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 aprendizDIVSubrayadoBottom">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <p class="aprendizLabel">Perfil:</p>
+                        <label class="aprendizLabelTexto" id="lbl_modal_solicitud_perfil"></label>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <p class="aprendizLabel">Funciones a desarrollar:</p>
+                        <label class="aprendizLabelTexto" id="lbl_modal_solicitud_funciones"></label>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 aprendizDIVSubrayadoBottom">
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <p class="aprendizLabel">Aprendices requeridos:  <label class="aprendizLabelTexto" id="lbl_modal_solicitud_requeridos"></label></p>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <p class="aprendizLabel">Aprendices aplicados:  <label class="aprendizLabelTexto" id="lbl_modal_solicitud_aplicados"></label></p>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <p class="aprendizLabel">Fecha de creación:  <label class="aprendizLabelTexto" id="lbl_modal_solicitud_fecha_creacion"></label></p>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <p class="aprendizLabel">Fecha de cierre:  <label class="aprendizLabelTexto" id="lbl_modal_solicitud_fecha_cierre"></label></p>
+                    </div>
+                </div>
+                <div class="modal-footer aprendizModalFooter">
+                    <button type="button" id="btn_modal_solicitud_aplicar" class="aprendizBotonInterno">Aplicar</button>
+                    <button type="button" id="btn_modal_solicitud_cerrar" class="aprendizBotonInterno" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal confirmar postulación-->
+<div class="modal fade" id="modalConfirmarPostulacion">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content aprendizModal">
+            <div class="modal-header aprendizModalTitulo">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="aprendizModalConfirmacionTitulo">Postularse a la solicitud</h4>
+            </div>
+            <div class="modal-body aprendizModalCuerpo">
+                <div class="row aprendizModalInfoDiv">
+                    <div class="col-xs-12 col-sm-12">
+                        <span class="aprendizLabelTexto" id="modal_confirmar_postulacion"></span>
+                    </div>
+                </div>
+                <div class="modal-footer aprendizModalFooter">
+                    <button type="button" id="btn_confirmar_postulacion_aceptar" class="aprendizBotonInterno">Aceptar</button>
+                    <button type="button" id="btn_confirmar_postulacion_cancelar" class="aprendizBotonInterno" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal de respuesta-->
+<div class="modal fade" id="modalRespuesta">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content aprendizModal">
+            <div class="modal-header aprendizModalTitulo">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="aprendizModalRespuestaTitulo"></h4>
+            </div>
+            <div class="modal-body aprendizModalCuerpo">
+                <div class="row aprendizModalInfoDiv">
+                    <div class="col-xs-12 col-sm-12">
+                        <span class="aprendizLabelTexto" id="modal_respuesta"></span>
+                    </div>
+                </div>
+                <div class="modal-footer aprendizModalFooter">
+                    <button type="button" id="btn_respuesta_cerrar" class="aprendizBotonInterno" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal de respuesta postulacion-->
+<div class="modal fade" id="modalRespuestaPostulacion" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content aprendizModal">
+            <div class="modal-header aprendizModalTitulo">
+                <h4 class="modal-title" id="aprendizModalRespuestaPostulacionTitulo"></h4>
+            </div>
+            <div class="modal-body aprendizModalCuerpo">
+                <div class="row aprendizModalInfoDiv">
+                    <div class="col-xs-12 col-sm-12">
+                        <span class="aprendizLabelTexto" id="modal_respuesta_postulacion"></span>
+                    </div>
+                </div>
+                <div class="modal-footer aprendizModalFooter">
+                    <button type="button" id="btn_respuesta_postulacion_cerrar" class="aprendizBotonInterno">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal de tutorial-->
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="modalTutorial">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div id="carrusel" class="carousel slide" data-ride="carousel" data-interval="false">
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <div class="modal-header aprendizModalTitulo">
+                            <h4 class="modal-title">Tutorial crear solicitudes de aprendices</h4>
+                        </div>
+                        <div class="modal-body aprendizModalCuerpo">
+                            <div class="col-xs-1 col-sm-1 col-md-1"></div>
+                            <div class="col-xs-10 col-sm-10 col-md-10">
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <label class="col-xs-12 col-sm-12 col-md-12 aprendizLabelTitulo1Centrado" id="">¡Empecemos!</label>
+                                </div>
+                            </div>
+                            <div class="col-xs-1 col-sm-1 col-md-1"></div>
+                            <div class="modal-footer aprendizModalFooter">
+                                <button type="button" id="btn_tutorial_cerrar" class="aprendizBotonInterno" data-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="modal-header aprendizModalTitulo">
+                            <h4 class="modal-title">Tutorial crear solicitudes de aprendices</h4>
+                        </div>
+                        <div class="modal-body aprendizModalCuerpo">
+                            <div class="col-xs-1 col-sm-1 col-md-1"></div>
+                            <div class="col-xs-10 col-sm-10 col-md-10">
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <label class="col-xs-12 col-sm-12 col-md-12 aprendizLabelTitulo4Centrado" id="">Departamento y ciudad</label>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <label class="col-xs-12 col-sm-12 col-md-12 aprendizLabelTexto" id="">Para el campo Departamento usted debe elegir de la lista desplegable el departamento en el cual se llevará a cabo el contrato de aprendizaje.</label>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <label class="col-xs-12 col-sm-12 col-md-12 aprendizLabelTexto" id="">Una vez sea seleccionado el departamento, la lista desplegable de Ciudad cargará las ciudades del departamento seleccionado. Por favor seleccione la ciudad en la cual se llevará a cabo el contrato de aprendizaje.</label>
+                                </div>
+                            </div>
+                            <div class="col-xs-1 col-sm-1 col-md-1"></div>
+                            <label class="col-xs-12 col-sm-12 col-md-12 aprendizLabelTextoCentrado" id="lbl_rSocial">
+                                Página 1
+                            </label>
+                            <div class="modal-footer aprendizModalFooter">
+                                <button type="button" id="btn_tutorial_cerrar" class="aprendizBotonInterno" data-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="modal-header aprendizModalTitulo">
+                            <h4 class="modal-title">Tutorial crear solicitudes de aprendices</h4>
+                        </div>
+                        <div class="modal-body aprendizModalCuerpo">
+                            <div class="col-xs-1 col-sm-1 col-md-1"></div>
+                            <div class="col-xs-10 col-sm-10 col-md-10">
+                                <label class="col-xs-12 col-sm-12 col-md-12 aprendizLabelTitulo1Centrado" id="">¡Gracias!</label>
+                            </div>
+                            <div class="col-xs-1 col-sm-1 col-md-1"></div>
+                            <div class="modal-footer aprendizModalFooter">
+                                <button type="button" id="btn_tutorial_cerrar" class="aprendizBotonInterno" data-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Controls -->
+                <a class="left carousel-control" href="#carrusel" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+                <a class="right carousel-control" href="#carrusel" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+,
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="" class="page-footer font-small blue pt-4">
+        <div id="" class="footer-copyright aprendizFooter">
+            .:: Servicio Nacional de Aprendizaje SENA – Dirección General Calle 57 No. 8-69, Bogotá D.C - PBX (57 1) 5461500
+            <br />
+            Línea gratuita de atención al ciudadano Bogotá 343 01 11  – Resto del país 018000 910270<br />
+            Horario de atención: lunes a viernes de 8:00 am a 5:30 pm<br />
+            Correo electrónico para notificaciones judiciales: <b><a href="mailto:servicioalciudadano@sena.edu.co" style="color: #FFFFFF; text-decoration: none">servicioalciudadano@sena.edu.co</a></b><br />
+            Todos los derechos reservados © 2026 ::.
+            ::.
+        </div>
+    </footer>
+    <div class="modalCargando"></div>
+    <script>
+        var accionMenu = '/sgva/MenuAprendiz/MenuAprendiz';
+
+        // INICIO :: Función abrir spinner cargando
+        var abrir_cargando = function () {
+            $("body").addClass("cargando");
+        };
+        // FIN :: Función abrir spinner cargando
+        // INICIO :: Función cerrar spinner cargando
+        var cerrar_cargando = function () {
+            $("body").removeClass("cargando");
+        };
+        // FIN :: Función cerrar spinner cargando
+
+        $(document).ready(function () {
+            var datos = {};
+            $.ajax({
+                datatype: 'json',
+                cache: false,
+                type: "GET",
+                url: accionMenu,
+                contentType: 'application/json; charset=utf-8',
+                data: datos,
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log('jqXHR = ', jqXHR);
+                console.log('textStatus = ', textStatus);
+                console.log('errorThrown = ', errorThrown);
+            }).done(function (data, textStatus, jqXHR) {
+                //console.log(data.aaData);
+                var resultado = data.aaData;
+                if (resultado.length > 0) {
+                    //var enlace = document.getElementById('a_solicitudes');
+                    //enlace.setAttribute('href', resultado[3][8]);
+                    document.getElementById('barraLateral').style.display = "none";
+                    document.getElementById('barraLateral_old').style.display = "none";
+                    document.getElementById('div_btn_inicio').innerHTML = resultado[0][8];
+                    document.getElementById('div_btn_perfil').innerHTML = resultado[1][8];
+                    document.getElementById('div_btn_buscar').innerHTML = resultado[2][8];
+                    document.getElementById('div_btn_aplicaciones').innerHTML = resultado[3][8];
+                    document.getElementById('div_btn_contratos').innerHTML = resultado[4][8];
+                    document.getElementById('div_btn_encuesta').innerHTML = resultado[5][8];
+
+                    document.getElementById("enlace1").src = "/sgva/APRENDICES/Recursos/imagenes/Iconos/" + resultado[0][5] + ".png";
+                    document.getElementById("enlace2").src = "/sgva/APRENDICES/Recursos/imagenes/Iconos/" + resultado[1][5] + ".png";
+                    document.getElementById("enlace3").src = "/sgva/APRENDICES/Recursos/imagenes/Iconos/" + resultado[2][5] + ".png";
+                    document.getElementById("enlace4").src = "/sgva/APRENDICES/Recursos/imagenes/Iconos/" + resultado[3][5] + ".png";
+                    document.getElementById("enlace5").src = "/sgva/APRENDICES/Recursos/imagenes/Iconos/" + resultado[4][5] + ".png";
+                    document.getElementById("enlace6").src = "/sgva/APRENDICES/Recursos/imagenes/Iconos/" + resultado[5][5] + ".png";
+
+                    document.getElementById("btnInicio").href = "/" + resultado[0][7];
+                    document.getElementById("btnPerfil").href = "/" + resultado[1][7];
+                    document.getElementById("btnBuscarEmpresa").href = "/" + resultado[2][7];
+                    document.getElementById("btnConsultarAplicaciones").href = "/" + resultado[3][7];
+                    document.getElementById("btnContratos").href = "/" + resultado[4][7];
+                    document.getElementById("btnEncuesta").href = "/" + resultado[5][7];
+                }
+                else {
+                    document.getElementById('barraLateral').style.display = "none";
+                    document.getElementById('barraLateral_old').style.display = "initial";
+                }
+
+
+                $(".imagenBotonLateral").on("mouseover", function () {
+                    // Obtiene el icono del boton
+                    var iconoBase = $(this).data("icono");
+                    // Actualiza la imagen del botón
+                    $(this).attr("src", "/sgva/EMPRESA/Recursos/imagenes/Iconos/N" + iconoBase + ".png");
+                });
+
+                $(".imagenBotonLateral").on("mouseout", function () {
+                    // Obtiene el icono del boton
+                    var iconoBase = $(this).data("icono");
+                    // Actualiza la imagen del botón
+                    $(this).attr("src", "/sgva/EMPRESA/Recursos/imagenes/Iconos/" + iconoBase + ".png");
+                });
+
+            });
+        //});
+        //$(document).ready(function () {
+            // Elimina el "No back link" del menu apycom
+            $("body div:last").remove();
+
+            // Configura los datepicker
+            $('.fecha-datepicker').datepicker({
+                    dateFormat: 'yy-mm-dd'
+            });
+            $('div.ui-datepicker').css({
+                        'font-size': '11px'
+            });
+
+
+            // Configura los datepicker
+            $('.fecha-datepicker').datepicker({
+                    dateFormat: 'yy-mm-dd'
+            });
+            $('div.ui-datepicker').css({
+                        'font-size': '11px'
+            });
+
+            // Se inicializan los campos autoNumeric
+            $('.sgva_numero').autoNumeric('init');
+        });
+    </script>
+
+    
+
+    <script type="text/javascript">
+
+        /* Variables globales */
+
+        // URL de la acción para buscar los contratos
+        //La funcion dentro del controlador y el controlador
+        var accionBuscarAcademico = '/sgva/AprendizAcademico/AprendizConsultarAcademicos';
+        var accionCiudades = '/sgva/Ciudad/CiudadByDptoId';
+        var accionBuscarSolicitudesRequeridas = '/sgva/Solicitudes/AprendizConsultarSolicitudesRequeridas';
+        var accionBuscarSolicitudID = '/sgva/Solicitudes/ConsultarSolicitud';
+        var accionAplicaAprendiz = '/sgva/Solicitudes/AprendizAplicaSolicitud';
+
+        var accionConsultarAprendices = '/sgva/AprendizMovimiento/EmpresaAprendicesAplicadosSolicitud';
+        var accionConsultarAprendiz = '/sgva/AprendizAcademico/EmpresaAprendizDetalle';
+    </script>
+
+    
+    
+    <script src="/sgva/bundles/aprendiz_solicitudes?v=-a6gBc_Ewo3bV87o3GbomfAJgOZi0rdoqKtQL2eHzDA1"></script>
+
+    
+
+
+
+</body>
+</html>
+

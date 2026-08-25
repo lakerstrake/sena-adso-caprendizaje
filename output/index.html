@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <!-- Character Encoding & Viewport -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- Primary Meta Tags -->
+    <title>SENA · ADSO | Directorio Estratégico de Aprendices</title>
+    <meta name="title" content="SENA · ADSO | Directorio Estratégico de Aprendices">
+    <meta name="description" content="Plataforma estratégica para la gestión de contratos de aprendizaje SENA ADSO. Conexión directa con empresas de software, tecnología y sistemas en Colombia.">
+    <meta name="author" content="Juan Manuel Lagos Monroy">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="SENA · ADSO | Directorio Estratégico de Aprendices">
+    <meta property="og:description" content="Plataforma de postulación y análisis de empresas para contratos de aprendizaje SENA ADSO.">
+    
+    <!-- Design & Typography Tokens -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <!-- External Utilities (SheetJS) -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    
+    <!-- Modular Stylesheet (ISO/IEC 25010) -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <!-- Header & Top Navigation Bar -->
+    <header class="navbar" role="banner">
+        <div class="navbar-container">
+            <!-- Brand Section -->
+            <div class="brand-section">
+                <div class="brand-badge" aria-hidden="true"><i class="fa-solid fa-code"></i></div>
+                <div class="brand-title">
+                    <h1>SENA · ADSO</h1>
+                    <span>Directorio Estratégico</span>
+                </div>
+            </div>
+
+            <!-- Main Navigation Pills -->
+            <nav class="nav-pills" role="navigation" aria-label="Navegación principal">
+                <button class="nav-pill-btn active" id="pillDirectory" onclick="app.switchNavTab('directory')" aria-current="page">
+                    <i class="fa-solid fa-list-ul" aria-hidden="true"></i> Directorio <span class="count-badge" id="pillTotalCount">179</span>
+                </button>
+                <button class="nav-pill-btn" id="pillStrategy" onclick="app.switchNavTab('strategy')">
+                    <i class="fa-solid fa-rocket" aria-hidden="true"></i> Escalabilidad & Finanzas
+                </button>
+                <button class="nav-pill-btn" id="pillFavs" onclick="app.switchNavTab('favs')">
+                    <i class="fa-regular fa-bookmark" aria-hidden="true"></i> Preseleccionadas <span class="count-badge" id="pillFavCount">0</span>
+                </button>
+            </nav>
+
+            <!-- Candidate Profile & Action Tools -->
+            <div style="display: flex; align-items: center; gap: 0.4rem; flex-shrink: 0;">
+                <div class="candidate-pill">
+                    <i class="fa-solid fa-user-check" style="color: var(--brand-primary);" aria-hidden="true"></i>
+                    <strong style="color: var(--text-main);">Juan Manuel Lagos</strong>
+                    <span style="color: var(--text-dim);" aria-hidden="true">•</span>
+                    <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN" target="_blank" rel="noopener noreferrer" title="Ver Hoja de Vida oficial (CV)" style="color: #38bdf8; font-weight: 600;">
+                        <i class="fa-solid fa-file-lines" aria-hidden="true"></i> Hoja de Vida
+                    </a>
+                    <span style="color: var(--text-dim);" aria-hidden="true">•</span>
+                    <a href="https://github.com/lakerstrake" target="_blank" rel="noopener noreferrer" title="Portafolio en GitHub">
+                        <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub
+                    </a>
+                    <span style="color: var(--text-dim);" aria-hidden="true">•</span>
+                    <a href="https://linkedin.com/in/juan-manuel-lagos-monroy" target="_blank" rel="noopener noreferrer" title="Perfil de LinkedIn">
+                        <i class="fa-brands fa-linkedin" aria-hidden="true"></i> LinkedIn
+                    </a>
+                    <span style="color: var(--text-dim);" aria-hidden="true">•</span>
+                    <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN" target="_blank" rel="noopener noreferrer" title="Certificados Académicos en Google Drive" style="color: var(--drive-color);">
+                        <i class="fa-brands fa-google-drive" aria-hidden="true"></i> Certificados
+                    </a>
+                </div>
+                <button class="btn" onclick="app.exportData('xlsx')" title="Descargar como archivo Excel (.xlsx)" aria-label="Exportar Excel">
+                    <i class="fa-solid fa-file-excel" style="color: #10b981;" aria-hidden="true"></i>
+                </button>
+                <button class="btn" onclick="app.exportData('csv')" title="Descargar como archivo CSV (.csv)" aria-label="Exportar CSV">
+                    <i class="fa-solid fa-file-csv" style="color: #38bdf8;" aria-hidden="true"></i>
+                </button>
+                <button class="btn btn-icon" onclick="app.toggleTheme()" id="themeBtn" title="Cambiar tema de color" aria-label="Cambiar tema">
+                    <i class="fa-solid fa-sun" id="themeIcon" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace Application -->
+    <main class="main-content" role="main">
+
+        <!-- Anti-Blocking Operational Notice -->
+        <aside class="notice-banner" id="antiBlockNotice" role="region" aria-label="Aviso de protocolo anti-bloqueo">
+            <div style="display: flex; align-items: center; gap: 0.4rem;">
+                <i class="fa-solid fa-shield-halved" style="color: var(--tier-3);" aria-hidden="true"></i>
+                <span><strong>Protocolo Anti-Bloqueo:</strong> Contacta directamente a las empresas por <strong>Correo</strong>, <strong>WhatsApp</strong> o <strong>LinkedIn</strong> con tu CV para no bloquear tu perfil 15 días en SGVA.</span>
+            </div>
+            <button class="btn btn-icon" style="border: none; background: transparent; cursor: pointer; color: var(--text-muted);" onclick="document.getElementById('antiBlockNotice').style.display='none'" aria-label="Cerrar aviso">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+        </aside>
+
+        <!-- SECTION 1: DIRECTORY WORKSPACE -->
+        <section id="sectionDirectory" style="display: flex; flex-direction: column; flex: 1; min-height: 0; gap: 0.45rem;">
+
+            <!-- Filter Deck -->
+            <div class="filter-deck" role="search" aria-label="Filtros de búsqueda">
+                <!-- Search Input & Tier Segments -->
+                <div class="filter-deck-primary">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                        <input type="search" id="mainSearch" placeholder="Buscar por empresa, NIT, ciudad, stack (React, Node, SQL) o funciones..." aria-label="Buscar vacantes">
+                    </div>
+
+                    <!-- Tier Quick Segment Filters -->
+                    <div class="tier-segments" role="group" aria-label="Filtrar por categoría de empresa">
+                        <button class="tier-seg-btn active" onclick="app.setTierFilter('', this)">Todos <span class="seg-pill">179</span></button>
+                        <button class="tier-seg-btn seg-1" onclick="app.setTierFilter('TIER_1', this)">Tier 1 · Software <span class="seg-pill">11</span></button>
+                        <button class="tier-seg-btn seg-2" onclick="app.setTierFilter('TIER_2', this)">Tier 2 · Sistemas <span class="seg-pill">31</span></button>
+                        <button class="tier-seg-btn seg-3" onclick="app.setTierFilter('TIER_3', this)">Tier 3 · Soporte TI <span class="seg-pill">58</span></button>
+                        <button class="tier-seg-btn" onclick="app.setTierFilter('TIER_4', this)">Tier 4 · Operación <span class="seg-pill">45</span></button>
+                        <button class="tier-seg-btn" onclick="app.setTierFilter('TIER_5', this)">Tier 5 <span class="seg-pill">34</span></button>
+                    </div>
+
+                    <button class="btn" onclick="app.toggleSecondaryFilters()" id="toggleFiltersBtn">
+                        <i class="fa-solid fa-sliders" aria-hidden="true"></i> Filtros <span class="count-badge" id="activeFilterBadge" style="margin-left: 2px;">0</span>
+                    </button>
+                </div>
+
+                <!-- Tech Stack Chips -->
+                <div class="stack-row" role="group" aria-label="Filtrar por tecnologías">
+                    <span>Stack ADSO:</span>
+                    <button class="chip-btn active" onclick="app.setStackChipFilter('', this)">Todos</button>
+                    <button class="chip-btn" onclick="app.setStackChipFilter('SQL', this)">SQL / Bases de Datos</button>
+                    <button class="chip-btn" onclick="app.setStackChipFilter('Frontend / Web', this)">Frontend & React</button>
+                    <button class="chip-btn" onclick="app.setStackChipFilter('Java', this)">Java / Spring</button>
+                    <button class="chip-btn" onclick="app.setStackChipFilter('Python', this)">Python</button>
+                    <button class="chip-btn" onclick="app.setStackChipFilter('.NET / C#', this)">.NET / C#</button>
+                    <button class="chip-btn" onclick="app.setStackChipFilter('Git', this)">Git / GitHub</button>
+                    <button class="chip-btn" onclick="app.setStackChipFilter('APIs REST', this)">APIs REST</button>
+                    <button class="chip-btn" onclick="app.setStackChipFilter('QA / Testing', this)">QA / Testing</button>
+                    <button class="chip-btn" onclick="app.setStackChipFilter('Cloud', this)">Cloud AWS/Azure</button>
+                    <button class="chip-btn" onclick="app.setStackChipFilter('ERP / Sistemas', this)">ERP / Sistemas</button>
+                </div>
+
+                <!-- Secondary Filters Grid -->
+                <div class="secondary-filters-row" id="secondaryFiltersRow" style="display: none;">
+                    <div class="filter-select-wrap">
+                        <label for="filterChannel">Canal Directo</label>
+                        <select class="select-sm" id="filterChannel">
+                            <option value="">Todos los canales</option>
+                            <option value="WHATSAPP">Con WhatsApp Directo (129)</option>
+                            <option value="EMAIL">Con Correo Electrónico (175)</option>
+                        </select>
+                    </div>
+                    <div class="filter-select-wrap">
+                        <label for="filterCompetition">Nivel de Competencia</label>
+                        <select class="select-sm" id="filterCompetition">
+                            <option value="">Cualquier competencia</option>
+                            <option value="ZERO">Sin postulados (0 candidatos)</option>
+                            <option value="LOW">Baja (≤ 1.0 postulados/cupo)</option>
+                            <option value="MOD">Moderada (1.1 - 2.0 ratio)</option>
+                            <option value="MED">Media (2.1 - 5.0 ratio)</option>
+                        </select>
+                    </div>
+                    <div class="filter-select-wrap">
+                        <label for="filterDpto">Departamento</label>
+                        <select class="select-sm" id="filterDpto"><option value="">Todos</option></select>
+                    </div>
+                    <div class="filter-select-wrap">
+                        <label for="filterCity">Ciudad</label>
+                        <select class="select-sm" id="filterCity"><option value="">Todas</option></select>
+                    </div>
+                    <div class="filter-select-wrap">
+                        <label for="filterSort">Criterio de Orden</label>
+                        <select class="select-sm" id="filterSort">
+                            <option value="ranking_asc">Afinidad y Éxito (#01 a #179)</option>
+                            <option value="escalabilidad_desc">Mayor Escalabilidad Profesional</option>
+                            <option value="reputation_desc">Mayor Calidad Web (★)</option>
+                            <option value="comp_asc">Menor Competencia</option>
+                            <option value="vacancies_desc">Mayor Cantidad de Vacantes</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Header Toolbar -->
+            <div class="table-toolbar">
+                <div>Mostrando <strong id="lblVisibleCount">179</strong> de <strong id="lblTotalCount">179</strong> vacantes</div>
+                <div style="display: flex; align-items: center; gap: 0.45rem;">
+                    <button class="btn" style="padding: 0.18rem 0.45rem; font-size: 0.66rem;" onclick="app.resetFilters()">Restablecer</button>
+                    <div class="nav-pills" style="padding: 1px;" role="group" aria-label="Cambiar vista">
+                        <button class="nav-pill-btn active" id="btnLayoutTable" onclick="app.setLayout('table')" style="padding: 0.18rem 0.45rem;" aria-label="Vista tabla"><i class="fa-solid fa-table-list"></i></button>
+                        <button class="nav-pill-btn" id="btnLayoutCards" onclick="app.setLayout('cards')" style="padding: 0.18rem 0.45rem;" aria-label="Vista tarjetas"><i class="fa-solid fa-border-all"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Master Data Table Container -->
+            <div class="table-card" id="tableCardWrap">
+                <div class="table-container">
+                    <table class="data-table" role="table">
+                        <thead>
+                            <tr>
+                                <th style="width: 24px; text-align: center;"><i class="fa-solid fa-code-compare" title="Comparar"></i></th>
+                                <th style="width: 24px;"></th>
+                                <th style="width: 38px;">Pos</th>
+                                <th>Empresa & Ubicación</th>
+                                <th style="width: 130px;">Clasificación</th>
+                                <th style="width: 70px;">Puntos</th>
+                                <th style="width: 80px;">Calidad Web</th>
+                                <th style="width: 95px;">Escala</th>
+                                <th style="width: 110px;">Competencia</th>
+                                <th style="width: 115px;">Apoyo / 5A</th>
+                                <th style="width: 160px; text-align: right;">Contacto Directo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+                <!-- Pagination Footer -->
+                <div class="table-footer">
+                    <span id="lblPagination">Página 1 de 4</span>
+                    <div style="display: flex; gap: 3px;" id="paginationPages"></div>
+                </div>
+            </div>
+
+            <!-- Cards Container -->
+            <div class="cards-view-grid" id="cardsGridWrap" style="display: none;"></div>
+        </section>
+
+        <!-- SECTION 2: STRATEGY & FINANCIAL PROJECTIONS -->
+        <section id="sectionStrategy" class="strategy-view" style="display: none;" aria-label="Proyección estratégica y financiera">
+            <div class="strategy-header">
+                <div>
+                    <h2 style="font-size: 1.05rem; font-weight: 700; color: var(--text-main);">Proyección Financiera & Escalabilidad a 5 Años</h2>
+                    <p style="color: var(--text-muted); font-size: 0.74rem; margin-top: 0.15rem;">
+                        Impacto profesional para <strong>Juan Manuel Lagos Monroy</strong> según el tipo de empresa seleccionada.
+                    </p>
+                </div>
+                <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); padding: 0.5rem 1rem; border-radius: var(--radius-sm); text-align: center;">
+                    <div style="font-size: 1.2rem; font-weight: 700; color: var(--tier-1); font-family: var(--font-mono);">+$320M COP</div>
+                    <div style="font-size: 0.62rem; color: var(--text-dim); text-transform: uppercase;">Diferencial Acumulado Tier 1 vs Pyme</div>
+                </div>
+            </div>
+
+            <div class="strategy-columns">
+                <!-- Financial Table Card -->
+                <div class="strategy-card-clean" style="grid-column: 1/-1;">
+                    <div style="font-weight: 700; font-size: 0.8rem; color: var(--tier-1); display: flex; align-items: center; gap: 0.35rem;">
+                        <i class="fa-solid fa-coins"></i> Ingresos Acumulados Proyectados (1 a 5 Años)
+                    </div>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.72rem; margin-top: 0.35rem;">
+                        <thead>
+                            <tr style="background: var(--bg-canvas); border-bottom: 1px solid var(--border-muted);">
+                                <th style="padding: 0.45rem; text-align: left;">Categoría</th>
+                                <th style="padding: 0.45rem;">Práctica (6m)</th>
+                                <th style="padding: 0.45rem;">Año 1 (Junior)</th>
+                                <th style="padding: 0.45rem;">Acumulado 3A</th>
+                                <th style="padding: 0.45rem;">Acumulado 5A</th>
+                                <th style="padding: 0.45rem; text-align: left;">Calidad de Vida</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--border-muted);">
+                                <td style="padding: 0.45rem;"><strong style="color: var(--tier-1);">Tier 1 · Software & Tech</strong></td>
+                                <td style="padding: 0.45rem; text-align: center;">$8.541.000 COP</td>
+                                <td style="padding: 0.45rem; text-align: center;">$45.000.000 COP</td>
+                                <td style="padding: 0.45rem; text-align: center;"><strong style="color: var(--brand-primary);">$185.000.000</strong></td>
+                                <td style="padding: 0.45rem; text-align: center;"><strong style="color: var(--tier-1);">$450M a $720M+ COP</strong></td>
+                                <td style="padding: 0.45rem; color: var(--text-muted);">Remoto / Híbrido, autonomía y valorización global.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-muted);">
+                                <td style="padding: 0.45rem;"><strong style="color: var(--tier-2);">Tier 2 · Sistemas & Datos</strong></td>
+                                <td style="padding: 0.45rem; text-align: center;">$8.541.000 COP</td>
+                                <td style="padding: 0.45rem; text-align: center;">$36.000.000 COP</td>
+                                <td style="padding: 0.45rem; text-align: center;">$150.000.000</td>
+                                <td style="padding: 0.45rem; text-align: center;"><strong>$320M a $480M COP</strong></td>
+                                <td style="padding: 0.45rem; color: var(--text-muted);">Gran estabilidad bancaria e industrial.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-muted);">
+                                <td style="padding: 0.45rem;"><strong style="color: var(--tier-3);">Tier 3 · Soporte TI</strong></td>
+                                <td style="padding: 0.45rem; text-align: center;">$8.541.000 COP</td>
+                                <td style="padding: 0.45rem; text-align: center;">$28.000.000 COP</td>
+                                <td style="padding: 0.45rem; text-align: center;">$115.000.000</td>
+                                <td style="padding: 0.45rem; text-align: center;">$210M a $310M COP</td>
+                                <td style="padding: 0.45rem; color: var(--text-muted);">Mayormente presencial y turnos técnicos.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Career Milestones Card -->
+                <div class="strategy-card-clean">
+                    <div style="font-weight: 700; font-size: 0.78rem; color: var(--tier-2);"><i class="fa-solid fa-timeline"></i> Trayectoria de 4 Hitos ADSO</div>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.7rem; color: var(--text-muted);">
+                        <li><strong>Año 0 (Práctica):</strong> Apoyo legal ($1.423.500 COP + EPS/ARL). Foco en código y Scrum.</li>
+                        <li><strong>Año 1 (Junior Dev):</strong> $3.0M a $4.8M COP al graduarte del tecnólogo.</li>
+                        <li><strong>Año 3 (Mid-Level):</strong> $5.5M a $8.5M COP diseñando microservicios y cloud.</li>
+                        <li><strong>Año 5+ (Senior / Remoto):</strong> $10M a $22M+ COP ($3.000 - $5.500 USD/mes).</li>
+                    </ul>
+                </div>
+
+                <!-- Anti-Blocking Strategy Card -->
+                <div class="strategy-card-clean">
+                    <div style="font-weight: 700; font-size: 0.78rem; color: var(--tier-3);"><i class="fa-solid fa-shield-halved"></i> Estrategia Anti-Bloqueo</div>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.7rem; color: var(--text-muted);">
+                        <li><span style="color: var(--tier-5);">✗</span> <strong>NO</strong> te postules en SGVA (te bloquea 15 días hábiles a 1 sola empresa).</li>
+                        <li><span style="color: var(--brand-primary);">✓</span> <strong>SÍ</strong> contacta simultáneamente a 20 o 30 empresas por Correo, WhatsApp y LinkedIn con tu CV.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FLOATING COMPARISON DOCK -->
+    <div class="dock-bar" id="comparisonDock" role="region" aria-label="Barra de comparación">
+        <span style="font-size: 0.72rem; font-weight: 700;"><i class="fa-solid fa-code-compare" style="color: var(--tier-1);"></i> Comparando <span class="count-badge" id="dockCount" style="margin-left: 2px;">0</span> de 3:</span>
+        <div id="dockList" style="display: flex; gap: 0.35rem;"></div>
+        <div style="display: flex; gap: 0.3rem;">
+            <button class="btn btn-primary" style="padding: 0.2rem 0.5rem; font-size: 0.68rem;" onclick="app.openCompareModal()">Ver Comparativa</button>
+            <button class="btn" style="padding: 0.2rem 0.4rem; font-size: 0.68rem;" onclick="app.clearComparison()">Limpiar</button>
+        </div>
+    </div>
+
+    <!-- COMPARISON MODAL -->
+    <div class="modal-backdrop" id="compareModal" role="dialog" aria-modal="true" aria-labelledby="compareModalTitle" onclick="if(event.target.id==='compareModal') app.closeCompareModal()">
+        <div class="modal-panel" style="max-width: 1040px;">
+            <div class="modal-header">
+                <div>
+                    <h2 id="compareModalTitle" style="font-size: 0.95rem; font-weight: 700;"><i class="fa-solid fa-code-compare" style="color: var(--tier-1);"></i> Comparación Directa Frente a Frente</h2>
+                    <span style="font-size: 0.7rem; color: var(--text-muted);">Evaluación comparativa de vacantes seleccionadas</span>
+                </div>
+                <button class="btn btn-icon" onclick="app.closeCompareModal()" aria-label="Cerrar modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.72rem;" id="compareTable"></table>
+            </div>
+        </div>
+    </div>
+
+    <!-- DETAIL & OUTREACH MODAL -->
+    <div class="modal-backdrop" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="mTitle" onclick="if(event.target.id==='detailModal') app.closeDetailModal()">
+        <div class="modal-panel" id="modalPanel">
+            <div class="modal-header">
+                <div>
+                    <h2 id="mTitle" style="font-size: 1rem; font-weight: 700;">Empresa</h2>
+                    <span id="mSubtitle" style="font-size: 0.72rem; color: var(--text-muted);">Ubicación • NIT</span>
+                </div>
+                <div style="display: flex; gap: 0.35rem;">
+                    <button class="btn btn-icon" id="mFavBtn" onclick="app.handleToggleFavorite(app.store.activeItem?.solicitud_id)" aria-label="Favorito"><i class="fa-regular fa-bookmark"></i></button>
+                    <button class="btn btn-icon" onclick="app.closeDetailModal()" aria-label="Cerrar modal"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <!-- 4 Top Stat Boxes -->
+                <div class="stat-quad">
+                    <div class="stat-box">
+                        <span>Afinidad ADSO</span>
+                        <strong id="mScore" style="color: var(--tier-1);">95 / 100</strong>
+                    </div>
+                    <div class="stat-box">
+                        <span>Escalabilidad</span>
+                        <strong id="mEsc" style="color: var(--tier-2);">96 / 100</strong>
+                    </div>
+                    <div class="stat-box">
+                        <span>Calidad Web</span>
+                        <strong id="mRating" style="color: var(--tier-3);">★ 4.3</strong>
+                    </div>
+                    <div class="stat-box">
+                        <span>Apoyo Mensual</span>
+                        <strong id="mSupport" style="color: var(--brand-primary);">$1.423.500</strong>
+                    </div>
+                </div>
+
+                <!-- Modal Sub-Tabs -->
+                <div class="modal-tabs" role="tablist">
+                    <button class="modal-tab-item active" id="mTabOutreach" onclick="app.setModalTab('outreach')" role="tab">
+                        <i class="fa-solid fa-paper-plane"></i> Contacto Directo
+                    </button>
+                    <button class="modal-tab-item" id="mTabInterview" onclick="app.setModalTab('interview')" role="tab">
+                        <i class="fa-solid fa-brain"></i> Simulador de Entrevista
+                    </button>
+                    <button class="modal-tab-item" id="mTabCareer" onclick="app.setModalTab('career')" role="tab">
+                        <i class="fa-solid fa-chart-line"></i> Proyección & Finanzas
+                    </button>
+                    <button class="modal-tab-item" id="mTabDetails" onclick="app.setModalTab('details')" role="tab">
+                        <i class="fa-solid fa-file-lines"></i> Perfil & Funciones
+                    </button>
+                </div>
+
+                <!-- SUBSECTION 1: OUTREACH -->
+                <div id="mSecOutreach" style="display: flex; flex-direction: column; gap: 0.65rem;">
+                    <div style="display: flex; gap: 0.35rem;">
+                        <button class="btn btn-primary" id="mChEmail" onclick="app.setChannel('email')" style="flex: 1;"><i class="fa-solid fa-envelope"></i> Correo Formal</button>
+                        <button class="btn" id="mChWA" onclick="app.setChannel('wa')" style="flex: 1;"><i class="fa-brands fa-whatsapp"></i> WhatsApp Directo</button>
+                        <button class="btn" id="mChLinkedIn" onclick="app.setChannel('linkedin')" style="flex: 1;"><i class="fa-brands fa-linkedin"></i> Nota LinkedIn</button>
+                    </div>
+
+                    <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-sm); padding: 0.75rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                            <strong style="font-size: 0.74rem;" id="mOutreachHeading">Carta Formal de Postulación Institucional</strong>
+                            <div id="mOutreachActions" style="display: flex; gap: 0.3rem;"></div>
+                        </div>
+                        <div id="mOutreachBody" style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-main); white-space: pre-wrap; max-height: 180px; overflow-y: auto; user-select: text;"></div>
+                    </div>
+
+                    <!-- Direct Contacts Summary -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem; font-size: 0.72rem; background: var(--bg-subtle); padding: 0.65rem; border-radius: var(--radius-xs); border: 1px solid var(--border-muted);">
+                        <div><span style="color: var(--text-dim);">Contacto / RRHH:</span> <strong id="mContactName"></strong></div>
+                        <div><span style="color: var(--text-dim);">Correo:</span> <strong id="mContactEmail" style="font-family: var(--font-mono);"></strong></div>
+                        <div><span style="color: var(--text-dim);">Teléfono / WhatsApp:</span> <strong id="mContactPhone" style="font-family: var(--font-mono);"></strong></div>
+                        <div><span style="color: var(--text-dim);">Modalidad:</span> <strong id="mContactModalidad" style="color: var(--tier-2);"></strong></div>
+                    </div>
+                </div>
+
+                <!-- SUBSECTION 2: INTERVIEW SIMULATOR -->
+                <div id="mSecInterview" style="display: none; flex-direction: column; gap: 0.5rem;">
+                    <div id="mInterviewList" style="display: flex; flex-direction: column; gap: 0.45rem;"></div>
+                </div>
+
+                <!-- SUBSECTION 3: CAREER & FINANCES -->
+                <div id="mSecCareer" style="display: none; flex-direction: column; gap: 0.65rem;">
+                    <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-sm); padding: 0.75rem;">
+                        <strong style="color: var(--tier-1); font-size: 0.76rem;" id="mCurvaTitulo"></strong>
+                        <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.2rem;" id="mCurvaDetalle"></p>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem;" id="mTimelineGrid"></div>
+                    <div style="background: var(--tier-1-bg); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: var(--radius-xs); padding: 0.55rem 0.75rem; font-size: 0.72rem;">
+                        <strong style="color: var(--tier-1);">Acumulado 5 Años:</strong> <span id="mFinAcumulado5A"></span> • <span id="mFinDiferencial" style="color: var(--brand-primary); font-weight: 600;"></span>
+                    </div>
+                </div>
+
+                <!-- SUBSECTION 4: DETAILS -->
+                <div id="mSecDetails" style="display: none; flex-direction: column; gap: 0.55rem;">
+                    <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-sm); padding: 0.7rem;">
+                        <span style="font-size: 0.62rem; text-transform: uppercase; color: var(--text-dim); font-weight: 600;">Perfil Requerido</span>
+                        <p style="font-size: 0.74rem; color: var(--text-main); margin-top: 0.2rem; white-space: pre-wrap;" id="mPerfil"></p>
+                    </div>
+                    <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-sm); padding: 0.7rem;">
+                        <span style="font-size: 0.62rem; text-transform: uppercase; color: var(--text-dim); font-weight: 600;">Funciones Asignadas</span>
+                        <p style="font-size: 0.74rem; color: var(--text-main); margin-top: 0.2rem; white-space: pre-wrap;" id="mFunciones"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div style="padding: 0.65rem 1.25rem; border-top: 1px solid var(--border-muted); display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface-raised);">
+                <span style="font-size: 0.7rem; color: var(--text-dim);">Cierre de Convocatoria: <strong id="mClosingDate" style="color: var(--tier-3); font-family: var(--font-mono);"></strong></span>
+                <button class="btn btn-primary" onclick="app.closeDetailModal()">Listo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast Element -->
+    <div class="toast-msg" id="toastMsg" role="alert" aria-live="polite">Mensaje</div>
+
+    <!-- Dataset & Application Scripts -->
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

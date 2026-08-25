@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+.npm/
+
+# Cloudflare & Wrangler build artifacts
+.wrangler/
+.mf/
+dist/
+
+# Python virtual environment & cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# IDE & OS files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# Temporary test outputs
+test_*.png
+output/test_*.png
+.tempmediaStorage/
+scratch/

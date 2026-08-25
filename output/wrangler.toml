@@ -1,0 +1,12 @@
+name = "sena-adso-caprendizaje"
+main = "worker.js"
+compatibility_date = "2026-08-25"
+
+# Cloudflare Static Assets Binding
+[assets]
+directory = "./output"
+binding = "ASSETS"
+
+# Observability
+[observability]
+enabled = true

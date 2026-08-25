@@ -1,0 +1,27 @@
+{
+  "name": "sena-adso-caprendizaje",
+  "version": "2.0.0",
+  "description": "Directorio Estratégico y Plataforma de Gestión de Contratos de Aprendizaje SENA ADSO",
+  "main": "worker.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "deploy:pages": "wrangler pages deploy output --project-name=sena-caprendizaje-adso",
+    "build:data": "python generate_data_js.py",
+    "lint": "npx eslint assets/js/*.js"
+  },
+  "keywords": [
+    "sena",
+    "adso",
+    "contrato-aprendizaje",
+    "cloudflare-workers",
+    "spa",
+    "vanilla-js",
+    "iso25010"
+  ],
+  "author": "Juan Manuel Lagos Monroy <jmlagos2003@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.100.0"
+  }
+}
