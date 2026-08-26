@@ -1251,7 +1251,7 @@ class AppController {
                                 const v=(it.ai_scores&&it.ai_scores[k])||0;
                                 const c=v>=80?'#10b981':v>=65?'#f59e0b':v>=50?'#3b82f6':'#6b7280';
                                 return `<span style="font-size:0.48rem;font-family:var(--font-mono);color:${c};">${v}</span>`;
-                            }).join('<span style="color:#334155;font-size:0.44rem;">·</span>')}
+                            }).join('<span style="color:var(--border-default);font-size:0.44rem;">·</span>')}
                         </div>
                     </div>
                 </td>
@@ -1421,7 +1421,7 @@ class AppController {
                             const keys=['M1_RecruiterAI','M2_FitAI','M3_GrowthAI','M4_UrgencyAI','M5_CompetenceAI'];
                             const val = (it.ai_scores&&it.ai_scores[keys[i]])||0;
                             const col = val>=80?'#10b981':val>=65?'#f59e0b':val>=50?'#3b82f6':'#6b7280';
-                            return `<div style="background:rgba(0,0,0,0.15);border-radius:3px;padding:0.15rem 0;">
+                            return `<div style="background:var(--bg-canvas);border:1px solid var(--border-muted);border-radius:3px;padding:0.15rem 0;">
                                 <div style="font-size:0.5rem;color:#64748b;">${labels[i]}</div>
                                 <div style="font-size:0.72rem;font-weight:700;color:${col};font-family:var(--font-mono);">${val}</div>
                             </div>`;
