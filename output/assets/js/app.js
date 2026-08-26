@@ -1635,6 +1635,84 @@ class AppController {
         setTxt(this.dom.mFunciones, it.funciones || 'No registrado');
         setTxt(this.dom.mClosingDate, it.fecha_cierre || 'No registrada');
 
+        // ── PANORAMA EMPRESARIAL ──────────────────────────────────────────────
+        const mPanoramaContainer = document.getElementById('mPanoramaContainer');
+        if (mPanoramaContainer && it.panorama_actividad) {
+            const stars = (r) => {
+                const full = Math.round(r);
+                return '★'.repeat(full) + '☆'.repeat(5 - full);
+            };
+            const sectorColors = {
+                software: '#6366f1', finanzas: '#f59e0b', salud: '#10b981',
+                gobierno: '#3b82f6', otros: '#94a3b8'
+            };
+            const sc = sectorColors[it.panorama_sector] || '#94a3b8';
+            const banderaHtml = it.panorama_bandera
+                ? `<div style="margin-top:0.5rem;padding:0.4rem 0.6rem;border-radius:6px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);font-size:0.66rem;color:#fca5a5;">
+                       ${SecurityService.escapeHtml(it.panorama_bandera)}
+                   </div>` : '';
+
+            mPanoramaContainer.innerHTML = `
+            <div style="margin-top:0.6rem;">
+                <!-- Encabezado -->
+                <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:1px solid var(--border-muted);">
+                    <span style="font-size:0.6rem;font-weight:700;color:${sc};padding:0.1rem 0.45rem;border-radius:4px;background:${sc}18;border:1px solid ${sc}33;text-transform:uppercase;letter-spacing:0.05em;">
+                        ${SecurityService.escapeHtml(it.panorama_sector || 'general')}
+                    </span>
+                    <span style="font-size:0.68rem;font-weight:700;color:var(--text-main);">Panorama Empresarial</span>
+                    <span style="margin-left:auto;font-size:0.6rem;color:var(--text-dim);">IA + Internet + SGVA</span>
+                </div>
+
+                <!-- ¿Qué hace? -->
+                <div style="margin-bottom:0.6rem;">
+                    <div style="font-size:0.6rem;font-weight:700;color:var(--brand-primary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.2rem;">🏢 ¿Qué hace esta empresa?</div>
+                    <div style="font-size:0.7rem;color:var(--text-muted);line-height:1.55;">${SecurityService.escapeHtml(it.panorama_actividad)}</div>
+                </div>
+
+                <!-- Stack real -->
+                <div style="margin-bottom:0.6rem;">
+                    <div style="font-size:0.6rem;font-weight:700;color:#10b981;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.25rem;">⚙️ Stack tecnológico real</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:0.2rem;">
+                        ${(it.panorama_stack_real||'').split(',').map(t=>`<span style="font-size:0.6rem;padding:0.1rem 0.35rem;border-radius:4px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);color:#6ee7b7;font-family:var(--font-mono);">${SecurityService.escapeHtml(t.trim())}</span>`).join('')}
+                    </div>
+                </div>
+
+                <!-- Opiniones -->
+                <div style="margin-bottom:0.6rem;">
+                    <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.3rem;">
+                        <div style="font-size:0.6rem;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:0.05em;">💬 Opiniones de empleados</div>
+                        <div style="margin-left:auto;font-size:0.68rem;color:#fbbf24;font-family:var(--font-mono);">${stars(it.panorama_rating_real||3.5)} <span style="color:var(--text-dim);font-size:0.58rem;">${(it.panorama_rating_real||3.5).toFixed(1)}/5</span></div>
+                    </div>
+                    <div style="font-size:0.58rem;color:var(--text-dim);margin-bottom:0.35rem;">Fuentes: ${SecurityService.escapeHtml(it.panorama_fuentes||'')}</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.35rem;">
+                        <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:6px;padding:0.4rem 0.5rem;">
+                            <div style="font-size:0.58rem;font-weight:700;color:#10b981;margin-bottom:0.2rem;">✅ Lo bueno</div>
+                            ${(it.panorama_pros||'').split('·').filter(Boolean).map(p=>`<div style="font-size:0.62rem;color:var(--text-muted);margin-bottom:0.1rem;">· ${SecurityService.escapeHtml(p.trim())}</div>`).join('')}
+                        </div>
+                        <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:6px;padding:0.4rem 0.5rem;">
+                            <div style="font-size:0.58rem;font-weight:700;color:#f87171;margin-bottom:0.2rem;">⚠️ A considerar</div>
+                            ${(it.panorama_contras||'').split('·').filter(Boolean).map(c=>`<div style="font-size:0.62rem;color:var(--text-muted);margin-bottom:0.1rem;">· ${SecurityService.escapeHtml(c.trim())}</div>`).join('')}
+                        </div>
+                    </div>
+                    ${banderaHtml}
+                </div>
+
+                <!-- Lo que buscan -->
+                <div style="margin-bottom:0.55rem;">
+                    <div style="font-size:0.6rem;font-weight:700;color:#818cf8;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.2rem;">🎯 ¿Qué buscan en ti? (SGVA)</div>
+                    <div style="font-size:0.67rem;color:var(--text-dim);background:var(--bg-canvas);border-radius:6px;padding:0.4rem 0.5rem;line-height:1.5;border:1px solid var(--border-muted);">
+                        ${SecurityService.escapeHtml(it.panorama_buscan_resumen||it.perfil_requerido||'Ver detalle arriba')}
+                    </div>
+                </div>
+
+                <!-- Veredicto IA -->
+                <div style="padding:0.4rem 0.6rem;border-radius:8px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.25);">
+                    <div style="font-size:0.6rem;font-weight:700;color:#a5b4fc;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.15rem;">🤖 Veredicto IA</div>
+                    <div style="font-size:0.68rem;color:#e2e8f0;line-height:1.5;">${SecurityService.escapeHtml(it.panorama_veredicto||'')}</div>
+                </div>
+            </div>`;
+        }
+
         if (it.finanzas_5anios) {
             setTxt(this.dom.mFinAcumulado5A, it.finanzas_5anios.acumulado_5a);
             setTxt(this.dom.mFinDiferencial, it.finanzas_5anios.diferencial_vs_pyme);
