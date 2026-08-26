@@ -1240,7 +1240,21 @@ class AppController {
                     </div>
                 </td>
                 <td><span class="pill-badge ${tierClass}">${SecurityService.escapeHtml(it.cat_badge || 'Tier')}</span></td>
-                <td><strong style="color: var(--tier-1); font-family: var(--font-mono);">${it.puntaje_exito || 0}</strong><span style="color: var(--text-dim); font-size: 0.62rem;">/100</span></td>
+                <td>
+                    <div style="display:flex;flex-direction:column;gap:0.15rem;">
+                        <div style="display:flex;align-items:center;gap:0.3rem;">
+                            <strong style="color:${it.ai_tier_color||'var(--tier-1)'};font-family:var(--font-mono);">${it.puntaje_exito||0}</strong>
+                            <span style="font-size:0.58rem;font-weight:700;padding:0.05rem 0.25rem;border-radius:3px;background:${(it.ai_tier_color||'#6b7280')}22;color:${it.ai_tier_color||'#6b7280'};">T${it.ai_tier||'?'}</span>
+                        </div>
+                        <div style="display:flex;gap:2px;">
+                            ${['M1_RecruiterAI','M2_FitAI','M3_GrowthAI','M4_UrgencyAI','M5_CompetenceAI'].map(k=>{
+                                const v=(it.ai_scores&&it.ai_scores[k])||0;
+                                const c=v>=80?'#10b981':v>=65?'#f59e0b':v>=50?'#3b82f6':'#6b7280';
+                                return `<span style="font-size:0.48rem;font-family:var(--font-mono);color:${c};">${v}</span>`;
+                            }).join('<span style="color:#334155;font-size:0.44rem;">·</span>')}
+                        </div>
+                    </div>
+                </td>
                 <td><span class="rating-chip"><i class="fa-solid fa-star"></i> ${(it.reputacion_rating || 3.8).toFixed(1)}</span></td>
                 <td><strong style="color: var(--tier-2); font-family: var(--font-mono);">${it.escalabilidad_score || 70}/100</strong></td>
                 <td>
@@ -1394,10 +1408,28 @@ class AppController {
                     <div style="font-size: 0.66rem; color: var(--text-dim); margin-top: 0.15rem;">${SecurityService.escapeHtml(it.ciudad || '')}, ${SecurityService.escapeHtml(it.departamento || '')} • ${it.vacantes || 1} vac · ${it.postulados || 0} post</div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.3rem; background: var(--bg-canvas); padding: 0.35rem; border-radius: var(--radius-xs); text-align: center;">
-                    <div><span style="font-size: 0.58rem; color: var(--text-dim);">PUNTOS</span><div style="font-weight: 700; color: var(--tier-1);">${it.puntaje_exito || 0}</div></div>
-                    <div><span style="font-size: 0.58rem; color: var(--text-dim);">ESCALA</span><div style="font-weight: 700; color: var(--tier-2);">${it.escalabilidad_score || 70}</div></div>
-                    <div><span style="font-size: 0.58rem; color: var(--text-dim);">5A SALARIO</span><div style="font-weight: 700; color: var(--brand-primary); font-size: 0.64rem;">${SecurityService.escapeHtml(it.techo_salarial_5anios ? it.techo_salarial_5anios.split('(')[0].trim() : '')}</div></div>
+                <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-xs); padding: 0.4rem 0.5rem; margin-bottom: 0.35rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.3rem;">
+                        <span style="font-size:0.58rem; color:var(--text-dim); font-family:var(--font-mono); text-transform:uppercase; letter-spacing:0.04em;">⚡ Multi-AI Consensus</span>
+                        <span style="font-size:0.6rem; font-weight:700; padding:0.08rem 0.35rem; border-radius:3px; background:${(it.ai_tier_color||'#6b7280')}22; color:${it.ai_tier_color||'#6b7280'}; border:1px solid ${it.ai_tier_color||'#6b7280'}44;">
+                            Tier ${it.ai_tier||'?'} · ${it.puntaje_exito||0}pts
+                        </span>
+                    </div>
+                    <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:0.2rem; text-align:center;">
+                        ${['M1','M2','M3','M4','M5'].map((m,i)=>{
+                            const labels=['Reclu','Fit','Growth','Urgenc','Compet'];
+                            const keys=['M1_RecruiterAI','M2_FitAI','M3_GrowthAI','M4_UrgencyAI','M5_CompetenceAI'];
+                            const val = (it.ai_scores&&it.ai_scores[keys[i]])||0;
+                            const col = val>=80?'#10b981':val>=65?'#f59e0b':val>=50?'#3b82f6':'#6b7280';
+                            return `<div style="background:rgba(0,0,0,0.15);border-radius:3px;padding:0.15rem 0;">
+                                <div style="font-size:0.5rem;color:#64748b;">${labels[i]}</div>
+                                <div style="font-size:0.72rem;font-weight:700;color:${col};font-family:var(--font-mono);">${val}</div>
+                            </div>`;
+                        }).join('')}
+                    </div>
+                    <div style="margin-top:0.25rem; font-size:0.55rem; color:var(--text-dim); text-align:right;">
+                        Conf. ${SecurityService.escapeHtml(it.ai_consensus_confidence||'?')} · ${SecurityService.escapeHtml(it.ai_tier_label||'')}
+                    </div>
                 </div>
 
                 <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-muted); padding-top: 0.4rem;">
@@ -1547,7 +1579,47 @@ class AppController {
 
         setTxt(this.dom.mTitle, it.empresa);
         setTxt(this.dom.mSubtitle, `${it.ciudad?.trim() || ''}, ${it.departamento || ''} • NIT: ${it.nit || 'No registrado'}`);
-        setTxt(this.dom.mScore, `${it.puntaje_exito || 0} / 100`);
+        // ── Multi-AI Score Panel in Modal ──────────────────────────────
+        const mScoreEl = this.dom.mScore;
+        if (mScoreEl) {
+            const ai = it.ai_scores || {};
+            const aiModels = [
+                { key: 'M1_RecruiterAI',  label: 'RecruiterAI',  desc: 'Prob. respuesta reclutador' },
+                { key: 'M2_FitAI',        label: 'FitAI',        desc: 'Match técnico candidato' },
+                { key: 'M3_GrowthAI',     label: 'GrowthAI',     desc: 'Crecimiento profesional 5A' },
+                { key: 'M4_UrgencyAI',    label: 'UrgencyAI',    desc: 'Ventana y urgencia' },
+                { key: 'M5_CompetenceAI', label: 'CompetenceAI', desc: 'Ventaja vs competidores' }
+            ];
+            const tierColor = it.ai_tier_color || '#6b7280';
+            let html = `<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
+                <span style="font-size:1.4rem;font-weight:900;font-family:var(--font-mono);color:${tierColor};">${it.puntaje_exito||0}</span>
+                <div>
+                    <div style="font-size:0.62rem;font-weight:700;color:${tierColor};padding:0.08rem 0.4rem;border-radius:4px;background:${tierColor}22;border:1px solid ${tierColor}44;display:inline-block;">
+                        Tier ${it.ai_tier||'?'} — ${SecurityService.escapeHtml(it.ai_tier_label||'')}
+                    </div>
+                    <div style="font-size:0.58rem;color:var(--text-dim);margin-top:0.15rem;">Confianza de consenso: <strong style="color:var(--text-muted);">${SecurityService.escapeHtml(it.ai_consensus_confidence||'N/A')}</strong></div>
+                </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:0.3rem;">`;
+            aiModels.forEach(m => {
+                const val = ai[m.key] || 0;
+                const col = val>=80?'#10b981':val>=65?'#f59e0b':val>=50?'#3b82f6':'#6b7280';
+                const pct = Math.min(100, val);
+                html += `<div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
+                        <span style="font-size:0.6rem;font-weight:700;color:var(--text-muted);font-family:var(--font-mono);">${m.label}</span>
+                        <span style="font-size:0.58rem;color:var(--text-dim);">${m.desc}</span>
+                        <span style="font-size:0.62rem;font-weight:700;color:${col};font-family:var(--font-mono);">${val}</span>
+                    </div>
+                    <div style="height:4px;border-radius:2px;background:rgba(255,255,255,0.06);overflow:hidden;">
+                        <div style="height:100%;width:${pct}%;background:${col};border-radius:2px;transition:width 0.6s ease;"></div>
+                    </div>
+                </div>`;
+            });
+            html += '</div>';
+            mScoreEl.innerHTML = html;
+        }
+
         setTxt(this.dom.mEsc, `${it.escalabilidad_score || 75} / 100`);
         setTxt(this.dom.mRating, `★ ${(it.reputacion_rating || 3.8).toFixed(1)}`);
         setTxt(this.dom.mSupport, '$1.423.500 COP');
