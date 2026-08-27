@@ -459,14 +459,17 @@ class AppController {
             mFavBtn: document.getElementById('mFavBtn'),
             
             // Modal Tabs
+            mTabPanorama: document.getElementById('mTabPanorama'),
             mTabOutreach: document.getElementById('mTabOutreach'),
             mTabInterview: document.getElementById('mTabInterview'),
-            mTabCareer: document.getElementById('mTabCareer'),
             mTabDetails: document.getElementById('mTabDetails'),
+            mSecPanorama: document.getElementById('mSecPanorama'),
             mSecOutreach: document.getElementById('mSecOutreach'),
             mSecInterview: document.getElementById('mSecInterview'),
-            mSecCareer: document.getElementById('mSecCareer'),
             mSecDetails: document.getElementById('mSecDetails'),
+            mTierText: document.getElementById('mTierText'),
+            mVacantesText: document.getElementById('mVacantesText'),
+            mModalidadText: document.getElementById('mModalidadText'),
             
             // Modal Outreach Channel
             mChEmail: document.getElementById('mChEmail'),
@@ -1229,10 +1232,10 @@ class AppController {
                 <td style="text-align: center;">
                     <input type="checkbox" ${isComp ? 'checked' : ''} data-action="toggleCompare" data-id="${SecurityService.escapeHtml(it.solicitud_id)}" aria-label="Comparar empresa">
                 </td>
-                <td>
+                <td style="text-align: center;">
                     <i class="${favIcon}" style="cursor: pointer; ${favColor}" data-action="toggleFavorite" data-id="${SecurityService.escapeHtml(it.solicitud_id)}" aria-label="Marcar como favorita"></i>
                 </td>
-                <td style="font-family: var(--font-mono); font-weight: 700; color: var(--text-dim);">#${posFormatted}</td>
+                <td style="font-family: var(--font-mono); font-weight: 700; color: var(--text-dim); text-align: center;">#${posFormatted}</td>
                 <td>
                     <div class="cell-main">
                         <span class="cell-title" title="${SecurityService.escapeHtml(it.empresa)}">${SecurityService.escapeHtml(it.empresa)}</span>
@@ -1241,33 +1244,24 @@ class AppController {
                 </td>
                 <td><span class="pill-badge ${tierClass}">${SecurityService.escapeHtml(it.cat_badge || 'Tier')}</span></td>
                 <td>
-                    <div style="display:flex;flex-direction:column;gap:0.15rem;">
-                        <div style="display:flex;align-items:center;gap:0.3rem;">
-                            <strong style="color:${it.ai_tier_color||'var(--tier-1)'};font-family:var(--font-mono);">${it.puntaje_exito||0}</strong>
-                            <span style="font-size:0.58rem;font-weight:700;padding:0.05rem 0.25rem;border-radius:3px;background:${(it.ai_tier_color||'#6b7280')}22;color:${it.ai_tier_color||'#6b7280'};">T${it.ai_tier||'?'}</span>
-                        </div>
-                        <div style="display:flex;gap:2px;">
-                            ${['M1_RecruiterAI','M2_FitAI','M3_GrowthAI','M4_UrgencyAI','M5_CompetenceAI'].map(k=>{
-                                const v=(it.ai_scores&&it.ai_scores[k])||0;
-                                const c=v>=80?'#10b981':v>=65?'#f59e0b':v>=50?'#3b82f6':'#6b7280';
-                                return `<span style="font-size:0.48rem;font-family:var(--font-mono);color:${c};">${v}</span>`;
-                            }).join('<span style="color:var(--border-default);font-size:0.44rem;">·</span>')}
-                        </div>
+                    <div style="display: flex; gap: 0.22rem; flex-wrap: wrap; align-items: center;">
+                        ${(it.stack_tags && it.stack_tags.length > 0)
+                            ? it.stack_tags.slice(0, 3).map(t => `<span class="stack-chip">${SecurityService.escapeHtml(t)}</span>`).join('')
+                            : `<span style="color:var(--text-dim);font-size:0.64rem;">ADSO General</span>`
+                        }
                     </div>
                 </td>
-                <td><span class="rating-chip"><i class="fa-solid fa-star"></i> ${(it.reputacion_rating || 3.8).toFixed(1)}</span></td>
-                <td><strong style="color: var(--tier-2); font-family: var(--font-mono);">${it.escalabilidad_score || 70}/100</strong></td>
+                <td style="text-align: center;">
+                    <div style="display: inline-flex; align-items: center; gap: 0.3rem;">
+                        <strong style="color: ${it.ai_tier_color || 'var(--brand-primary)'}; font-family: var(--font-mono); font-size: 0.84rem;">${it.puntaje_exito || 0}</strong>
+                        <span style="font-size: 0.56rem; font-weight: 800; padding: 0.04rem 0.26rem; border-radius: 3px; background: ${(it.ai_tier_color || '#10b981')}22; color: ${it.ai_tier_color || '#10b981'};">T${it.ai_tier || '?'}</span>
+                    </div>
+                </td>
                 <td>
-                    <span style="display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.7rem; white-space: nowrap;">
+                    <span style="display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.68rem; white-space: nowrap;">
                         <span class="ratio-dot ${dotClass}"></span>
                         <span>${it.vacantes || 1} vac · ${it.postulados || 0} post</span>
                     </span>
-                </td>
-                <td>
-                    <div class="cell-main" style="white-space: nowrap;">
-                        <span style="color: var(--brand-primary); font-weight: 600; font-family: var(--font-mono); font-size: 0.7rem;">${cleanApoyo}</span>
-                        <span style="color: var(--tier-1); font-size: 0.62rem; font-weight: 600;">5A: ${SecurityService.escapeHtml(cleanTecho5A)}</span>
-                    </div>
                 </td>
                 <td style="text-align: right;">
                     <div class="row-actions">
@@ -1393,9 +1387,9 @@ class AppController {
             const posFormatted = (it.ranking_posicion || 1) < 10 ? '0' + it.ranking_posicion : it.ranking_posicion;
 
             card.innerHTML = `
-                <div>
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.35rem;">
-                        <div style="display: flex; align-items: center; gap: 0.4rem;">
+                <div style="display: flex; flex-direction: column; gap: 0.45rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 0.35rem;">
                             <span style="font-family: var(--font-mono); font-weight: 700; color: var(--text-dim); font-size: 0.72rem;">#${posFormatted}</span>
                             <span class="pill-badge ${tierClass}">${SecurityService.escapeHtml(it.cat_badge || 'Tier')}</span>
                         </div>
@@ -1404,41 +1398,34 @@ class AppController {
                             <i class="${favIcon}" style="cursor: pointer; font-size: 0.82rem; ${favColor}" data-action="toggleFavorite" data-id="${SecurityService.escapeHtml(it.solicitud_id)}"></i>
                         </div>
                     </div>
-                    <h3 style="font-size: 0.84rem; font-weight: 700; color: var(--text-main); line-height: 1.3;">${SecurityService.escapeHtml(it.empresa)}</h3>
-                    <div style="font-size: 0.66rem; color: var(--text-dim); margin-top: 0.15rem;">${SecurityService.escapeHtml(it.ciudad || '')}, ${SecurityService.escapeHtml(it.departamento || '')} • ${it.vacantes || 1} vac · ${it.postulados || 0} post</div>
-                </div>
-
-                <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-xs); padding: 0.4rem 0.5rem; margin-bottom: 0.35rem;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.3rem;">
-                        <span style="font-size:0.58rem; color:var(--text-dim); font-family:var(--font-mono); text-transform:uppercase; letter-spacing:0.04em;">⚡ Multi-AI Consensus</span>
-                        <span style="font-size:0.6rem; font-weight:700; padding:0.08rem 0.35rem; border-radius:3px; background:${(it.ai_tier_color||'#6b7280')}22; color:${it.ai_tier_color||'#6b7280'}; border:1px solid ${it.ai_tier_color||'#6b7280'}44;">
-                            Tier ${it.ai_tier||'?'} · ${it.puntaje_exito||0}pts
-                        </span>
+                    <div>
+                        <h3 style="font-size: 0.86rem; font-weight: 700; color: var(--text-main); line-height: 1.25; margin-bottom: 0.15rem;">${SecurityService.escapeHtml(it.empresa)}</h3>
+                        <div style="font-size: 0.66rem; color: var(--text-dim);">${SecurityService.escapeHtml(it.ciudad || '')}, ${SecurityService.escapeHtml(it.departamento || '')} • ${it.vacantes || 1} vac · ${it.postulados || 0} post</div>
                     </div>
-                    <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:0.2rem; text-align:center;">
-                        ${['M1','M2','M3','M4','M5'].map((m,i)=>{
-                            const labels=['Reclu','Fit','Growth','Urgenc','Compet'];
-                            const keys=['M1_RecruiterAI','M2_FitAI','M3_GrowthAI','M4_UrgencyAI','M5_CompetenceAI'];
-                            const val = (it.ai_scores&&it.ai_scores[keys[i]])||0;
-                            const col = val>=80?'#10b981':val>=65?'#f59e0b':val>=50?'#3b82f6':'#6b7280';
-                            return `<div style="background:var(--bg-canvas);border:1px solid var(--border-muted);border-radius:3px;padding:0.15rem 0;">
-                                <div style="font-size:0.5rem;color:#64748b;">${labels[i]}</div>
-                                <div style="font-size:0.72rem;font-weight:700;color:${col};font-family:var(--font-mono);">${val}</div>
-                            </div>`;
-                        }).join('')}
-                    </div>
-                    <div style="margin-top:0.25rem; font-size:0.55rem; color:var(--text-dim); text-align:right;">
-                        Conf. ${SecurityService.escapeHtml(it.ai_consensus_confidence||'?')} · ${SecurityService.escapeHtml(it.ai_tier_label||'')}
+                    <div style="display: flex; gap: 0.22rem; flex-wrap: wrap; margin-top: 0.1rem;">
+                        ${(it.stack_tags && it.stack_tags.length > 0)
+                            ? it.stack_tags.slice(0, 4).map(t => `<span class="stack-chip">${SecurityService.escapeHtml(t)}</span>`).join('')
+                            : `<span style="color:var(--text-dim);font-size:0.64rem;">ADSO General</span>`
+                        }
                     </div>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-muted); padding-top: 0.4rem;">
-                    <span style="color: var(--brand-primary); font-weight: 600; font-family: var(--font-mono); font-size: 0.72rem;">$1.423.500 COP</span>
+                <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-xs); padding: 0.45rem 0.6rem; display: flex; justify-content: space-between; align-items: center; margin-top: 0.25rem;">
+                    <div>
+                        <span style="font-size: 0.58rem; color: var(--text-dim); text-transform: uppercase; font-weight: 600;">Afinidad Técnica IA</span>
+                        <div style="font-size: 0.72rem; font-weight: 700; color: ${it.ai_tier_color || 'var(--brand-primary)'};">${SecurityService.escapeHtml(it.ai_tier_label || 'Oportunidad')}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.35rem;">
+                        <span style="font-size: 1.15rem; font-weight: 900; font-family: var(--font-mono); color: ${it.ai_tier_color || 'var(--brand-primary)'};">${it.puntaje_exito || 0}</span>
+                        <span style="font-size: 0.58rem; font-weight: 800; padding: 0.05rem 0.3rem; border-radius: 3px; background: ${(it.ai_tier_color || '#10b981')}22; color: ${it.ai_tier_color || '#10b981'};">T${it.ai_tier || '?'}</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; align-items: center; border-top: 1px solid var(--border-muted); padding-top: 0.45rem; margin-top: 0.25rem;">
                     <div class="row-actions">
-                        ${hasEmail ? `<a href="${SecurityService.escapeHtml(SecurityService.getGmailUrl(it.email, isMaster ? `Propuesta técnica para ${it.empresa} - Juan Manuel Lagos` : `Postulación Contrato ADSO SENA - [Nombre del Aprendiz]`, isMaster ? (it.correo_formal_completo || '') : PrivacyFilterService.sanitizeForGuest(it.correo_formal_completo || '')))}" target="_blank" rel="noopener noreferrer" class="mini-btn mini-gmail" title="Redactar en Gmail (${SecurityService.escapeHtml(it.email)})"><i class="fa-brands fa-google"></i></a>` : ''}
-                        ${hasValidWA ? `<a href="${SecurityService.escapeHtml(waUrl)}" target="_blank" rel="noopener noreferrer" class="mini-btn mini-wa" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
-                        ${it.linkedin_contact_search_url ? `<a href="${SecurityService.escapeHtml(it.linkedin_contact_search_url)}" target="_blank" rel="noopener noreferrer" class="mini-btn" title="LinkedIn"><i class="fa-brands fa-linkedin" style="color: var(--linkedin-color);"></i></a>` : ''}
-                        <button class="mini-btn" style="font-weight: 700;" data-action="openDetailModal" data-id="${SecurityService.escapeHtml(it.solicitud_id)}">Ver Detalle</button>
+                        ${hasEmail ? `<a href="${SecurityService.escapeHtml(SecurityService.getGmailUrl(it.email, isMaster ? `Propuesta técnica para ${it.empresa} - Juan Manuel Lagos` : `Postulación Contrato ADSO SENA - [Nombre del Aprendiz]`, isMaster ? (it.correo_formal_completo || '') : PrivacyFilterService.sanitizeForGuest(it.correo_formal_completo || '')))}" target="_blank" rel="noopener noreferrer" class="mini-btn mini-gmail" title="Redactar en Gmail (${SecurityService.escapeHtml(it.email)})"><i class="fa-brands fa-google"></i> Gmail</a>` : ''}
+                        ${hasValidWA ? `<a href="${SecurityService.escapeHtml(waUrl)}" target="_blank" rel="noopener noreferrer" class="mini-btn mini-wa" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i> WA</a>` : ''}
+                        <button class="mini-btn" style="font-weight: 700;" data-action="openDetailModal" data-id="${SecurityService.escapeHtml(it.solicitud_id)}">Ver Detalle ↗</button>
                     </div>
                 </div>
             `;
@@ -1545,13 +1532,12 @@ class AppController {
         html += '</tr></thead><tbody>';
 
         const fields = [
-            { label: "Afinidad & Puntos", fn: it => `<strong style="color: var(--tier-1);">${it.puntaje_exito} / 100</strong>` },
-            { label: "Reputación Web", fn: it => `★ ${(it.reputacion_rating || 3.8).toFixed(1)} (${SecurityService.escapeHtml(it.reputacion_fuente || 'Web')})` },
-            { label: "Escalabilidad", fn: it => `<strong style="color: var(--tier-2);">${it.escalabilidad_score || 70}/100</strong> (${SecurityService.escapeHtml(it.escalabilidad_nivel || 'Media')})` },
-            { label: "Apoyo Práctica", fn: it => `<strong style="color: var(--brand-primary);">$1.423.500 COP</strong>` },
-            { label: "5A Salario & Acumulado", fn: it => `<strong>${SecurityService.escapeHtml(it.techo_salarial_5anios || '')}</strong><div style="font-size: 0.65rem; color: var(--brand-primary);">${SecurityService.escapeHtml(it.finanzas_5anios?.acumulado_5a || '')}</div>` },
-            { label: "Competencia", fn: it => `${it.vacantes || 1} vac. vs ${it.postulados || 0} post. (Ratio: ${it.competencia_ratio || 0})` },
-            { label: "Contacto Directo", fn: it => `${SecurityService.escapeHtml(it.contacto || 'RRHH')} • ${SecurityService.escapeHtml(it.email || '')} • ${SecurityService.escapeHtml(it.telefono || '')}` }
+            { label: "Afinidad & Tier IA", fn: it => `<strong style="color: ${it.ai_tier_color || 'var(--brand-primary)'};">${it.puntaje_exito} / 100 (Tier ${it.ai_tier || '?'})</strong>` },
+            { label: "Categoría", fn: it => `<span class="pill-badge pill-tier-1">${SecurityService.escapeHtml(it.cat_badge || '')}</span>` },
+            { label: "Stack Tecnológico", fn: it => (it.stack_tags && it.stack_tags.length > 0) ? it.stack_tags.slice(0, 4).map(t => `<span class="stack-chip">${SecurityService.escapeHtml(t)}</span>`).join(' ') : 'ADSO General' },
+            { label: "Actividad Principal", fn: it => `<div style="font-size: 0.68rem; color: var(--text-muted); line-height: 1.4;">${SecurityService.escapeHtml((it.panorama_actividad || it.funciones || '').slice(0, 140))}...</div>` },
+            { label: "Vacantes / Cupos", fn: it => `<strong style="color: var(--tier-2);">${it.vacantes || 1} vacantes</strong> (${it.postulados || 0} postulados)` },
+            { label: "Contacto Directo", fn: it => `<div><strong>${SecurityService.escapeHtml(it.contacto || 'RRHH')}</strong><div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--brand-primary);">${SecurityService.escapeHtml(it.email || '')}</div></div>` }
         ];
 
         fields.forEach(f => {
@@ -1622,7 +1608,9 @@ class AppController {
 
         setTxt(this.dom.mEsc, `${it.escalabilidad_score || 75} / 100`);
         setTxt(this.dom.mRating, `★ ${(it.reputacion_rating || 3.8).toFixed(1)}`);
-        setTxt(this.dom.mSupport, '$1.423.500 COP');
+        setTxt(this.dom.mTierText, it.cat_badge || 'Tier 1 · Software');
+        setTxt(this.dom.mVacantesText, `${it.vacantes || 1} vacantes (${it.postulados || 0} post.)`);
+        setTxt(this.dom.mModalidadText, it.modalidad || 'Presencial / Híbrido');
 
         setTxt(this.dom.mContactName, it.contacto || 'Equipo de Selección y Gestión Humana');
         setTxt(this.dom.mContactEmail, it.email || 'No registrado');
@@ -1749,7 +1737,7 @@ class AppController {
         }
 
         this.updateModalFavBtn();
-        this.setModalTab('outreach');
+        this.setModalTab('panorama');
         this.setChannel('email');
         if (this.dom.detailModal) this.dom.detailModal.style.display = 'flex';
     }
@@ -1769,22 +1757,22 @@ class AppController {
 
     setModalTab(tab) {
         document.querySelectorAll('.modal-tab-item').forEach(b => b.classList.remove('active'));
-        [this.dom.mSecOutreach, this.dom.mSecInterview, this.dom.mSecCareer, this.dom.mSecDetails].forEach(el => {
+        [this.dom.mSecPanorama, this.dom.mSecOutreach, this.dom.mSecDetails, this.dom.mSecInterview].forEach(el => {
             if (el) el.style.display = 'none';
         });
 
-        if (tab === 'outreach') {
+        if (tab === 'panorama') {
+            this.dom.mTabPanorama?.classList.add('active');
+            if (this.dom.mSecPanorama) this.dom.mSecPanorama.style.display = 'flex';
+        } else if (tab === 'outreach') {
             this.dom.mTabOutreach?.classList.add('active');
             if (this.dom.mSecOutreach) this.dom.mSecOutreach.style.display = 'flex';
-        } else if (tab === 'interview') {
-            this.dom.mTabInterview?.classList.add('active');
-            if (this.dom.mSecInterview) this.dom.mSecInterview.style.display = 'flex';
-        } else if (tab === 'career') {
-            this.dom.mTabCareer?.classList.add('active');
-            if (this.dom.mSecCareer) this.dom.mSecCareer.style.display = 'flex';
         } else if (tab === 'details') {
             this.dom.mTabDetails?.classList.add('active');
             if (this.dom.mSecDetails) this.dom.mSecDetails.style.display = 'flex';
+        } else if (tab === 'interview') {
+            this.dom.mTabInterview?.classList.add('active');
+            if (this.dom.mSecInterview) this.dom.mSecInterview.style.display = 'flex';
         }
     }
 

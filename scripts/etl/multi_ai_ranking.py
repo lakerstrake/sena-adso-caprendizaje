@@ -1,240 +1,115 @@
-﻿#!/usr/bin/env python3
-"""
-================================================================================
-SGVA SENA - MULTI-AI RANKING ENGINE v2.0
-================================================================================
-Simula 5 perspectivas de IA especializadas para re-calcular el puntaje de exito
-de cada empresa con base en datos objetivos y criterios de ingenieria social.
-
-Modelos simulados:
-  [M1] RecruiterAI   - Probabilidad de respuesta del reclutador al correo
-  [M2] FitAI         - Alineacion tecnica candidato <-> vacante
-  [M3] GrowthAI      - Potencial de crecimiento profesional real a 5 anios
-  [M4] UrgencyAI     - Urgencia de cierre y ventana de oportunidad
-  [M5] CompetenceAI  - Ventaja competitiva del candidato sobre otros postulantes
-
-Score final = promedio ponderado de los 5 modelos (pesos calibrados).
-================================================================================
-"""
-
-import json
+﻿import json
 import os
 import re
-from datetime import datetime, date
+from datetime import date
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DATA_JSON = os.path.join(ROOT, "output", "assets", "data", "empresas.json")
 DATA_JS   = os.path.join(ROOT, "output", "assets", "js", "data.js")
 
-# ─── Perfil del candidato ─────────────────────────────────────────────────────
 CANDIDATE_STACK = {
-    "languages": ["javascript", "java", "python", "sql", "html", "css", "c#"],
-    "frameworks": ["react", "node", "spring", "spring boot", "angular", "vue", ".net"],
-    "databases":  ["sql", "mysql", "postgresql", "mongodb", "oracle"],
-    "tools":      ["git", "github", "docker", "api", "rest", "scrum", "agil", "jira"],
-    "domains":    ["web", "frontend", "backend", "full stack", "bases de datos", "qa",
-                   "testing", "soporte", "mantenimiento", "erp", "sistemas"]
+    "languages": ["javascript", "java", "python", "sql", "html", "css", "c#", "typescript", "php"],
+    "frameworks": ["react", "node", "spring", "spring boot", "angular", "vue", ".net", "express"],
+    "databases":  ["sql", "mysql", "postgresql", "mongodb", "oracle", "sql server"],
+    "tools":      ["git", "github", "docker", "api", "rest", "scrum", "agil", "jira", "linux"],
+    "domains":    ["software", "web", "frontend", "backend", "full stack", "bases de datos", "qa",
+                   "testing", "soporte", "mantenimiento", "sistemas", "aplicaciones"]
 }
 
-# Palabras clave high-signal que indican SENA / aprendiz muy buscado
-HIGH_SIGNAL_KEYWORDS = [
-    "sena", "aprendiz", "adso", "analisis y desarrollo", "tecnologia",
-    "logica", "programacion basica", "junior", "practica"
+TECH_KEYWORDS = [
+    "software", "desarrollo", "programador", "programacion", "developer", "frontend", "backend",
+    "full stack", "fullstack", "react", "node", "java", "python", "sql", "bases de datos",
+    "sistemas de informacion", "ingenieria", "tecnolog", "it ", "tech", "cloud", "api", "qa"
 ]
 
-# Sectores con alta absorcion de aprendices SENA tech
-TECH_SECTORS = ["software", "tecnologia", "sistemas", "desarrollo", "digital",
-                "datos", "informatica", "it ", "tech", "cloud", "ia", "inteligencia"]
+NON_TECH_KEYWORDS = [
+    "oleaginosa", "palma", "porki", "cerdo", "ganad", "agricol", "agro", "avicol", "frigorifico",
+    "carnes", "alimentos", "restaurante", "hotel", "campestre", "confeccion", "distribuidora",
+    "comercializadora de pollo", "drogeria", "panaderia", "farmacia", "calzado"
+]
 
-# ─── M1: RecruiterAI ─────────────────────────────────────────────────────────
-def score_recruiter_ai(emp):
-    """
-    Probabilidad de que el reclutador abra, lea y responda el correo.
-    Factores: contacto nominal, canal disponible, tamano empresa, urgencia.
-    """
-    score = 50  # base
+def score_fit_ai(emp):
+    funciones = (emp.get("funciones", "") + " " + emp.get("perfil_requerido", "")).lower()
+    empresa = emp.get("empresa", "").lower()
+    tags = [t.lower() for t in (emp.get("stack_tags") or [])]
+    combo = f"{empresa} {funciones} {' '.join(tags)}"
 
-    # Contacto nominal (tiene nombre real, no solo 'Recursos Humanos')
-    tipo = emp.get("contacto_tipo", "")
-    if tipo == "person":
-        score += 20  # nombre real = respuesta +2x segun psicologia social
+    score = 40
 
-    # Tiene email directo
-    if emp.get("email", "").strip():
+    # Sector check
+    if emp.get("cat_id") == "TIER_1":
+        score += 35
+    elif emp.get("cat_id") == "TIER_2":
+        score += 25
+    elif emp.get("cat_id") == "TIER_3":
         score += 15
-
-    # Tiene WhatsApp
-    if emp.get("is_whatsapp", False) or emp.get("whatsapp_number", ""):
-        score += 8
-
-    # Empresa pequena/mediana = decision mas rapida
-    empresa = emp.get("empresa", "").upper()
-    rep = emp.get("reputacion_fuente", "").lower()
-    if any(k in rep for k in ["multinacional", "enterprise", "banco"]):
-        score -= 8  # mas burocracia
-    elif any(k in rep for k in ["startup", "pyme", "boutique", "consultora"]):
+    elif emp.get("cat_id") == "TIER_4":
         score += 5
 
-    # Soft companies responden mejor a correos tecnicos
-    if any(k in rep for k in ["software", "tech", "digital", "sistemas"]):
-        score += 7
+    # Tech keyword matches
+    tech_hits = sum(1 for kw in TECH_KEYWORDS if kw in combo)
+    score += min(20, tech_hits * 3)
 
-    return min(100, max(0, score))
+    # Penalize non-tech sectors
+    if any(nk in combo for nk in NON_TECH_KEYWORDS):
+        score -= 30
 
-# ─── M2: FitAI ───────────────────────────────────────────────────────────────
-def score_fit_ai(emp):
-    """
-    Alineacion entre el stack del candidato y los requerimientos de la vacante.
-    Penaliza vacantes en sectores no-tech donde el aprendiz no encaja.
-    """
-    funciones = (emp.get("funciones", "") + " " + emp.get("perfil_requerido", "")).lower()
-    tags = [t.lower() for t in (emp.get("stack_tags") or [])]
-    combo = funciones + " " + " ".join(tags)
+    return min(100, max(20, score))
 
-    hits = 0
-    total_checked = 0
-
-    for skill_list in CANDIDATE_STACK.values():
-        for skill in skill_list:
-            total_checked += 1
-            if skill in combo:
-                hits += 1
-
-    raw_fit = min(100, (hits / max(total_checked, 1)) * 280)  # escala realista: 5/35 matches = buen fit
-
-    # Bonus si requiere explicitamente ADSO/SENA
-    if any(k in combo for k in HIGH_SIGNAL_KEYWORDS):
-        raw_fit = min(100, raw_fit + 20)
-
-    # Penalizacion por sector no-tech
-    empresa_lower = emp.get("empresa", "").lower()
-    rep_lower = emp.get("reputacion_fuente", "").lower()
-    non_tech_flags = ["oleaginosa", "agricola", "ganaderia", "alimentos", "campestre",
-                      "hotel", "construccion", "manufactura", "textil", "mineria"]
-    if any(k in empresa_lower or k in rep_lower for k in non_tech_flags):
-        raw_fit = max(10, raw_fit - 25)
-
-    return min(100, max(0, round(raw_fit)))
-
-# ─── M3: GrowthAI ────────────────────────────────────────────────────────────
 def score_growth_ai(emp):
-    """
-    Potencial de crecimiento profesional real: escalabilidad, sector, stack futuro.
-    """
-    esc = emp.get("escalabilidad_score", 50)
-    if isinstance(esc, str):
-        try: esc = float(re.sub(r"[^0-9.]", "", esc))
-        except: esc = 50
+    cat_id = emp.get("cat_id", "TIER_4")
+    if cat_id == "TIER_1": base = 95
+    elif cat_id == "TIER_2": base = 85
+    elif cat_id == "TIER_3": base = 70
+    elif cat_id == "TIER_4": base = 50
+    else: base = 35
 
-    nivel = emp.get("escalabilidad_nivel", "").lower()
-    rep   = (emp.get("reputacion_fuente", "") + " " + emp.get("reputacion_nivel", "")).lower()
+    empresa = emp.get("empresa", "").upper()
+    if any(k in empresa for k in ["SOFTWARE", "TECH", "SISTEMAS", "SOLUCIONES", "TECNOLOGIA", "NALSANI", "STEFANINI", "WASI", "TELEMATICA", "CLARO", "ARQUITECSOFT", "MVM", "ARTURO CALLE"]):
+        base += 5
 
-    score = float(esc) * 0.6  # base desde escalabilidad_score
+    return min(100, max(20, base))
 
-    # Sector tech global = futuro garantizado
-    if any(k in nivel for k in ["exponencial", "alto", "global"]):
+def score_recruiter_ai(emp):
+    score = 50
+    if emp.get("contacto") and len(emp.get("contacto")) > 3:
+        score += 25
+    if emp.get("email", "").strip() and "@" in emp.get("email", ""):
         score += 20
-    elif any(k in nivel for k in ["medio", "moderado"]):
-        score += 8
+    if emp.get("is_whatsapp", False) or emp.get("whatsapp_number", ""):
+        score += 10
+    return min(100, max(20, score))
 
-    # Empresa reconocida = red de contactos y marca en CV
-    if any(k in rep for k in ["multinacional", "enterprise", "banco", "grupo", "ntt", "stefanini"]):
-        score += 12
-    elif any(k in rep for k in ["startup", "boutique", "scale-up"]):
-        score += 6
-
-    # Salario egresado como indicador de mercado
-    sal = emp.get("salario_egresado_jr", "").lower()
-    if "5.000" in sal or "6.000" in sal or "7.000" in sal or "8.000" in sal:
-        score += 8
-    elif "4.000" in sal or "4.500" in sal:
-        score += 4
-
-    return min(100, max(0, round(score)))
-
-# ─── M4: UrgencyAI ───────────────────────────────────────────────────────────
 def score_urgency_ai(emp):
-    """
-    Urgencia de la oportunidad: fecha de cierre, postulados vs vacantes, ventana activa.
-    """
-    score = 55  # base neutral
+    score = 65
+    postulados = int(emp.get("postulados", 0) or 0)
+    vacantes   = int(emp.get("vacantes", 1)   or 1)
+    ratio = postulados / max(vacantes, 1)
 
-    # Dias restantes hasta cierre
-    fecha_str = emp.get("fecha_cierre", "")
-    try:
-        day, month, year = fecha_str.split("/")
-        cierre = date(int(year), int(month), int(day))
-        hoy    = date.today()
-        dias   = (cierre - hoy).days
+    if ratio == 0:     score += 25
+    elif ratio <= 1.0: score += 15
+    elif ratio <= 2.0: score += 5
+    elif ratio <= 4.0: score -= 5
+    else:              score -= 20
 
-        if dias < 0:
-            score -= 40   # ya cerro
-        elif dias <= 5:
-            score -= 15   # critico, puede que no vean tu correo
-        elif dias <= 15:
-            score += 25   # ventana perfecta - urgencia alta
-        elif dias <= 30:
-            score += 15   # buena ventana
-        elif dias <= 60:
-            score += 5
-        else:
-            score -= 5    # poca urgencia para el reclutador
-    except:
-        pass
+    return min(100, max(20, score))
 
-    # Ratio postulados/vacantes - competencia
-    try:
-        postulados = int(emp.get("postulados", 0) or 0)
-        vacantes   = int(emp.get("vacantes", 1)   or 1)
-        ratio = postulados / max(vacantes, 1)
-
-        if ratio <= 1.0:   score += 20  # pocas personas, alta chance
-        elif ratio <= 2.0: score += 12
-        elif ratio <= 4.0: score += 4
-        elif ratio <= 8.0: score -= 8
-        else:              score -= 18  # muy competido
-    except:
-        pass
-
-    return min(100, max(0, score))
-
-# ─── M5: CompetenceAI ────────────────────────────────────────────────────────
 def score_competence_ai(emp):
-    """
-    Ventaja competitiva del candidato vs tipico postulante a esta vacante.
-    Considera: facilidad de acceso, stack match exclusivo, doble formacion, GitHub.
-    """
-    facilidad = emp.get("facilidad_code", "MED")
-    score_map  = {"HIGH": 90, "MOD": 72, "MED": 55, "LOW": 38, "ZERO": 15}
-    score = score_map.get(facilidad, 55)
-
-    # Doble formacion = ventaja diferencial vs competidores puros ADSO
+    score = 65
     funciones = (emp.get("funciones", "") + " " + emp.get("perfil_requerido", "")).lower()
+    
+    if any(k in funciones for k in ["react", "node", "sql", "javascript", "python", "desarrollo"]):
+        score += 20
+    if any(k in funciones for k in ["mecanica", "electronica", "iot", "automatizacion"]):
+        score += 15
+    return min(100, max(20, score))
 
-    if any(k in funciones for k in ["mecanica", "electronica", "iot", "automatizacion",
-                                     "robotica", "industria", "manufactura", "control"]):
-        score += 15  # background mecatronica = diferenciador total
-
-    if any(k in funciones for k in ["react", "node", "spring", "angular", "aws", "cloud"]):
-        score += 12  # stack moderno exacto al candidato
-
-    # GitHub en el correo ya enviado = prueba social irrefutable
-    score += 8  # base por portafolio publico verificable
-
-    # Penalizar si requiere experiencia laboral formal
-    if any(k in funciones for k in ["experiencia minima", "1 año", "2 años", "senior",
-                                     "lider", "arquitecto"]):
-        score -= 20
-
-    return min(100, max(0, score))
-
-# ─── Consenso de los 5 modelos ────────────────────────────────────────────────
 WEIGHTS = {
-    "recruiter": 0.20,   # quien responde es lo que importa primero
-    "fit":       0.30,   # match tecnico es el filtro principal
-    "growth":    0.18,   # donde me conviene estar en 5 anios
-    "urgency":   0.15,   # ventana de tiempo real
-    "competence":0.17    # mi ventaja vs otros candidatos
+    "fit":       0.35,  # Real alignment with Software / Tech
+    "growth":    0.25,  # Real career value
+    "recruiter": 0.20,  # Real contactibility
+    "urgency":   0.10,  # Competition ratio
+    "competence":0.10   # Differentiator
 }
 
 def compute_multi_ai_score(emp):
@@ -251,10 +126,8 @@ def compute_multi_ai_score(emp):
         m4 * WEIGHTS["urgency"] +
         m5 * WEIGHTS["competence"]
     )
-
     consensus = round(final)
 
-    # Nivel de confianza del consenso (cuanto de acuerdo estan los modelos)
     scores = [m1, m2, m3, m4, m5]
     mean   = sum(scores) / len(scores)
     stddev = (sum((s - mean)**2 for s in scores) / len(scores)) ** 0.5
@@ -273,78 +146,54 @@ def compute_multi_ai_score(emp):
     }
 
 def get_tier(score):
-    if score >= 85: return {"tier": "S", "label": "Prioritario - Postula HOY", "color": "#f59e0b"}
-    if score >= 72: return {"tier": "A", "label": "Alta Probabilidad",          "color": "#10b981"}
-    if score >= 58: return {"tier": "B", "label": "Buena Oportunidad",          "color": "#3b82f6"}
-    if score >= 44: return {"tier": "C", "label": "Posible",                    "color": "#8b5cf6"}
-    return              {"tier": "D", "label": "Baja Prioridad",               "color": "#6b7280"}
+    if score >= 88: return {"tier": "S", "label": "Prioridad Máxima - Postula HOY", "color": "#10b981"}
+    if score >= 76: return {"tier": "A", "label": "Alta Probabilidad de Éxito",     "color": "#0284c7"}
+    if score >= 62: return {"tier": "B", "label": "Buena Oportunidad Técnica",     "color": "#7c3aed"}
+    if score >= 48: return {"tier": "C", "label": "Opción Secundaria",             "color": "#d97706"}
+    return              {"tier": "D", "label": "Baja Afinidad ADSO",               "color": "#64748b"}
 
 def main():
     print("=" * 70)
-    print("  MULTI-AI RANKING ENGINE v2.0 - 5 IAs en Consenso")
-    print("  [M1] RecruiterAI [M2] FitAI [M3] GrowthAI [M4] UrgencyAI [M5] CompetenceAI")
+    print("  MULTI-AI RANKING CALIBRATION v3.1 (High Tech Credibility)")
     print("=" * 70)
 
     with open(DATA_JSON, "r", encoding="utf-8") as f:
         companies = json.load(f)
 
-    print(f"[*] Analizando {len(companies)} vacantes con 5 modelos IA...")
-
     for i, emp in enumerate(companies):
-        result = compute_multi_ai_score(emp)
-        tier   = get_tier(result["puntaje_exito"])
+        res = compute_multi_ai_score(emp)
+        tier = get_tier(res["puntaje_exito"])
 
-        emp["puntaje_exito"]             = result["puntaje_exito"]
-        emp["ai_scores"]                 = result["ai_scores"]
-        emp["ai_consensus_confidence"]   = result["ai_consensus_confidence"]
+        emp["puntaje_exito"]             = res["puntaje_exito"]
+        emp["ai_scores"]                 = res["ai_scores"]
+        emp["ai_consensus_confidence"]   = res["ai_consensus_confidence"]
         emp["ai_tier"]                   = tier["tier"]
         emp["ai_tier_label"]             = tier["label"]
         emp["ai_tier_color"]             = tier["color"]
 
-    # Re-ranking por nuevo puntaje
-    companies.sort(key=lambda x: x["puntaje_exito"], reverse=True)
+    # Re-ranking: Sort by puntaje_exito desc, then vacantes desc, then postulados asc
+    companies.sort(key=lambda x: (-x["puntaje_exito"], -int(x.get("vacantes",1) or 1), int(x.get("postulados",0) or 0)))
     for i, emp in enumerate(companies):
         emp["ranking_posicion"] = i + 1
 
-    # Estadisticas
     tiers = {"S": 0, "A": 0, "B": 0, "C": 0, "D": 0}
     for emp in companies:
         tiers[emp.get("ai_tier", "D")] += 1
 
-    print(f"\n[RESULTADOS] Top 20 vacantes por consenso multi-IA:")
-    print(f"{'Pos':>3} {'Score':>5} {'Tier':>4} {'Conf':>5} | {'M1':>3} {'M2':>3} {'M3':>3} {'M4':>3} {'M5':>3} | Empresa")
-    print("-" * 100)
-    for emp in companies[:20]:
-        ai = emp.get("ai_scores", {})
-        print(
-            f"{emp['ranking_posicion']:>3} "
-            f"{emp['puntaje_exito']:>5} "
-            f"  {emp.get('ai_tier','?'):>1}   "
-            f"{emp.get('ai_consensus_confidence','?')[:4]:>4} "
-            f"| {ai.get('M1_RecruiterAI',0):>3} "
-            f"{ai.get('M2_FitAI',0):>3} "
-            f"{ai.get('M3_GrowthAI',0):>3} "
-            f"{ai.get('M4_UrgencyAI',0):>3} "
-            f"{ai.get('M5_CompetenceAI',0):>3} "
-            f"| {emp['empresa'][:55]}"
-        )
+    print(f"\n[DISTRIBUCIÓN] Tier S={tiers['S']} | Tier A={tiers['A']} | Tier B={tiers['B']} | Tier C={tiers['C']} | Tier D={tiers['D']}")
+    print(f"\nTop 15 vacantes:")
+    for emp in companies[:15]:
+        print(f"  #{emp['ranking_posicion']:02d} [{emp['puntaje_exito']}pts - Tier {emp['ai_tier']}] {emp['empresa']} ({emp['ciudad']}) | Cat: {emp.get('cat_badge','')}")
 
-    print(f"\n[DISTRIBUCION] Tier S={tiers['S']} A={tiers['A']} B={tiers['B']} C={tiers['C']} D={tiers['D']}")
-    print(f"[*] Vacantes prioritarias (Tier S+A): {tiers['S']+tiers['A']}")
-
-    # Guardar JSON
     with open(DATA_JSON, "w", encoding="utf-8") as f:
         json.dump(companies, f, ensure_ascii=False, indent=2)
 
-    # Guardar data.js
     with open(DATA_JS, "w", encoding="utf-8") as f:
-        f.write("/**\n * SGVA SENA ADSO - Multi-AI Ranked Data Registry\n */\nwindow.RAW_DATA = ")
+        f.write("/**\n * SGVA SENA ADSO - Multi-AI Ranked Dataset\n */\nwindow.RAW_DATA = ")
         json.dump(companies, f, ensure_ascii=False)
         f.write(";\n")
 
-    print(f"\n[OK] JSON y data.js actualizados con rankings Multi-AI.")
+    print("\n[OK] Dataset actualizado con ranking tech de alta fidelidad.")
 
 if __name__ == "__main__":
     main()
-
-

@@ -2113,3 +2113,27 @@ body {
     outline: 2px solid var(--brand-primary);
     outline-offset: 2px;
 }
+
+/* Modern Clean Stack Chip */
+.stack-chip {
+    font-size: 0.6rem;
+    font-weight: 600;
+    padding: 0.08rem 0.38rem;
+    border-radius: 4px;
+    background: var(--bg-canvas);
+    border: 1px solid var(--border-muted);
+    color: var(--text-muted);
+    white-space: nowrap;
+    font-family: var(--font-mono);
+    display: inline-block;
+    transition: var(--transition-fast);
+}
+.stack-chip:hover {
+    border-color: var(--brand-primary);
+    color: var(--text-main);
+}
+[data-theme="light"] .stack-chip {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #334155;
+}

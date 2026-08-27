@@ -82,7 +82,7 @@
                         <i class="fa-solid fa-list-ul" aria-hidden="true"></i> Directorio <span class="count-badge" id="pillTotalCount">195</span>
                     </button>
                     <button class="nav-pill-btn" id="pillStrategy" data-action="switchNavTab" data-tab="strategy">
-                        <i class="fa-solid fa-rocket" aria-hidden="true"></i> Finanzas & 5A
+                        <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Guía & Estrategia
                     </button>
                     <button class="nav-pill-btn" id="pillFavs" data-action="switchNavTab" data-tab="favs">
                         <i class="fa-regular fa-bookmark" aria-hidden="true"></i> Favoritas <span class="count-badge" id="pillFavCount">0</span>
@@ -289,17 +289,15 @@
                     <table class="data-table" role="table">
                         <thead>
                             <tr>
-                                <th style="width: 24px; text-align: center;"><i class="fa-solid fa-code-compare" title="Comparar"></i></th>
-                                <th style="width: 24px;"></th>
-                                <th style="width: 38px;">Pos</th>
-                                <th>Empresa & Ubicación</th>
-                                <th style="width: 130px;">Clasificación</th>
-                                <th style="width: 70px;">Puntos</th>
-                                <th style="width: 80px;">Calidad Web</th>
-                                <th style="width: 95px;">Escala</th>
-                                <th style="width: 110px;">Competencia</th>
-                                <th style="width: 115px;">Apoyo / 5A</th>
-                                <th style="width: 160px; text-align: right;">Contacto Directo</th>
+                                <th style="width: 28px; text-align: center;"><i class="fa-solid fa-code-compare" title="Comparar empresas"></i></th>
+                                <th style="width: 28px; text-align: center;"><i class="fa-regular fa-bookmark" title="Favoritos"></i></th>
+                                <th style="width: 42px; text-align: center;">#</th>
+                                <th style="min-width: 190px;">Empresa & Ubicación</th>
+                                <th style="width: 140px;">Categoría</th>
+                                <th style="min-width: 160px;">Stack Tecnológico</th>
+                                <th style="width: 90px; text-align: center;">Afinidad IA</th>
+                                <th style="width: 110px;">Vacantes</th>
+                                <th style="width: 160px; text-align: right;">Postulación Directa</th>
                             </tr>
                         </thead>
                         <tbody id="tableBody"></tbody>
@@ -316,87 +314,68 @@
             <div class="cards-view-grid" id="cardsGridWrap" style="display: none;"></div>
         </section>
 
-        <!-- SECTION 2: STRATEGY & FINANCIAL PROJECTIONS -->
-        <section id="sectionStrategy" class="strategy-view" style="display: none;" aria-label="Proyección estratégica y financiera">
+                <!-- SECTION 2: TACTICAL POSTULATION GUIDE & INTERVIEW PREP -->
+        <section id="sectionStrategy" class="strategy-view" style="display: none;" aria-label="Guía táctica de postulación y entrevistas">
             <div class="strategy-header">
                 <div>
-                    <h2 style="font-size: 1.05rem; font-weight: 700; color: var(--text-main);">Proyección Financiera & Escalabilidad a 5 Años</h2>
+                    <h2 style="font-size: 1.05rem; font-weight: 700; color: var(--text-main);">Guía Táctica de Postulación ADSO & Entrevistas</h2>
                     <p style="color: var(--text-muted); font-size: 0.74rem; margin-top: 0.15rem;">
-                        Impacto profesional para <strong>Juan Manuel Lagos Monroy</strong> según el tipo de empresa seleccionada.
+                        Metodología estratégica para contactar empresas, superar filtros de RRHH y asegurar contrato de aprendizaje.
                     </p>
                 </div>
-                <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); padding: 0.5rem 1rem; border-radius: var(--radius-sm); text-align: center;">
-                    <div style="font-size: 1.2rem; font-weight: 700; color: var(--tier-1); font-family: var(--font-mono);">+$320M COP</div>
-                    <div style="font-size: 0.62rem; color: var(--text-dim); text-transform: uppercase;">Diferencial Acumulado Tier 1 vs Pyme</div>
+                <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); padding: 0.5rem 1rem; border-radius: var(--radius-sm); text-align: center;">
+                    <div style="font-size: 1.15rem; font-weight: 700; color: var(--brand-primary); font-family: var(--font-mono);">10x Efectividad</div>
+                    <div style="font-size: 0.62rem; color: var(--text-dim); text-transform: uppercase;">Contacto Directo Multicanal</div>
                 </div>
             </div>
 
-            <div class="strategy-columns">
-                <!-- Financial Matrix -->
+            <div class="strategy-columns" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 0.8rem;">
+                <!-- Card 1: Anti-Blocking Rule -->
+                <div class="strategy-card-clean">
+                    <div style="font-weight: 700; font-size: 0.82rem; color: var(--brand-primary); display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.4rem;">
+                        <i class="fa-solid fa-shield-halved"></i> 1. La Regla de Oro: Contacto Directo vs SGVA
+                    </div>
+                    <p style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.55; margin-bottom: 0.5rem;">
+                        Si te postulas con el botón del SGVA, la plataforma te <strong>bloquea durante 15 días hábiles</strong> impidiéndote postularte a cualquier otra vacante.
+                    </p>
+                    <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-xs); padding: 0.5rem 0.65rem; font-size: 0.7rem;">
+                        <div style="color: #ef4444; margin-bottom: 0.25rem;">❌ <strong>Error común:</strong> Postularse en la web de SGVA y esperar semanas sin respuesta.</div>
+                        <div style="color: var(--brand-primary);">✅ <strong>Estrategia ganadora:</strong> Usar el correo nominal, WhatsApp y LinkedIn para contactar 20 empresas el mismo día con tu PDF y portafolio en GitHub.</div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Cialdini Pitch -->
+                <div class="strategy-card-clean">
+                    <div style="font-weight: 700; font-size: 0.82rem; color: var(--tier-2); display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.4rem;">
+                        <i class="fa-solid fa-bullseye"></i> 2. Estructura del Pitch Persuasivo
+                    </div>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.71rem; color: var(--text-muted); line-height: 1.4;">
+                        <li><strong>1. Saludo Nominal:</strong> Menciona el nombre de la persona de RRHH (aumenta la tasa de apertura +60%).</li>
+                        <li><strong>2. Gancho de Diferenciación:</strong> Resalta tu doble perfil (Ingeniería Mecatrónica + ADSO SENA).</li>
+                        <li><strong>3. Prueba Social:</strong> Enlace directo a tu Google Drive (CV oficial) y repositorios en GitHub.</li>
+                        <li><strong>4. Llamado a la Acción (CTA):</strong> Disponibilidad inmediata para prueba técnica o entrevista breve.</li>
+                    </ul>
+                </div>
+
+                <!-- Card 3: Technical Interview Checklist -->
                 <div class="strategy-card-clean" style="grid-column: 1/-1;">
-                    <div style="font-weight: 700; font-size: 0.8rem; color: var(--tier-1); display: flex; align-items: center; gap: 0.35rem;">
-                        <i class="fa-solid fa-coins"></i> Ingresos Acumulados Proyectados (1 a 5 Años)
+                    <div style="font-weight: 700; font-size: 0.82rem; color: var(--tier-1); display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.4rem;">
+                        <i class="fa-solid fa-code-branch"></i> 3. Checklist Técnico para la Entrevista
                     </div>
-                    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
-                        <table style="width: 100%; min-width: 600px; border-collapse: collapse; font-size: 0.72rem; margin-top: 0.35rem;">
-                            <thead>
-                                <tr style="background: var(--bg-canvas); border-bottom: 1px solid var(--border-muted);">
-                                    <th style="padding: 0.45rem; text-align: left;">Categoría</th>
-                                    <th style="padding: 0.45rem;">Práctica (6m)</th>
-                                    <th style="padding: 0.45rem;">Año 1 (Junior)</th>
-                                    <th style="padding: 0.45rem;">Acumulado 3A</th>
-                                    <th style="padding: 0.45rem;">Acumulado 5A</th>
-                                    <th style="padding: 0.45rem; text-align: left;">Calidad de Vida</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr style="border-bottom: 1px solid var(--border-muted);">
-                                    <td style="padding: 0.45rem;"><strong style="color: var(--tier-1);">Tier 1 · Software & Tech</strong></td>
-                                    <td style="padding: 0.45rem; text-align: center;">$8.541.000 COP</td>
-                                    <td style="padding: 0.45rem; text-align: center;">$45.000.000 COP</td>
-                                    <td style="padding: 0.45rem; text-align: center;"><strong style="color: var(--brand-primary);">$185.000.000</strong></td>
-                                    <td style="padding: 0.45rem; text-align: center;"><strong style="color: var(--tier-1);">$450M a $720M+ COP</strong></td>
-                                    <td style="padding: 0.45rem; color: var(--text-muted);">Remoto / Híbrido, autonomía y valorización global.</td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid var(--border-muted);">
-                                    <td style="padding: 0.45rem;"><strong style="color: var(--tier-2);">Tier 2 · Sistemas & Datos</strong></td>
-                                    <td style="padding: 0.45rem; text-align: center;">$8.541.000 COP</td>
-                                    <td style="padding: 0.45rem; text-align: center;">$36.000.000 COP</td>
-                                    <td style="padding: 0.45rem; text-align: center;">$150.000.000</td>
-                                    <td style="padding: 0.45rem; text-align: center;"><strong>$320M a $480M COP</strong></td>
-                                    <td style="padding: 0.45rem; color: var(--text-muted);">Gran estabilidad bancaria e industrial.</td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid var(--border-muted);">
-                                    <td style="padding: 0.45rem;"><strong style="color: var(--tier-3);">Tier 3 · Soporte TI</strong></td>
-                                    <td style="padding: 0.45rem; text-align: center;">$8.541.000 COP</td>
-                                    <td style="padding: 0.45rem; text-align: center;">$28.000.000 COP</td>
-                                    <td style="padding: 0.45rem; text-align: center;">$115.000.000</td>
-                                    <td style="padding: 0.45rem; text-align: center;">$210M a $310M COP</td>
-                                    <td style="padding: 0.45rem; color: var(--text-muted);">Mayormente presencial y turnos técnicos.</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.5rem; margin-top: 0.3rem;">
+                        <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-xs); padding: 0.5rem 0.65rem; font-size: 0.7rem;">
+                            <strong style="color: var(--text-main);">Bases de Datos & SQL:</strong>
+                            <p style="color: var(--text-muted); font-size: 0.67rem; margin-top: 0.15rem;">Repasar JOINs, consultas agregadas, índices y modelado relacional (ER).</p>
+                        </div>
+                        <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-xs); padding: 0.5rem 0.65rem; font-size: 0.7rem;">
+                            <strong style="color: var(--text-main);">Desarrollo Web & APIs:</strong>
+                            <p style="color: var(--text-muted); font-size: 0.67rem; margin-top: 0.15rem;">Endpoints REST, métodos HTTP (GET, POST, PUT, DELETE), JSON y frontend reactivo.</p>
+                        </div>
+                        <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-xs); padding: 0.5rem 0.65rem; font-size: 0.7rem;">
+                            <strong style="color: var(--text-main);">Control de Versiones:</strong>
+                            <p style="color: var(--text-muted); font-size: 0.67rem; margin-top: 0.15rem;">Git branch, commits semánticos, pull requests y flujo Gitflow.</p>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Career Path Milestones -->
-                <div class="strategy-card-clean">
-                    <div style="font-weight: 700; font-size: 0.78rem; color: var(--tier-2);"><i class="fa-solid fa-timeline"></i> Trayectoria de 4 Hitos ADSO</div>
-                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.7rem; color: var(--text-muted);">
-                        <li><strong>Año 0 (Práctica):</strong> Apoyo legal ($1.423.500 COP + EPS/ARL). Foco en código y Scrum.</li>
-                        <li><strong>Año 1 (Junior Dev):</strong> $3.0M a $4.8M COP al graduarte del tecnólogo.</li>
-                        <li><strong>Año 3 (Mid-Level):</strong> $5.5M a $8.5M COP diseñando microservicios y cloud.</li>
-                        <li><strong>Año 5+ (Senior / Remoto):</strong> $10M a $22M+ COP ($3.000 - $5.500 USD/mes).</li>
-                    </ul>
-                </div>
-
-                <!-- Anti-Blocking Tactics -->
-                <div class="strategy-card-clean">
-                    <div style="font-weight: 700; font-size: 0.78rem; color: var(--tier-3);"><i class="fa-solid fa-shield-halved"></i> Estrategia Anti-Bloqueo</div>
-                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.7rem; color: var(--text-muted);">
-                        <li><span style="color: var(--tier-5);">✗</span> <strong>NO</strong> te postules en SGVA (te bloquea 15 días hábiles a 1 sola empresa).</li>
-                        <li><span style="color: var(--brand-primary);">✓</span> <strong>SÍ</strong> contacta simultáneamente a 20 o 30 empresas por Correo, WhatsApp y LinkedIn con tu CV.</li>
-                    </ul>
                 </div>
             </div>
         </section>
@@ -452,46 +431,51 @@
             </div>
 
             <div class="modal-body">
-                <!-- Stat Quadrant -->
-                <div class="stat-quad">
+                                <!-- Executive Summary Cards -->
+                <div class="stat-quad" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); margin-bottom: 0.75rem;">
                     <div class="stat-box">
-                        <span>Afinidad ADSO</span>
-                        <strong id="mScore" style="color: var(--tier-1);">95 / 100</strong>
+                        <span>Afinidad Técnica IA</span>
+                        <strong id="mScore" style="color: var(--brand-primary); font-size: 1.05rem;">95 / 100</strong>
                     </div>
                     <div class="stat-box">
-                        <span>Escalabilidad</span>
-                        <strong id="mEsc" style="color: var(--tier-2);">96 / 100</strong>
+                        <span>Categoría Empresa</span>
+                        <strong id="mTierText" style="color: var(--tier-1); font-size: 0.85rem;">Tier 1 · Software</strong>
                     </div>
                     <div class="stat-box">
-                        <span>Calidad Web</span>
-                        <strong id="mRating" style="color: var(--tier-3);">★ 4.3</strong>
+                        <span>Cupos SGVA</span>
+                        <strong id="mVacantesText" style="color: var(--tier-2); font-size: 0.85rem;">3 vacantes</strong>
                     </div>
                     <div class="stat-box">
-                        <span>Apoyo Mensual</span>
-                        <strong id="mSupport" style="color: var(--brand-primary);">$1.423.500</strong>
+                        <span>Modalidad</span>
+                        <strong id="mModalidadText" style="color: var(--text-main); font-size: 0.85rem;">Presencial / Híbrido</strong>
                     </div>
                 </div>
 
-                <!-- Modal Tabs (Swipeable on Mobile) -->
+                <!-- Modal Tabs -->
                 <div class="modal-tabs" role="tablist">
-                    <button class="modal-tab-item active" id="mTabOutreach" data-action="setModalTab" data-tab="outreach" role="tab">
-                        <i class="fa-solid fa-paper-plane"></i> Contacto Directo
+                    <button class="modal-tab-item active" id="mTabPanorama" data-action="setModalTab" data-tab="panorama" role="tab">
+                        <i class="fa-solid fa-building"></i> Panorama Empresarial
                     </button>
-                    <button class="modal-tab-item" id="mTabInterview" data-action="setModalTab" data-tab="interview" role="tab">
-                        <i class="fa-solid fa-brain"></i> Simulador Entrevista
-                    </button>
-                    <button class="modal-tab-item" id="mTabCareer" data-action="setModalTab" data-tab="career" role="tab">
-                        <i class="fa-solid fa-chart-line"></i> Finanzas & Carrera
+                    <button class="modal-tab-item" id="mTabOutreach" data-action="setModalTab" data-tab="outreach" role="tab">
+                        <i class="fa-solid fa-paper-plane"></i> Carta & Postulación
                     </button>
                     <button class="modal-tab-item" id="mTabDetails" data-action="setModalTab" data-tab="details" role="tab">
-                        <i class="fa-solid fa-file-lines"></i> Perfil & Funciones
+                        <i class="fa-solid fa-file-lines"></i> Requisitos SGVA
+                    </button>
+                    <button class="modal-tab-item" id="mTabInterview" data-action="setModalTab" data-tab="interview" role="tab">
+                        <i class="fa-solid fa-circle-question"></i> Entrevista
                     </button>
                 </div>
 
-                <!-- SUBSECTION 1: OUTREACH -->
-                <div id="mSecOutreach" style="display: flex; flex-direction: column; gap: 0.65rem;">
+                                <!-- TAB 1: PANORAMA EMPRESARIAL -->
+                <div id="mSecPanorama" style="display: flex; flex-direction: column; gap: 0.55rem;">
+                    <div id="mPanoramaContainer"></div>
+                </div>
+
+                <!-- TAB 2: OUTREACH / CARTA Y MENSAJES -->
+                <div id="mSecOutreach" style="display: none; flex-direction: column; gap: 0.65rem;">
                     <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
-                        <button class="btn btn-primary" id="mChEmail" data-action="setModalChannel" data-channel="email" style="flex: 1; min-width: 90px;"><i class="fa-solid fa-envelope"></i> Correo</button>
+                        <button class="btn btn-primary" id="mChEmail" data-action="setModalChannel" data-channel="email" style="flex: 1; min-width: 90px;"><i class="fa-solid fa-envelope"></i> Correo Gmail</button>
                         <button class="btn" id="mChWA" data-action="setModalChannel" data-channel="wa" style="flex: 1; min-width: 90px;"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
                         <button class="btn" id="mChLinkedIn" data-action="setModalChannel" data-channel="linkedin" style="flex: 1; min-width: 90px;"><i class="fa-brands fa-linkedin"></i> LinkedIn</button>
                     </div>
@@ -501,7 +485,7 @@
                             <strong style="font-size: 0.74rem;" id="mOutreachHeading">Carta Formal de Postulación Institucional</strong>
                             <div id="mOutreachActions" style="display: flex; gap: 0.3rem;"></div>
                         </div>
-                        <div id="mOutreachBody" style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-main); white-space: pre-wrap; max-height: 180px; overflow-y: auto; user-select: text;"></div>
+                        <div id="mOutreachBody" style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-main); white-space: pre-wrap; max-height: 200px; overflow-y: auto; user-select: text; line-height: 1.5;"></div>
                     </div>
 
                     <!-- Contact Details -->
@@ -513,35 +497,21 @@
                     </div>
                 </div>
 
-                <!-- SUBSECTION 2: INTERVIEW SIMULATOR -->
-                <div id="mSecInterview" style="display: none; flex-direction: column; gap: 0.5rem;">
-                    <div id="mInterviewList" style="display: flex; flex-direction: column; gap: 0.45rem;"></div>
-                </div>
-
-                <!-- SUBSECTION 3: CAREER & FINANCES -->
-                <div id="mSecCareer" style="display: none; flex-direction: column; gap: 0.65rem;">
-                    <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-sm); padding: 0.75rem;">
-                        <strong style="color: var(--tier-1); font-size: 0.76rem;" id="mCurvaTitulo"></strong>
-                        <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.2rem;" id="mCurvaDetalle"></p>
-                    </div>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.4rem;" id="mTimelineGrid"></div>
-                    <div style="background: var(--tier-1-bg); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: var(--radius-xs); padding: 0.55rem 0.75rem; font-size: 0.72rem;">
-                        <strong style="color: var(--tier-1);">Acumulado 5 Años:</strong> <span id="mFinAcumulado5A"></span> • <span id="mFinDiferencial" style="color: var(--brand-primary); font-weight: 600;"></span>
-                    </div>
-                </div>
-
-                <!-- SUBSECTION 4: DETAILS -->
+                <!-- TAB 3: REQUISITOS SGVA -->
                 <div id="mSecDetails" style="display: none; flex-direction: column; gap: 0.55rem;">
                     <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-sm); padding: 0.7rem;">
-                        <span style="font-size: 0.62rem; text-transform: uppercase; color: var(--text-dim); font-weight: 600;">Perfil Requerido</span>
-                        <p style="font-size: 0.74rem; color: var(--text-main); margin-top: 0.2rem; white-space: pre-wrap;" id="mPerfil"></p>
+                        <span style="font-size: 0.62rem; text-transform: uppercase; color: var(--text-dim); font-weight: 700; letter-spacing: 0.04em;">Perfil Requerido por la Empresa</span>
+                        <p style="font-size: 0.74rem; color: var(--text-main); margin-top: 0.25rem; white-space: pre-wrap; line-height: 1.5;" id="mPerfil"></p>
                     </div>
                     <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-sm); padding: 0.7rem;">
-                        <span style="font-size: 0.62rem; text-transform: uppercase; color: var(--text-dim); font-weight: 600;">Funciones Asignadas</span>
-                        <p style="font-size: 0.74rem; color: var(--text-main); margin-top: 0.2rem; white-space: pre-wrap;" id="mFunciones"></p>
+                        <span style="font-size: 0.62rem; text-transform: uppercase; color: var(--text-dim); font-weight: 700; letter-spacing: 0.04em;">Funciones Asignadas al Aprendiz</span>
+                        <p style="font-size: 0.74rem; color: var(--text-main); margin-top: 0.25rem; white-space: pre-wrap; line-height: 1.5;" id="mFunciones"></p>
                     </div>
-                    <!-- PANORAMA EMPRESARIAL -->
-                    <div id="mPanoramaContainer" style="border-radius: var(--radius-sm);"></div>
+                </div>
+
+                <!-- TAB 4: INTERVIEW SIMULATOR -->
+                <div id="mSecInterview" style="display: none; flex-direction: column; gap: 0.5rem;">
+                    <div id="mInterviewList" style="display: flex; flex-direction: column; gap: 0.45rem;"></div>
                 </div>
             </div>
 
@@ -750,7 +720,7 @@
                         <span class="sync-status-pill sync-pill-ok">OK</span>
                     </div>
                     <div class="sync-row-meta">
-                        <span id="sgvaDate">26 ago 2026, 19:38</span>
+                        <span id="sgvaDate">26 ago 2026, 21:05</span>
                         <span class="sync-meta-sep">·</span>
                         <span>195 vacantes · 5 modelos IA</span>
                     </div>
@@ -771,11 +741,11 @@
                         </a>
                     </div>
                     <div class="sync-row-meta">
-                        <span id="syncDate">26 ago 2026, 19:38</span>
+                        <span id="syncDate">26 ago 2026, 19:39</span>
                         <span class="sync-meta-sep">·</span>
-                        <span id="syncHash" style="font-family:var(--font-mono);font-weight:600;">a6a4885</span>
+                        <span id="syncHash" style="font-family:var(--font-mono);font-weight:600;">5547319</span>
                     </div>
-                    <div class="sync-row-desc" id="syncMsg">feat(sync): live SGVA synchronization - 195 active v...</div>
+                    <div class="sync-row-desc" id="syncMsg">chore(badge): sync timestamp 26 ago 2026 19:38 - 195...</div>
                 </div>
             </div>
 
@@ -792,7 +762,7 @@
                         </a>
                     </div>
                     <div class="sync-row-meta">
-                        <span id="cfDate">26 ago 2026, ~19:40</span>
+                        <span id="cfDate">26 ago 2026, ~19:41</span>
                         <span class="sync-meta-sep">·</span>
                         <span>Auto-deploy desde main</span>
                     </div>
