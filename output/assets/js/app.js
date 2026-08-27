@@ -2037,14 +2037,29 @@ class AppController {
         }
     }
 
-    exportData(fmt) {
+    async exportData(fmt) {
+        if (typeof XLSX === 'undefined') {
+            this.showToast('Cargando motor de exportación...');
+            try {
+                await new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+                    script.onload = resolve;
+                    script.onerror = reject;
+                    document.head.appendChild(script);
+                });
+            } catch (err) {
+                this.showToast('Error al cargar librería de exportación');
+                return;
+            }
+        }
         if (typeof XLSX !== 'undefined') {
             const ws = XLSX.utils.json_to_sheet(this.store.filteredData);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "ADSO_SENA");
             if (fmt === 'xlsx') XLSX.writeFile(wb, "postulaciones_adso_sena.xlsx");
             else XLSX.writeFile(wb, "postulaciones_adso_sena.csv");
-            this.showToast(`Exportando datos en ${fmt.toUpperCase()}...`);
+            this.showToast(`Archivo ${fmt.toUpperCase()} descargado con éxito`);
         } else {
             this.showToast('Librería de exportación no disponible');
         }
