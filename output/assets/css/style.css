@@ -2093,3 +2093,23 @@ body {
 [data-theme="light"] #mScore div[style*="rgba(255,255,255,0.06)"] {
     background: #e2e8f0 !important;
 }
+
+
+/* ── High-Performance Rendering & Zero-CLS Optimizations ── */
+.strategy-view {
+    content-visibility: auto;
+    contain-intrinsic-size: 800px;
+}
+.modal-backdrop {
+    content-visibility: auto;
+}
+.data-table-container {
+    contain: layout style paint;
+}
+.cards-view-grid {
+    contain: layout style;
+}
+:focus-visible {
+    outline: 2px solid var(--brand-primary);
+    outline-offset: 2px;
+}

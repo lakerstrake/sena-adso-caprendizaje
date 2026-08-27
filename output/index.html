@@ -21,6 +21,24 @@
     <meta property="og:description" content="Directorio estratégico de vacantes y postulaciones directas para aprendices ADSO SENA.">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
     
+    <link rel="canonical" href="https://sena-adso-caprendizaje.pages.dev/">
+    
+    <!-- Structured Data (JSON-LD) for Google SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "SENA · ADSO Directorio Estratégico",
+      "url": "https://sena-adso-caprendizaje.pages.dev/",
+      "description": "Plataforma estratégica para la gestión y postulación directa a contratos de aprendizaje SENA ADSO con 179 empresas de software y sistemas en Colombia.",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Juan Manuel Lagos Monroy"
+      }
+    }
+    </script>
     <!-- Preconnect to CDNs for high-speed delivery -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -100,14 +118,14 @@
 
                 <div class="nav-tools">
                     <span id="lblSessionTimer" style="font-size: 0.65rem; font-family: var(--font-mono); color: #38bdf8; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.25); padding: 0.15rem 0.45rem; border-radius: var(--radius-xs); display: none;" title="Tiempo restante de sesión activa">⏱️ 15:00</span>
-                    <button class="btn" id="btnCvAlertsTrigger" data-action="openCvAlertsModal" title="Monitor de Alertas y Telemetría de CV en Vivo" style="padding: 0.22rem 0.55rem; color: #10b981; border-color: rgba(16, 185, 129, 0.35); background: rgba(16, 185, 129, 0.08); display: none;">
+                    <button class="btn" id="btnCvAlertsTrigger" aria-label="Ver registro de alertas de visualización de CV" data-action="openCvAlertsModal" title="Monitor de Alertas y Telemetría de CV en Vivo" style="padding: 0.22rem 0.55rem; color: #10b981; border-color: rgba(16, 185, 129, 0.35); background: rgba(16, 185, 129, 0.08); display: none;">
                         <i class="fa-solid fa-bell" style="color: #10b981;"></i> <span style="font-size: 0.68rem; font-weight: 700;">Alertas CV</span> <span class="count-badge" id="badgeCvAlertsCount" style="background: #10b981; color: #000; font-size: 0.55rem; margin-left: 2px;">0</span>
                     </button>
                     <button class="session-badge" id="btnAuthTrigger" data-action="openAuthModal" title="Clic para autenticar como Titular (Juan Manuel Lagos)" style="border-color: rgba(56, 189, 248, 0.35); cursor: pointer;">
                         <i class="fa-solid fa-lock-open" style="color: #38bdf8;" aria-hidden="true" id="iconSessionStatus"></i>
                         <span id="lblSessionUser">👤 Invitado · Ingreso Titular</span>
                     </button>
-                    <button class="btn btn-icon" id="btnQuickLogout" data-action="submitLogout" title="Cerrar Sesión / Salir" style="width: 26px; height: 26px; color: #ef4444; display: none;" aria-label="Cerrar sesión">
+                    <button class="btn btn-icon" id="btnQuickLogout" aria-label="Cerrar sesión de titular" data-action="submitLogout" title="Cerrar Sesión / Salir" style="width: 26px; height: 26px; color: #ef4444; display: none;" aria-label="Cerrar sesión">
                         <i class="fa-solid fa-right-from-bracket"></i>
                     </button>
                     <button class="btn" data-action="exportData" data-format="xlsx" title="Descargar Excel (.xlsx)" aria-label="Exportar Excel" style="padding: 0.22rem 0.45rem;">
@@ -116,7 +134,7 @@
                     <button class="btn" data-action="exportData" data-format="csv" title="Descargar CSV (.csv)" aria-label="Exportar CSV" style="padding: 0.22rem 0.45rem;">
                         <i class="fa-solid fa-file-csv" style="color: #38bdf8;" aria-hidden="true"></i>
                     </button>
-                    <button class="btn btn-icon" data-action="toggleTheme" id="themeBtn" title="Cambiar tema de color" aria-label="Cambiar tema" style="width: 26px; height: 26px;">
+                    <button class="btn btn-icon" data-action="toggleTheme" id="themeBtn" aria-label="Cambiar entre tema claro y tema oscuro" title="Cambiar tema de color" aria-label="Cambiar tema" style="width: 26px; height: 26px;">
                         <i class="fa-solid fa-sun" id="themeIcon" aria-hidden="true"></i>
                     </button>
                 </div>
@@ -184,7 +202,7 @@
                         <button class="tier-seg-btn" data-action="filterTier" data-tier="TIER_5">Tier 5 <span class="seg-pill">34</span></button>
                     </div>
 
-                    <button class="btn" id="toggleFiltersBtn" data-action="toggleSecondaryFilters" style="padding: 0.28rem 0.55rem;">
+                    <button class="btn" id="toggleFiltersBtn" aria-label="Mostrar u ocultar filtros secundarios avanzados" data-action="toggleSecondaryFilters" style="padding: 0.28rem 0.55rem;">
                         <i class="fa-solid fa-sliders" aria-hidden="true"></i> Filtros <span class="count-badge" id="activeFilterBadge" style="margin-left: 2px;">0</span>
                     </button>
                 </div>
@@ -209,7 +227,7 @@
                 <div class="secondary-filters-row" id="secondaryFiltersRow" style="display: none;">
                     <div class="filter-select-wrap">
                         <label for="filterChannel">Canal Directo</label>
-                        <select class="select-sm" id="filterChannel">
+                        <select class="select-sm" id="filterChannel" aria-label="Filtrar por canal directo de contacto">
                             <option value="">Todos los canales</option>
                             <option value="WHATSAPP">Con WhatsApp Directo (129)</option>
                             <option value="EMAIL">Con Correo Electrónico (175)</option>
@@ -227,7 +245,7 @@
                     </div>
                     <div class="filter-select-wrap">
                         <label for="filterDpto">Departamento</label>
-                        <select class="select-sm" id="filterDpto"><option value="">Todos</option></select>
+                        <select class="select-sm" id="filterDpto" aria-label="Filtrar por departamento de Colombia"><option value="">Todos</option></select>
                     </div>
                     <div class="filter-select-wrap">
                         <label for="filterCity">Ciudad</label>
@@ -235,7 +253,7 @@
                     </div>
                     <div class="filter-select-wrap">
                         <label for="filterSort">Criterio de Orden</label>
-                        <select class="select-sm" id="filterSort">
+                        <select class="select-sm" id="filterSort" aria-label="Ordenar vacantes por criterio">
                             <option value="ranking_asc">Afinidad y Éxito (#01 a #179)</option>
                             <option value="escalabilidad_desc">Mayor Escalabilidad Profesional</option>
                             <option value="reputation_desc">Mayor Calidad Web (★)</option>
@@ -590,7 +608,7 @@
                         <div class="auth-input-wrap" style="margin-top: 0.25rem;">
                             <i class="fa-solid fa-lock input-icon" style="color: #10b981;"></i>
                             <input type="password" id="tbLoginPass" placeholder="••••••••••••" autocomplete="current-password" required style="font-family: var(--font-mono); font-size: 0.85rem;">
-                            <button type="button" class="pwd-toggle-btn" id="btnTogglePwd" data-action="togglePasswordVisibility" aria-label="Mostrar u ocultar contraseña">
+                            <button type="button" class="pwd-toggle-btn" id="btnTogglePwd" aria-label="Mostrar u ocultar contraseña" data-action="togglePasswordVisibility" aria-label="Mostrar u ocultar contraseña">
                                 <i class="fa-solid fa-eye" id="iconEye"></i>
                             </button>
                         </div>
