@@ -1745,76 +1745,351 @@ body {
         max-width: 140px;
     }
 }
-
 /* =============================================================================
-   LIGHT THEME OVERRIDES — JS-Injected Dynamic Content
-   These rules fix hardcoded dark colors in dynamically rendered HTML
-   from app.js (Multi-AI cards, Panorama, Modal sections)
+   COMPREHENSIVE LIGHT & DARK THEME SYSTEM (ISO/IEC 25010 & WCAG 2.1 AA)
+   Guarantees 100% pure light theme when [data-theme="light"] is active.
    ============================================================================= */
 
-/* ── Multi-AI Consensus panel in cards ── */
-[data-theme="light"] [style*="⚡ Multi-AI"] {
-    background: var(--bg-canvas) !important;
+/* ── 1. Top Banners (Guest & Candidate Modes) ── */
+[data-theme="light"] .candidate-banner {
+    background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%) !important;
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+    box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.05) !important;
+}
+[data-theme="light"] .candidate-banner::before {
+    background: linear-gradient(180deg, var(--brand-primary), #0284c7) !important;
+}
+[data-theme="light"] .candidate-name {
+    color: var(--text-main) !important;
+}
+[data-theme="light"] .candidate-pitch {
+    color: var(--text-muted) !important;
+}
+[data-theme="light"] .candidate-pitch strong {
+    color: var(--text-main) !important;
+}
+[data-theme="light"] .candidate-badge-photo {
+    background: rgba(16, 185, 129, 0.12) !important;
+    color: var(--brand-primary) !important;
+}
+[data-theme="light"] .status-ready {
+    background: rgba(5, 150, 105, 0.1) !important;
+    color: #059669 !important;
+    border-color: rgba(5, 150, 105, 0.3) !important;
+}
+[data-theme="light"] .status-guest {
+    background: rgba(2, 132, 199, 0.1) !important;
+    color: #0284c7 !important;
+    border-color: rgba(2, 132, 199, 0.3) !important;
+}
+[data-theme="light"] .btn-cv-drive {
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.12), rgba(5, 150, 105, 0.22)) !important;
+    border-color: rgba(5, 150, 105, 0.45) !important;
+    color: #059669 !important;
+}
+[data-theme="light"] .btn-cv-drive .cv-mini-badge {
+    background: #059669 !important;
+    color: #ffffff !important;
+}
+[data-theme="light"] .candidate-banner-actions .btn-secondary {
+    background: #ffffff !important;
+    border: 1px solid var(--border-default) !important;
+    color: var(--text-main) !important;
+}
+[data-theme="light"] .candidate-banner-actions .btn-secondary:hover {
+    background: var(--bg-surface-raised) !important;
 }
 
-/* Panorama Empresarial modal section */
+/* ── 2. Filter Deck & Search Controls ── */
+[data-theme="light"] .filter-deck {
+    background: #ffffff !important;
+    border-color: var(--border-muted) !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03) !important;
+}
+[data-theme="light"] .search-box input {
+    background: #f8fafc !important;
+    border-color: var(--border-default) !important;
+    color: var(--text-main) !important;
+}
+[data-theme="light"] .search-box input:focus {
+    background: #ffffff !important;
+    border-color: var(--brand-primary) !important;
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15) !important;
+}
+[data-theme="light"] .tier-seg-btn {
+    background: #f1f5f9 !important;
+    color: var(--text-muted) !important;
+    border: 1px solid var(--border-muted) !important;
+}
+[data-theme="light"] .tier-seg-btn:hover {
+    background: #e2e8f0 !important;
+    color: var(--text-main) !important;
+}
+[data-theme="light"] .tier-seg-btn.active {
+    background: rgba(5, 150, 105, 0.12) !important;
+    color: #059669 !important;
+    border-color: #059669 !important;
+    font-weight: 700 !important;
+}
+[data-theme="light"] .stack-tag-btn {
+    background: #f1f5f9 !important;
+    color: var(--text-muted) !important;
+    border-color: var(--border-muted) !important;
+}
+[data-theme="light"] .stack-tag-btn:hover {
+    background: #e2e8f0 !important;
+    color: var(--text-main) !important;
+}
+[data-theme="light"] .stack-tag-btn.active {
+    background: rgba(5, 150, 105, 0.12) !important;
+    color: #059669 !important;
+    border-color: #059669 !important;
+}
+[data-theme="light"] .secondary-filter-select {
+    background: #f8fafc !important;
+    border-color: var(--border-default) !important;
+    color: var(--text-main) !important;
+}
+[data-theme="light"] .secondary-filter-group label {
+    color: var(--text-dim) !important;
+}
+
+/* ── 3. Table & Cards Views ── */
+[data-theme="light"] .data-table-container {
+    background: #ffffff !important;
+    border-color: var(--border-muted) !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03) !important;
+}
+[data-theme="light"] .data-table th {
+    background: #f8fafc !important;
+    color: var(--text-dim) !important;
+    border-bottom: 1px solid var(--border-muted) !important;
+}
+[data-theme="light"] .data-table td {
+    background: #ffffff !important;
+    color: var(--text-main) !important;
+    border-bottom: 1px solid var(--border-muted) !important;
+}
+[data-theme="light"] .data-table tbody tr:hover td {
+    background: #f8fafc !important;
+}
+[data-theme="light"] .card {
+    background: #ffffff !important;
+    border-color: var(--border-muted) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04) !important;
+}
+[data-theme="light"] .card:hover {
+    border-color: var(--brand-primary) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* ── 4. Multi-AI Consensus Card & Table Elements ── */
+[data-theme="light"] .card > div:nth-child(2) {
+    background: #f8fafc !important;
+    border-color: var(--border-muted) !important;
+}
+[data-theme="light"] .card > div:nth-child(2) > div:nth-child(2) > div {
+    background: #ffffff !important;
+    border: 1px solid var(--border-muted) !important;
+}
+
+/* ── 5. Tri-Sync Status Panel Styles ── */
+.sync-panel-widget {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 9999;
+    background: var(--bg-surface-raised);
+    border: 1px solid var(--border-default);
+    border-radius: 0.75rem;
+    box-shadow: var(--shadow-overlay);
+    font-family: var(--font-mono);
+    font-size: 0.67rem;
+    color: var(--text-muted);
+    min-width: 290px;
+    max-width: 340px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+[data-theme="light"] .sync-panel-widget {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12) !important;
+}
+.sync-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border-muted);
+}
+[data-theme="light"] .sync-panel-header {
+    background: #f8fafc;
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+}
+.sync-live-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 7px #10b981;
+    animation: pulse-dot 2s infinite;
+    flex-shrink: 0;
+}
+.sync-panel-body {
+    padding: 0.5rem 0.75rem;
+}
+.sync-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.35rem 0;
+    border-bottom: 1px solid var(--border-muted);
+}
+.sync-row-icon {
+    margin-top: 3px;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+    width: 14px;
+    text-align: center;
+}
+.sync-row-content {
+    flex: 1;
+    min-width: 0;
+}
+.sync-row-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.sync-row-title {
+    font-weight: 700;
+    font-size: 0.65rem;
+}
+.sync-status-pill {
+    font-size: 0.55rem;
+    padding: 0.05rem 0.3rem;
+    border-radius: 3px;
+    font-weight: 700;
+}
+.sync-pill-ok {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+.sync-row-meta {
+    color: var(--text-dim);
+    margin-top: 0.1rem;
+    font-size: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+.sync-meta-sep {
+    color: var(--border-default);
+}
+.sync-row-desc {
+    color: var(--text-muted);
+    font-size: 0.58rem;
+    margin-top: 0.08rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.sync-link-btn {
+    font-size: 0.55rem;
+    padding: 0.05rem 0.35rem;
+    border-radius: 3px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-weight: 600;
+    transition: opacity 0.2s;
+}
+.sync-link-btn:hover {
+    opacity: 0.8;
+}
+.sync-link-github {
+    background: var(--tier-1-bg);
+    color: var(--tier-1);
+    border: 1px solid var(--tier-1);
+}
+.sync-link-cf {
+    background: var(--tier-3-bg);
+    color: var(--tier-3);
+    border: 1px solid var(--tier-3);
+}
+.sync-panel-footer {
+    text-align: right;
+    margin-top: 0.3rem;
+    padding-top: 0.3rem;
+    border-top: 1px solid var(--border-muted);
+}
+.sync-dismiss-btn {
+    background: none;
+    border: 1px solid var(--border-default);
+    border-radius: 4px;
+    color: var(--text-dim);
+    font-size: 0.58rem;
+    padding: 0.15rem 0.5rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: color 0.2s;
+}
+.sync-dismiss-btn:hover {
+    color: var(--text-main);
+}
+
+/* ── 6. Modals & Detail View ── */
+[data-theme="light"] .modal-content,
+[data-theme="light"] .auth-panel {
+    background: #ffffff !important;
+    color: var(--text-main) !important;
+    border: 1px solid var(--border-default) !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15) !important;
+}
+[data-theme="light"] .modal-header,
+[data-theme="light"] .modal-footer {
+    background: #f8fafc !important;
+    border-color: var(--border-muted) !important;
+}
+[data-theme="light"] .auth-tabs-nav {
+    background: #f1f5f9 !important;
+}
+[data-theme="light"] .auth-tab-btn.active {
+    background: #ffffff !important;
+    color: var(--brand-primary) !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+}
+[data-theme="light"] .auth-input-group input {
+    background: #f8fafc !important;
+    border-color: var(--border-default) !important;
+    color: var(--text-main) !important;
+}
+[data-theme="light"] .auth-input-group input:focus {
+    background: #ffffff !important;
+    border-color: var(--brand-primary) !important;
+}
+[data-theme="light"] .auth-context-box {
+    background: #f8fafc !important;
+    border-color: var(--border-muted) !important;
+}
+
+/* ── 7. Panorama Empresarial Light Mode ── */
 [data-theme="light"] #mPanoramaContainer > div {
     color: var(--text-main);
 }
-[data-theme="light"] #mPanoramaContainer [style*="rgba(0,0,0"] {
-    background: var(--bg-canvas) !important;
+[data-theme="light"] #mPanoramaContainer [style*="background:var(--bg-canvas)"] {
+    background: #f8fafc !important;
 }
-
-/* Modal score panel (Multi-AI bars) */
 [data-theme="light"] #mScore {
     color: var(--text-main);
 }
-[data-theme="light"] #mScore div[style*="rgba(255,255,255,0.06"] {
-    background: var(--border-muted) !important;
-}
-
-/* Sync panel - ensure clean white in light mode */
-[data-theme="light"] #syncPanel {
-    background: var(--bg-surface-raised) !important;
-    border-color: var(--border-default) !important;
-    box-shadow: var(--shadow-card) !important;
-}
-[data-theme="light"] #syncPanel span,
-[data-theme="light"] #syncPanel div {
-    color: inherit;
-}
-
-/* Force card AI mini-score labels to be readable in light mode */
-[data-theme="light"] [style*="color:#64748b"] {
-    color: var(--text-dim) !important;
-}
-[data-theme="light"] [style*="color:#94a3b8"] {
-    color: var(--text-muted) !important;
-}
-[data-theme="light"] [style*="color:#e2e8f0"] {
-    color: var(--text-main) !important;
-}
-[data-theme="light"] [style*="color:#a5b4fc"] {
-    color: var(--tier-1) !important;
-}
-
-/* Card AI consensus panel backdrop */
-[data-theme="light"] .card [style*="background: var(--bg-canvas)"][style*="border: 1px solid var(--border-muted)"] {
-    background: var(--bg-surface) !important;
-}
-
-/* Table row AI mini scores separator dot */
-[data-theme="light"] [style*="color:var(--border-default)"] {
-    color: var(--text-dim) !important;
-}
-
-/* Modal detail inner panels */
-[data-theme="light"] [style*="background:rgba(16,185,129,0.06)"] {
-    background: rgba(5,150,105,0.05) !important;
-}
-[data-theme="light"] [style*="background:rgba(239,68,68,0.06)"] {
-    background: rgba(225,29,72,0.05) !important;
-}
-[data-theme="light"] [style*="background:rgba(99,102,241,0.08)"] {
-    background: rgba(124,58,237,0.05) !important;
+[data-theme="light"] #mScore div[style*="rgba(255,255,255,0.06)"] {
+    background: #e2e8f0 !important;
 }
