@@ -2281,3 +2281,154 @@ body {
         padding: 0.25rem 0.45rem !important;
     }
 }
+
+/* ==========================================================================
+   METICULOUS RANKING ARGUMENTS & LEARNING POTENTIAL STYLES (ACLI v3.0)
+   ========================================================================== */
+.ranking-arg-card {
+    background: var(--bg-surface-raised);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-sm);
+    padding: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    position: relative;
+    overflow: hidden;
+}
+.ranking-arg-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--brand-primary);
+}
+.ranking-arg-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid var(--border-muted);
+}
+.ranking-pos-badge {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 900;
+    color: var(--brand-primary);
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius-xs);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+.ranking-justificacion-text {
+    font-size: 0.76rem;
+    color: var(--text-main);
+    line-height: 1.6;
+}
+.arg-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0.6rem;
+    margin-top: 0.25rem;
+}
+.arg-pro-box {
+    background: rgba(16, 185, 129, 0.05);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: var(--radius-xs);
+    padding: 0.65rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+.arg-pro-title {
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: #10b981;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+.arg-con-box {
+    background: rgba(245, 158, 11, 0.05);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    border-radius: var(--radius-xs);
+    padding: 0.65rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+.arg-con-title {
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: #f59e0b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+.arg-item {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.35rem;
+}
+.arg-item i {
+    margin-top: 3px;
+    font-size: 0.62rem;
+    flex-shrink: 0;
+}
+.learning-highlight-card {
+    background: rgba(99, 102, 241, 0.06);
+    border: 1px solid rgba(99, 102, 241, 0.22);
+    border-radius: var(--radius-xs);
+    padding: 0.65rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+.learning-highlight-title {
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: #818cf8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+.learning-pill {
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    background: rgba(99, 102, 241, 0.12);
+    border: 1px solid rgba(99, 102, 241, 0.28);
+    color: #a5b4fc;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+.salary-escalation-banner {
+    background: var(--bg-canvas);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-xs);
+    padding: 0.55rem 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+

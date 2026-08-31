@@ -1185,6 +1185,7 @@ class AppController {
         this.store.filteredData.sort((a, b) => {
             if (sort === 'ranking_asc') return (a.ranking_posicion || 0) - (b.ranking_posicion || 0);
             if (sort === 'escalabilidad_desc') return (b.escalabilidad_score || 0) - (a.escalabilidad_score || 0);
+            if (sort === 'score_desc') return (b.puntaje_exito || 0) - (a.puntaje_exito || 0);
             if (sort === 'reputation_desc') return (b.reputacion_rating || 0) - (a.reputacion_rating || 0);
             if (sort === 'comp_asc') return (a.competencia_ratio || 0) - (b.competencia_ratio || 0);
             if (sort === 'vacancies_desc') return (b.vacantes || 0) - (a.vacantes || 0);
@@ -1452,8 +1453,8 @@ class AppController {
 
                 <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-xs); padding: 0.45rem 0.6rem; display: flex; justify-content: space-between; align-items: center; margin-top: 0.25rem;">
                     <div>
-                        <span style="font-size: 0.58rem; color: var(--text-dim); text-transform: uppercase; font-weight: 600;">Afinidad Técnica IA</span>
-                        <div style="font-size: 0.72rem; font-weight: 700; color: ${it.ai_tier_color || 'var(--brand-primary)'};">${SecurityService.escapeHtml(it.ai_tier_label || 'Oportunidad')}</div>
+                        <span style="font-size: 0.58rem; color: var(--text-dim); text-transform: uppercase; font-weight: 600;">Rol & Afinidad ADSO</span>
+                        <div style="font-size: 0.72rem; font-weight: 700; color: ${it.ai_tier_color || 'var(--brand-primary)'};">${SecurityService.escapeHtml(it.rol_salida_egresado || it.ai_tier_label || 'Desarrollador Junior')}</div>
                     </div>
                     <div style="display: flex; align-items: center; gap: 0.35rem;">
                         <span style="font-size: 1.15rem; font-weight: 900; font-family: var(--font-mono); color: ${it.ai_tier_color || 'var(--brand-primary)'};">${it.puntaje_exito || 0}</span>
@@ -1663,81 +1664,116 @@ class AppController {
         setTxt(this.dom.mFunciones, it.funciones || 'No registrado');
         setTxt(this.dom.mClosingDate, it.fecha_cierre || 'No registrada');
 
-        // ── PANORAMA EMPRESARIAL ──────────────────────────────────────────────
+        // ── ÉXITO & ARGUMENTACIÓN DE RANKING (ACLI v3.0) ────────────────────
         const mPanoramaContainer = document.getElementById('mPanoramaContainer');
-        if (mPanoramaContainer && it.panorama_actividad) {
+        if (mPanoramaContainer) {
             const stars = (r) => {
                 const full = Math.round(r);
                 return '★'.repeat(full) + '☆'.repeat(5 - full);
             };
-            const sectorColors = {
-                software: '#6366f1', finanzas: '#f59e0b', salud: '#10b981',
-                gobierno: '#3b82f6', otros: '#94a3b8'
-            };
-            const sc = sectorColors[it.panorama_sector] || '#94a3b8';
-            const banderaHtml = it.panorama_bandera
-                ? `<div style="margin-top:0.5rem;padding:0.4rem 0.6rem;border-radius:6px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);font-size:0.66rem;color:#fca5a5;">
-                       ${SecurityService.escapeHtml(it.panorama_bandera)}
-                   </div>` : '';
+            const posFormatted = (it.ranking_posicion || 1) < 10 ? '0' + it.ranking_posicion : it.ranking_posicion;
+            
+            const prosList = Array.isArray(it.ranking_pros) 
+                ? it.ranking_pros 
+                : (it.panorama_pros || '').split('·').filter(Boolean).map(s => s.trim());
+                
+            const perosList = Array.isArray(it.ranking_peros) 
+                ? it.ranking_peros 
+                : (it.panorama_contras || '').split('·').filter(Boolean).map(s => s.trim());
+
+            const stackList = (it.panorama_stack_real || (it.stack_tags ? it.stack_tags.join(', ') : 'ADSO General')).split(',').map(s => s.trim()).filter(Boolean);
 
             mPanoramaContainer.innerHTML = `
-            <div style="margin-top:0.6rem;">
-                <!-- Encabezado -->
-                <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:1px solid var(--border-muted);">
-                    <span style="font-size:0.6rem;font-weight:700;color:${sc};padding:0.1rem 0.45rem;border-radius:4px;background:${sc}18;border:1px solid ${sc}33;text-transform:uppercase;letter-spacing:0.05em;">
-                        ${SecurityService.escapeHtml(it.panorama_sector || 'general')}
-                    </span>
-                    <span style="font-size:0.68rem;font-weight:700;color:var(--text-main);">Panorama Empresarial</span>
-                    <span style="margin-left:auto;font-size:0.6rem;color:var(--text-dim);">IA + Internet + SGVA</span>
-                </div>
-
-                <!-- ¿Qué hace? -->
-                <div style="margin-bottom:0.6rem;">
-                    <div style="font-size:0.6rem;font-weight:700;color:var(--brand-primary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.2rem;">🏢 ¿Qué hace esta empresa?</div>
-                    <div style="font-size:0.7rem;color:var(--text-muted);line-height:1.55;">${SecurityService.escapeHtml(it.panorama_actividad)}</div>
-                </div>
-
-                <!-- Stack real -->
-                <div style="margin-bottom:0.6rem;">
-                    <div style="font-size:0.6rem;font-weight:700;color:#10b981;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.25rem;">⚙️ Stack tecnológico real</div>
-                    <div style="display:flex;flex-wrap:wrap;gap:0.2rem;">
-                        ${(it.panorama_stack_real||'').split(',').map(t=>`<span style="font-size:0.6rem;padding:0.1rem 0.35rem;border-radius:4px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);color:#6ee7b7;font-family:var(--font-mono);">${SecurityService.escapeHtml(t.trim())}</span>`).join('')}
-                    </div>
-                </div>
-
-                <!-- Opiniones -->
-                <div style="margin-bottom:0.6rem;">
-                    <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.3rem;">
-                        <div style="font-size:0.6rem;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:0.05em;">💬 Opiniones de empleados</div>
-                        <div style="margin-left:auto;font-size:0.68rem;color:#fbbf24;font-family:var(--font-mono);">${stars(it.panorama_rating_real||3.5)} <span style="color:var(--text-dim);font-size:0.58rem;">${(it.panorama_rating_real||3.5).toFixed(1)}/5</span></div>
-                    </div>
-                    <div style="font-size:0.58rem;color:var(--text-dim);margin-bottom:0.35rem;">Fuentes: ${SecurityService.escapeHtml(it.panorama_fuentes||'')}</div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.35rem;">
-                        <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:6px;padding:0.4rem 0.5rem;">
-                            <div style="font-size:0.58rem;font-weight:700;color:#10b981;margin-bottom:0.2rem;">✅ Lo bueno</div>
-                            ${(it.panorama_pros||'').split('·').filter(Boolean).map(p=>`<div style="font-size:0.62rem;color:var(--text-muted);margin-bottom:0.1rem;">· ${SecurityService.escapeHtml(p.trim())}</div>`).join('')}
+            <div style="display: flex; flex-direction: column; gap: 0.65rem; margin-top: 0.35rem;">
+                
+                <!-- 1. Hero Card: Justificación de Posición en Ranking -->
+                <div class="ranking-arg-card">
+                    <div class="ranking-arg-header">
+                        <div style="display: flex; align-items: center; gap: 0.4rem;">
+                            <span class="ranking-pos-badge"><i class="fa-solid fa-trophy"></i> Puesto #${posFormatted} de 195</span>
+                            <span class="pill-badge pill-tier-1" style="background: ${(it.ai_tier_color || '#10b981')}18; color: ${it.ai_tier_color || '#10b981'}; border-color: ${(it.ai_tier_color || '#10b981')}44;">${SecurityService.escapeHtml(it.cat_badge || 'Tier')}</span>
                         </div>
-                        <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:6px;padding:0.4rem 0.5rem;">
-                            <div style="font-size:0.58rem;font-weight:700;color:#f87171;margin-bottom:0.2rem;">⚠️ A considerar</div>
-                            ${(it.panorama_contras||'').split('·').filter(Boolean).map(c=>`<div style="font-size:0.62rem;color:var(--text-muted);margin-bottom:0.1rem;">· ${SecurityService.escapeHtml(c.trim())}</div>`).join('')}
+                        <span class="learning-pill"><i class="fa-solid fa-graduation-cap"></i> ${SecurityService.escapeHtml(it.aprendizaje_potencial || 'Software & Sistemas')}</span>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.62rem; font-weight: 800; color: var(--brand-primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.2rem;">
+                            🎯 ¿Por qué esta empresa ocupa esta posición?
+                        </div>
+                        <p class="ranking-justificacion-text">
+                            ${SecurityService.escapeHtml(it.ranking_justificacion || it.panorama_actividad || 'Evaluación técnica basada en entorno de desarrollo, tecnologías en producción y escalabilidad profesional a 5 años.')}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 2. Potencial de Aprendizaje & Proyección Salarial -->
+                <div class="salary-escalation-banner">
+                    <div>
+                        <div style="font-size: 0.58rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Rol Proyectado al Egresar</div>
+                        <div style="font-size: 0.74rem; font-weight: 800; color: #38bdf8; margin-top: 1px;"><i class="fa-solid fa-code"></i> ${SecurityService.escapeHtml(it.rol_salida_egresado || 'Desarrollador Junior Full-Stack')}</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.58rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Techo Salarial (5 Años)</div>
+                        <div style="font-size: 0.74rem; font-weight: 800; color: #10b981; font-family: var(--font-mono); margin-top: 1px;"><i class="fa-solid fa-arrow-trend-up"></i> ${SecurityService.escapeHtml(it.techo_salarial_5anios || '$8M - $18M+ COP')}</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.58rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Reputación / Clima</div>
+                        <div style="font-size: 0.74rem; font-weight: 800; color: #fbbf24; font-family: var(--font-mono); margin-top: 1px;">★ ${(it.reputacion_rating || 4.0).toFixed(1)} / 5.0</div>
+                    </div>
+                </div>
+
+                <!-- 3. Pros Técnicos vs Los Peros (Contra-argumentos honestos) -->
+                <div class="arg-grid-2">
+                    <!-- Lo Bueno -->
+                    <div class="arg-pro-box">
+                        <div class="arg-pro-title">
+                            <i class="fa-solid fa-circle-check"></i> Lo Mejor (Ventajas Técnicas)
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+                            ${prosList.map(p => `
+                                <div class="arg-item">
+                                    <i class="fa-solid fa-check" style="color: #10b981;"></i>
+                                    <span>${SecurityService.escapeHtml(p)}</span>
+                                </div>
+                            `).join('')}
                         </div>
                     </div>
-                    ${banderaHtml}
-                </div>
 
-                <!-- Lo que buscan -->
-                <div style="margin-bottom:0.55rem;">
-                    <div style="font-size:0.6rem;font-weight:700;color:#818cf8;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.2rem;">🎯 ¿Qué buscan en ti? (SGVA)</div>
-                    <div style="font-size:0.67rem;color:var(--text-dim);background:var(--bg-canvas);border-radius:6px;padding:0.4rem 0.5rem;line-height:1.5;border:1px solid var(--border-muted);">
-                        ${SecurityService.escapeHtml(it.panorama_buscan_resumen||it.perfil_requerido||'Ver detalle arriba')}
+                    <!-- Los Peros -->
+                    <div class="arg-con-box">
+                        <div class="arg-con-title">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Los "Peros" (A considerar)
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+                            ${perosList.map(c => `
+                                <div class="arg-item">
+                                    <i class="fa-solid fa-circle-info" style="color: #f59e0b;"></i>
+                                    <span>${SecurityService.escapeHtml(c)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
                     </div>
                 </div>
 
-                <!-- Veredicto IA -->
-                <div style="padding:0.4rem 0.6rem;border-radius:8px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.25);">
-                    <div style="font-size:0.6rem;font-weight:700;color:#a5b4fc;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.15rem;">🤖 Veredicto IA</div>
-                    <div style="font-size:0.68rem;color:#e2e8f0;line-height:1.5;">${SecurityService.escapeHtml(it.panorama_veredicto||'')}</div>
+                <!-- 4. Stack Tecnológico Real en Producción -->
+                <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-xs); padding: 0.6rem 0.75rem;">
+                    <div style="font-size: 0.6rem; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.3rem;">
+                        <i class="fa-solid fa-layer-group"></i> Tecnologías y Entorno de Producción
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.25rem;">
+                        ${stackList.map(t => `<span class="stack-chip" style="font-size: 0.62rem; padding: 0.15rem 0.45rem;">${SecurityService.escapeHtml(t)}</span>`).join('')}
+                    </div>
                 </div>
+
+                <!-- 5. Veredicto Técnico IA -->
+                <div style="padding: 0.55rem 0.75rem; border-radius: var(--radius-xs); background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.25);">
+                    <div style="font-size: 0.6rem; font-weight: 800; color: #a5b4fc; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.15rem; display: flex; align-items: center; gap: 0.3rem;">
+                        <i class="fa-solid fa-robot"></i> Veredicto de Orientación Profesional ADSO
+                    </div>
+                    <div style="font-size: 0.7rem; color: var(--text-main); line-height: 1.55;">
+                        ${SecurityService.escapeHtml(it.panorama_veredicto || 'Oportunidad evaluada bajo el índice ACLI de aprendizaje y éxito profesional.')}
+                    </div>
+                </div>
+
             </div>`;
         }
 
