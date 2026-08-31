@@ -270,8 +270,8 @@
 
             <!-- Table Toolbar -->
             <div class="table-toolbar">
-                <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
-                    <div>Mostrando <strong id="lblVisibleCount">195</strong> de <strong id="lblTotalCount">195</strong> vacantes</div>
+                <div class="table-toolbar-left">
+                    <div style="font-size: 0.72rem; color: var(--text-muted);">Mostrando <strong id="lblVisibleCount" style="color: var(--text-main);">195</strong> de <strong id="lblTotalCount" style="color: var(--text-main);">195</strong> vacantes</div>
                     <button class="pill-badge pill-badge-btn" id="btnSgvaStatusBadge" data-action="openSgvaSyncModal" style="background: rgba(16, 185, 129, 0.08); color: var(--brand-primary); font-size: 0.62rem; border: 1px solid rgba(16, 185, 129, 0.25); cursor: pointer; display: inline-flex; align-items: center; gap: 0.3rem;" title="Ver diagnóstico y detalles de sincronización SGVA" aria-label="Estado de sincronización SGVA">
                         <i class="fa-solid fa-circle-check" id="iconSyncStatusDot" style="color: var(--brand-primary);"></i>
                         <span id="lblSgvaBadgeText">Sincronizado SGVA SENA 2026</span>
@@ -282,7 +282,7 @@
                         <span style="font-weight: 600;">Actualizar SGVA</span>
                     </button>
                 </div>
-                <div style="display: flex; align-items: center; gap: 0.35rem;">
+                <div class="table-toolbar-right">
                     <button class="btn" style="padding: 0.22rem 0.45rem; font-size: 0.68rem;" data-action="resetFilters" title="Restablecer filtros">
                         <i class="fa-solid fa-rotate-left"></i> Limpiar
                     </button>
@@ -424,16 +424,16 @@
     <div class="modal-backdrop" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="mTitle" data-action="backdropCloseDetail">
         <div class="modal-panel" id="modalPanel">
             <div class="modal-header">
-                <div>
-                    <h2 id="mTitle" style="font-size: 0.96rem; font-weight: 700;">Empresa</h2>
+                <div class="modal-header-info">
+                    <h2 id="mTitle" style="font-size: 0.96rem; font-weight: 700; line-height: 1.25;">Empresa</h2>
                     <span id="mSubtitle" style="font-size: 0.7rem; color: var(--text-muted);">Ubicación • NIT</span>
                 </div>
-                <div style="display: flex; align-items: center; gap: 0.35rem;">
+                <div class="modal-header-actions">
                     <a href="https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="padding: 0.22rem 0.5rem; font-size: 0.68rem;" title="Ver Hoja de Vida oficial (PDF) de Juan Manuel Lagos">
-                        <i class="fa-solid fa-file-pdf"></i> Hoja de Vida
+                        <i class="fa-solid fa-file-pdf"></i> <span class="modal-btn-label">Hoja de Vida</span>
                     </a>
                     <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn" style="padding: 0.22rem 0.5rem; font-size: 0.68rem; color: var(--drive-color); border-color: rgba(52, 168, 83, 0.4);" title="Ver Certificados Académicos en Google Drive">
-                        <i class="fa-brands fa-google-drive"></i> Certificados
+                        <i class="fa-brands fa-google-drive"></i> <span class="modal-btn-label">Certificados</span>
                     </a>
                     <button class="btn btn-icon" id="mFavBtn" data-action="toggleModalFavorite" aria-label="Favorito"><i class="fa-regular fa-bookmark"></i></button>
                     <button class="btn btn-icon" data-action="closeDetailModal" aria-label="Cerrar modal"><i class="fa-solid fa-xmark"></i></button>
@@ -441,23 +441,23 @@
             </div>
 
             <div class="modal-body">
-                                <!-- Executive Summary Cards -->
-                <div class="stat-quad" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); margin-bottom: 0.75rem;">
-                    <div class="stat-box">
-                        <span>Afinidad Técnica IA</span>
-                        <strong id="mScore" style="color: var(--brand-primary); font-size: 1.05rem;">95 / 100</strong>
+                <!-- Executive Summary Cards -->
+                <div class="stat-quad">
+                    <div class="stat-box stat-box-score">
+                        <span style="margin-bottom: 0.25rem;">Afinidad Técnica IA & Multi-Modelos</span>
+                        <div id="mScore"></div>
                     </div>
                     <div class="stat-box">
                         <span>Categoría Empresa</span>
-                        <strong id="mTierText" style="color: var(--tier-1); font-size: 0.85rem;">Tier 1 · Software</strong>
+                        <strong id="mTierText" style="color: var(--tier-1); font-size: 0.82rem;">Tier 1 · Software</strong>
                     </div>
                     <div class="stat-box">
                         <span>Cupos SGVA</span>
-                        <strong id="mVacantesText" style="color: var(--tier-2); font-size: 0.85rem;">3 vacantes</strong>
+                        <strong id="mVacantesText" style="color: var(--tier-2); font-size: 0.82rem;">3 vacantes</strong>
                     </div>
                     <div class="stat-box">
                         <span>Modalidad</span>
-                        <strong id="mModalidadText" style="color: var(--text-main); font-size: 0.85rem;">Presencial / Híbrido</strong>
+                        <strong id="mModalidadText" style="color: var(--text-main); font-size: 0.82rem;">Presencial / Híbrido</strong>
                     </div>
                 </div>
 
@@ -493,7 +493,7 @@
                     <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-sm); padding: 0.75rem;">
                         <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.4rem; margin-bottom: 0.4rem;">
                             <strong style="font-size: 0.74rem;" id="mOutreachHeading">Carta Formal de Postulación Institucional</strong>
-                            <div id="mOutreachActions" style="display: flex; gap: 0.3rem;"></div>
+                            <div id="mOutreachActions" style="display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center;"></div>
                         </div>
                         <div id="mOutreachBody" style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-main); white-space: pre-wrap; max-height: 200px; overflow-y: auto; user-select: text; line-height: 1.5;"></div>
                     </div>
@@ -840,11 +840,11 @@
                         </a>
                     </div>
                     <div class="sync-row-meta">
-                        <span id="syncDate">31 ago 2026, 13:27</span>
+                        <span id="syncDate">31 ago 2026, 17:39</span>
                         <span class="sync-meta-sep">·</span>
-                        <span id="syncHash" style="font-family:var(--font-mono);font-weight:600;">5857873</span>
+                        <span id="syncHash" style="font-family:var(--font-mono);font-weight:600;">fa968ae</span>
                     </div>
-                    <div class="sync-row-desc" id="syncMsg">feat(ranking): implement ACLI v3.0 learning & career...</div>
+                    <div class="sync-row-desc" id="syncMsg">fix(mobile): optimize mobile responsiveness, touch U...</div>
                 </div>
             </div>
 
@@ -861,7 +861,7 @@
                         </a>
                     </div>
                     <div class="sync-row-meta">
-                        <span id="cfDate">31 ago 2026, ~13:29</span>
+                        <span id="cfDate">31 ago 2026, ~17:41</span>
                         <span class="sync-meta-sep">·</span>
                         <span>Auto-deploy desde main</span>
                     </div>

@@ -532,6 +532,18 @@ class AppController {
         this.bindEvents();
         this.updateFavCounter();
         this.updateCompareDock();
+
+        // Mobile-first responsive optimization
+        if (window.innerWidth < 768) {
+            this.store.viewMode = 'cards';
+            const b = document.getElementById('syncPanelBody');
+            const ch = document.getElementById('syncChevron');
+            if (b && ch) {
+                b.style.display = 'none';
+                ch.className = 'fa-solid fa-chevron-up';
+            }
+        }
+
         this.setLayout(this.store.viewMode);
         this.initCvTracker();
         this.initSyncStatus();
@@ -764,14 +776,20 @@ class AppController {
     openAuthModal() {
         const modal = document.getElementById('authModal');
         const alertBox = document.getElementById('authAlertBox');
-        if (modal) modal.style.display = 'flex';
+        if (modal) {
+            modal.style.display = 'flex';
+            document.body.classList.add('modal-open');
+        }
         if (alertBox) alertBox.style.display = 'none';
         this.switchAuthTab('admin');
     }
 
     closeAuthModal() {
         const modal = document.getElementById('authModal');
-        if (modal) modal.style.display = 'none';
+        if (modal) {
+            modal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+        }
     }
 
     togglePasswordVisibility() {
@@ -1588,11 +1606,17 @@ class AppController {
         });
         html += '</tbody>';
         tbl.innerHTML = html;
-        if (this.dom.compareModal) this.dom.compareModal.style.display = 'flex';
+        if (this.dom.compareModal) {
+            this.dom.compareModal.style.display = 'flex';
+            document.body.classList.add('modal-open');
+        }
     }
 
     closeCompareModal() {
-        if (this.dom.compareModal) this.dom.compareModal.style.display = 'none';
+        if (this.dom.compareModal) {
+            this.dom.compareModal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+        }
     }
 
     openDetailModalById(solId) {
@@ -1815,11 +1839,17 @@ class AppController {
         this.updateModalFavBtn();
         this.setModalTab('panorama');
         this.setChannel('email');
-        if (this.dom.detailModal) this.dom.detailModal.style.display = 'flex';
+        if (this.dom.detailModal) {
+            this.dom.detailModal.style.display = 'flex';
+            document.body.classList.add('modal-open');
+        }
     }
 
     closeDetailModal() {
-        if (this.dom.detailModal) this.dom.detailModal.style.display = 'none';
+        if (this.dom.detailModal) {
+            this.dom.detailModal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+        }
     }
 
     updateModalFavBtn() {
@@ -1954,6 +1984,7 @@ class AppController {
     openCvAlertsModal() {
         if (this.dom.cvAlertsModal) {
             this.dom.cvAlertsModal.style.display = 'flex';
+            document.body.classList.add('modal-open');
             this.fetchCvAlerts();
         }
     }
@@ -1961,6 +1992,7 @@ class AppController {
     closeCvAlertsModal() {
         if (this.dom.cvAlertsModal) {
             this.dom.cvAlertsModal.style.display = 'none';
+            document.body.classList.remove('modal-open');
         }
     }
 
@@ -2155,6 +2187,7 @@ class AppController {
     openSgvaSyncModal() {
         if (this.dom.sgvaSyncModal) {
             this.dom.sgvaSyncModal.style.display = 'flex';
+            document.body.classList.add('modal-open');
             const savedTime = localStorage.getItem('sgva_last_sync_timestamp');
             this.updateSyncTimestamps(savedTime ? parseInt(savedTime, 10) : Date.now());
         }
@@ -2163,6 +2196,7 @@ class AppController {
     closeSgvaSyncModal() {
         if (this.dom.sgvaSyncModal) {
             this.dom.sgvaSyncModal.style.display = 'none';
+            document.body.classList.remove('modal-open');
         }
     }
 
