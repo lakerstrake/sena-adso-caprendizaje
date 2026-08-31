@@ -2137,3 +2137,147 @@ body {
     border-color: #cbd5e1;
     color: #334155;
 }
+
+/* ── 8. SGVA Live Synchronization UI & Standards ── */
+.btn-sync-quick {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: inherit;
+}
+.btn-sync-quick:hover {
+    background: rgba(16, 185, 129, 0.16) !important;
+    border-color: rgba(16, 185, 129, 0.55) !important;
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+    transform: translateY(-1px);
+}
+.btn-sync-quick:active {
+    transform: translateY(0);
+}
+.btn-sync-toolbar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    cursor: pointer;
+    border-radius: var(--radius-xs);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-sync-toolbar:hover {
+    background: rgba(16, 185, 129, 0.16) !important;
+    border-color: rgba(16, 185, 129, 0.55) !important;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+    transform: translateY(-1px);
+}
+.pill-badge-btn {
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+.pill-badge-btn:hover {
+    background: rgba(16, 185, 129, 0.15) !important;
+    border-color: rgba(16, 185, 129, 0.5) !important;
+    transform: translateY(-1px);
+}
+.sync-action-btn {
+    transition: all 0.2s ease;
+}
+.sync-action-btn:hover {
+    background: rgba(16, 185, 129, 0.25) !important;
+    border-color: rgba(16, 185, 129, 0.6) !important;
+    transform: scale(1.04);
+}
+
+/* Telemetry Cards */
+.sync-stat-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-sm);
+    padding: 0.65rem 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+[data-theme="light"] .sync-stat-card {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+}
+.sync-stat-label {
+    font-size: 0.62rem;
+    color: var(--text-dim);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+.sync-stat-value {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-main);
+    font-family: var(--font-mono);
+}
+.sync-stat-desc {
+    font-size: 0.58rem;
+    color: var(--text-muted);
+}
+
+/* Pipeline Stepper */
+.pipeline-stepper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-top: 0.4rem;
+}
+.pipeline-step {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.67rem;
+    padding: 0.3rem 0.5rem;
+    border-radius: var(--radius-xs);
+    background: var(--bg-canvas);
+    border: 1px solid var(--border-muted);
+    transition: all 0.25s ease;
+}
+[data-theme="light"] .pipeline-step {
+    background: #ffffff;
+    border-color: #e2e8f0;
+}
+.pipeline-step.step-ok {
+    color: var(--brand-primary);
+    border-color: rgba(16, 185, 129, 0.25);
+}
+.pipeline-step.step-running {
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.08);
+    border-color: rgba(56, 189, 248, 0.4);
+    animation: pulse-sync 1.5s infinite;
+}
+.pipeline-step.step-pending {
+    color: var(--text-dim);
+    opacity: 0.6;
+}
+
+/* Animations */
+@keyframes spinSmooth {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.spin-anim {
+    animation: spinSmooth 0.75s linear infinite !important;
+}
+@keyframes pulse-sync {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.75; transform: scale(0.99); }
+}
+
+@media (max-width: 640px) {
+    .btn-sync-quick-label {
+        display: none;
+    }
+    .btn-sync-quick {
+        padding: 0.25rem 0.45rem !important;
+    }
+}

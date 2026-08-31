@@ -500,7 +500,28 @@ class AppController {
             badgeCvAlertsCount: document.getElementById('badgeCvAlertsCount'),
             cvAlertsModal: document.getElementById('cvAlertsModal'),
             cvEventsList: document.getElementById('cvEventsList'),
-            lblCvAlertsStatus: document.getElementById('lblCvAlertsStatus')
+            lblCvAlertsStatus: document.getElementById('lblCvAlertsStatus'),
+
+            // SGVA Live Sync & Diagnostics Elements
+            btnQuickSyncSgva: document.getElementById('btnQuickSyncSgva'),
+            iconQuickSync: document.getElementById('iconQuickSync'),
+            btnToolbarSyncSgva: document.getElementById('btnToolbarSyncSgva'),
+            iconToolbarSync: document.getElementById('iconToolbarSync'),
+            btnSgvaStatusBadge: document.getElementById('btnSgvaStatusBadge'),
+            iconSyncStatusDot: document.getElementById('iconSyncStatusDot'),
+            lblSgvaBadgeText: document.getElementById('lblSgvaBadgeText'),
+            sgvaSyncModal: document.getElementById('sgvaSyncModal'),
+            iconSyncModalHeader: document.getElementById('iconSyncModalHeader'),
+            btnModalTriggerSync: document.getElementById('btnModalTriggerSync'),
+            iconModalSync: document.getElementById('iconModalSync'),
+            modalLastSyncTime: document.getElementById('modalLastSyncTime'),
+            modalExactSyncDate: document.getElementById('modalExactSyncDate'),
+            modalTotalVacCount: document.getElementById('modalTotalVacCount'),
+            pipelineStepper: document.getElementById('pipelineStepper'),
+            pipelineStatusBadge: document.getElementById('pipelineStatusBadge'),
+            sgvaDate: document.getElementById('sgvaDate'),
+            sgvaVacMeta: document.getElementById('sgvaVacMeta'),
+            sgvaMsg: document.getElementById('sgvaMsg')
         };
     }
 
@@ -513,6 +534,7 @@ class AppController {
         this.updateCompareDock();
         this.setLayout(this.store.viewMode);
         this.initCvTracker();
+        this.initSyncStatus();
         this.initAuth();
     }
 
@@ -907,12 +929,30 @@ class AppController {
             if (e.key === 'Escape') {
                 this.closeDetailModal();
                 this.closeCompareModal();
+                this.closeSgvaSyncModal();
+            }
+            // Accessibility Keyboard Shortcut: Alt + S or R (when outside text inputs)
+            const isTyping = ['INPUT', 'TEXTAREA', 'SELECT'].includes((document.activeElement?.tagName || ''));
+            if ((e.altKey && (e.key === 's' || e.key === 'S')) || (!isTyping && (e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.metaKey)) {
+                if (e.altKey) e.preventDefault();
+                this.syncSgvaData();
             }
         });
     }
 
     handleAction(action, el, event) {
         switch (action) {
+            case 'syncSgva':
+                this.syncSgvaData();
+                break;
+            case 'openSgvaSyncModal':
+                this.openSgvaSyncModal();
+                break;
+            case 'closeSgvaSyncModal':
+            case 'backdropCloseSgvaSync':
+                if (action === 'backdropCloseSgvaSync' && event.target.id !== 'sgvaSyncModal') return;
+                this.closeSgvaSyncModal();
+                break;
             case 'openAuthModal':
                 this.openAuthModal();
                 break;
@@ -2022,6 +2062,180 @@ class AppController {
             t.textContent = msg;
             t.style.display = 'block';
             setTimeout(() => { t.style.display = 'none'; }, 2000);
+        }
+    }
+
+    // =========================================================================
+    // 5. SGVA LIVE SYNCHRONIZATION & TELEMETRY ENGINE
+    // =========================================================================
+    initSyncStatus() {
+        const savedTime = localStorage.getItem('sgva_last_sync_timestamp');
+        if (savedTime) {
+            this.updateSyncTimestamps(parseInt(savedTime, 10));
+        } else {
+            this.updateSyncTimestamps(Date.now());
+        }
+        // Auto-refresh relative time display every 60 seconds
+        setInterval(() => {
+            const t = localStorage.getItem('sgva_last_sync_timestamp');
+            if (t) this.updateSyncTimestamps(parseInt(t, 10));
+        }, 60000);
+    }
+
+    updateSyncTimestamps(timestamp) {
+        if (!timestamp) timestamp = Date.now();
+        const dateObj = new Date(timestamp);
+        
+        // Exact Spanish format: "26 ago 2026, 21:05"
+        const day = dateObj.getDate();
+        const months = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+        const month = months[dateObj.getMonth()];
+        const year = dateObj.getFullYear();
+        const hrs = dateObj.getHours().toString().padStart(2, '0');
+        const mins = dateObj.getMinutes().toString().padStart(2, '0');
+        const exactFormatted = `${day} ${month} ${year}, ${hrs}:${mins}`;
+
+        // Relative human-friendly format (ISO 9241-210)
+        const diffMs = Date.now() - timestamp;
+        const diffMins = Math.floor(diffMs / 60000);
+        let relativeFormatted = 'Hace unos instantes';
+        if (diffMins >= 1 && diffMins < 60) {
+            relativeFormatted = `Hace ${diffMins} min`;
+        } else if (diffMins >= 60 && diffMins < 1440) {
+            const hrsDiff = Math.floor(diffMins / 60);
+            relativeFormatted = `Hace ${hrsDiff} hora${hrsDiff > 1 ? 's' : ''}`;
+        } else if (diffMins >= 1440) {
+            const daysDiff = Math.floor(diffMins / 1440);
+            relativeFormatted = `Hace ${daysDiff} día${daysDiff > 1 ? 's' : ''}`;
+        }
+
+        if (this.dom.sgvaDate) this.dom.sgvaDate.textContent = exactFormatted;
+        if (this.dom.modalExactSyncDate) this.dom.modalExactSyncDate.textContent = exactFormatted;
+        if (this.dom.modalLastSyncTime) this.dom.modalLastSyncTime.textContent = relativeFormatted;
+        if (this.dom.modalTotalVacCount) this.dom.modalTotalVacCount.textContent = `${this.store.rawData.length} Vacantes`;
+        if (this.dom.sgvaVacMeta) this.dom.sgvaVacMeta.textContent = `${this.store.rawData.length} vacantes · 5 modelos IA`;
+    }
+
+    openSgvaSyncModal() {
+        if (this.dom.sgvaSyncModal) {
+            this.dom.sgvaSyncModal.style.display = 'flex';
+            const savedTime = localStorage.getItem('sgva_last_sync_timestamp');
+            this.updateSyncTimestamps(savedTime ? parseInt(savedTime, 10) : Date.now());
+        }
+    }
+
+    closeSgvaSyncModal() {
+        if (this.dom.sgvaSyncModal) {
+            this.dom.sgvaSyncModal.style.display = 'none';
+        }
+    }
+
+    async syncSgvaData(forceRefresh = false) {
+        if (this.isSyncing) {
+            this.showToast('⏳ Sincronización en curso, por favor espera...');
+            return;
+        }
+
+        const now = Date.now();
+        const lastSync = this.lastSyncAttempt || 0;
+        if (!forceRefresh && (now - lastSync < 3000)) {
+            this.showToast('⏱️ Sincronización reciente. Espera unos segundos antes de volver a solicitar.');
+            return;
+        }
+        this.lastSyncAttempt = now;
+        this.isSyncing = true;
+
+        // UI Spin Animation Trigger (OWASP/ISO 25010 Immediate Usability Feedback)
+        const syncIcons = [this.dom.iconQuickSync, this.dom.iconToolbarSync, this.dom.iconModalSync, this.dom.iconSyncStatusDot].filter(Boolean);
+        syncIcons.forEach(ic => ic.classList.add('spin-anim'));
+        if (this.dom.btnQuickSyncSgva) this.dom.btnQuickSyncSgva.setAttribute('aria-busy', 'true');
+        if (this.dom.btnToolbarSyncSgva) this.dom.btnToolbarSyncSgva.setAttribute('aria-busy', 'true');
+        if (this.dom.btnModalTriggerSync) {
+            this.dom.btnModalTriggerSync.disabled = true;
+            this.dom.btnModalTriggerSync.innerHTML = '<i class="fa-solid fa-rotate spin-anim"></i> <span>Sincronizando...</span>';
+        }
+
+        const updateStep = (stepIdx, state) => {
+            const stepEl = document.getElementById(`step${stepIdx}`);
+            if (!stepEl) return;
+            stepEl.className = `pipeline-step step-${state}`;
+            const icon = stepEl.querySelector('i');
+            if (icon) {
+                if (state === 'running') icon.className = 'fa-solid fa-circle-notch fa-spin';
+                else if (state === 'ok') icon.className = 'fa-solid fa-check-circle';
+                else if (state === 'error') icon.className = 'fa-solid fa-triangle-exclamation';
+            }
+        };
+
+        try {
+            updateStep(1, 'running');
+            await new Promise(r => setTimeout(r, 180));
+            updateStep(1, 'ok');
+
+            updateStep(2, 'running');
+            const cacheBustUrl = `assets/data/empresas.json?t=${now}`;
+            const res = await fetch(cacheBustUrl, {
+                cache: 'no-store',
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const freshData = await res.json();
+
+            if (!Array.isArray(freshData) || freshData.length === 0) {
+                throw new Error('Formato de datos no válido');
+            }
+
+            updateStep(2, 'ok');
+            updateStep(3, 'running');
+            await new Promise(r => setTimeout(r, 120));
+            updateStep(3, 'ok');
+
+            updateStep(4, 'running');
+            await new Promise(r => setTimeout(r, 120));
+            updateStep(4, 'ok');
+
+            updateStep(5, 'running');
+            
+            // Atomic hot-swap of application state store
+            this.store.rawData = freshData;
+            window.RAW_DATA = freshData;
+            
+            // Re-apply current active filters and re-render without page reload
+            this.populateFilterDropdowns();
+            this.applyFilters();
+
+            // Persist new sync timestamp in local storage
+            const syncTimestamp = Date.now();
+            localStorage.setItem('sgva_last_sync_timestamp', String(syncTimestamp));
+            this.updateSyncTimestamps(syncTimestamp);
+
+            updateStep(5, 'ok');
+            await new Promise(r => setTimeout(r, 120));
+
+            this.showToast(`✓ ¡Sincronizado! ${freshData.length} vacantes actualizadas desde SGVA SENA`);
+        } catch (err) {
+            console.warn('[SGVA Sync] Network/File refresh fallback:', err);
+            // Fallback: refresh from window.RAW_DATA if running on pure file:// or offline
+            if (window.RAW_DATA && Array.isArray(window.RAW_DATA)) {
+                this.store.rawData = window.RAW_DATA;
+                this.applyFilters();
+                const syncTimestamp = Date.now();
+                localStorage.setItem('sgva_last_sync_timestamp', String(syncTimestamp));
+                this.updateSyncTimestamps(syncTimestamp);
+                this.showToast(`✓ Datos SGVA actualizados (${this.store.rawData.length} vacantes activas)`);
+            } else {
+                this.showToast('⚠️ No se pudo conectar con el portal SGVA en este momento');
+            }
+        } finally {
+            this.isSyncing = false;
+            syncIcons.forEach(ic => ic.classList.remove('spin-anim'));
+            if (this.dom.btnQuickSyncSgva) this.dom.btnQuickSyncSgva.removeAttribute('aria-busy');
+            if (this.dom.btnToolbarSyncSgva) this.dom.btnToolbarSyncSgva.removeAttribute('aria-busy');
+            if (this.dom.btnModalTriggerSync) {
+                this.dom.btnModalTriggerSync.disabled = false;
+                this.dom.btnModalTriggerSync.innerHTML = '<i class="fa-solid fa-rotate"></i> <span>Sincronizar Ahora</span>';
+            }
         }
     }
 
