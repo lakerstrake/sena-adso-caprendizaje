@@ -2127,7 +2127,7 @@ class AppController {
             const isMobile = SecurityService.isMobile();
             const gmailLink = hasEmail ? SecurityService.getGmailUrl(it.email, subject, bodyText) : '#';
             const mailtoLink = hasEmail ? SecurityService.getMailtoUrl(it.email, subject, bodyText) : '#';
-            const trackingCvUrl = it.cv_tracking_url || `https://sena-adso-caprendizaje.pages.dev/cv?empresa=${encodeURIComponent(it.empresa)}&id=${it.solicitud_id}&src=portal`;
+            const trackingCvUrl = it.cv_tracking_url || `https://sena-adso-caprendizaje.jmlagos2003.workers.dev/cv?empresa=${encodeURIComponent(it.empresa)}&id=${it.solicitud_id}&src=portal`;
 
             if (this.dom.mOutreachActions) {
                 let emailButtonsHtml = '';

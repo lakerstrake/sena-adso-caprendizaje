@@ -12,7 +12,7 @@ flowchart TD
     B -->|Genera| C["output/assets/data/empresas.json\n(179+ Vacantes Enriquecidas)"]
     B -->|Recompila con scripts/build.py| D["output/assets/js/data.js\n(Bundle de Producción)"]
     C & D -->|Git Push automático o manual| E["GitHub Repository\n(lakerstrake/sena-adso-caprendizaje)"]
-    E -->|GitHub Action / Webhook| F["Cloudflare Pages & Edge Worker\n(https://sena-adso-caprendizaje.pages.dev)"]
+    E -->|GitHub Action / Webhook| F["Cloudflare Pages & Edge Worker\n(https://sena-adso-caprendizaje.jmlagos2003.workers.dev)"]
     F -->|Zero-Trust Gatekeeper & Telemetría| G["Usuarios / Evaluadores (Modo Invitado)\n& Titular Juan Manuel Lagos"]
 ```
 
