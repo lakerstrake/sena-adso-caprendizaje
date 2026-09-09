@@ -143,9 +143,29 @@ npm run dev
 
 ## ☁️ Despliegue en Cloudflare
 
+### Requisito previo: secretos del repositorio
+
+El workflow `.github/workflows/deploy_cloudflare.yml` publica en cada `push` a
+`main`, pero **necesita dos secretos**. Sin ellos el despliegue se detiene y el
+sitio no llega a existir. Configúralos en
+`Settings > Secrets and variables > Actions > New repository secret`:
+
+| Secreto | Dónde obtenerlo |
+| --- | --- |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare Dashboard > My Profile > API Tokens > Create Token, con permiso **Cloudflare Pages: Edit** |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare Dashboard > Workers & Pages, en la barra lateral derecha |
+
+La sincronización automática del SGVA necesita además `SENA_USER` y
+`SENA_PASSWORD`.
+
+Verifica el estado del despliegue con:
+```bash
+gh run list --limit 3
+```
+
 ### Opción A: Cloudflare Pages (Recomendado)
 ```bash
-npx wrangler pages deploy output --project-name=sena-caprendizaje-adso
+npx wrangler pages deploy output --project-name=sena-adso-caprendizaje
 ```
 
 ### Opción B: Cloudflare Workers
