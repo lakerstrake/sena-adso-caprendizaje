@@ -585,6 +585,7 @@ class AppController {
         this.initCvTracker();
         this.initSyncStatus();
         this.initSyncPanel();
+        this.initRepoStatus();
         this.initAuth();
     }
 
@@ -2419,13 +2420,105 @@ class AppController {
         if (bannerTotal) bannerTotal.textContent = total;
     }
 
+    /**
+     * El panel mostraba valores incrustados por scripts/update_sync_badge.py,
+     * que hay que ejecutar a mano antes de cada commit: quedaba congelado en
+     * el ultimo commit en que alguien se acordo de correrlo. Ahora el estado
+     * se consulta a la API publica de GitHub, que es la fuente real de lo que
+     * Workers Builds acaba de publicar.
+     */
+    async initRepoStatus() {
+        const REPO = 'lakerstrake/sena-adso-caprendizaje';
+        const DATA_PATH = 'output/assets/data/empresas.json';
+        const TTL_MS = 30 * 60 * 1000;   // 60 peticiones/hora sin token: se cachea.
+        const CACHE_KEY = 'repo_status_cache';
+
+        const cached = this._readRepoCache(CACHE_KEY, TTL_MS);
+        if (cached) {
+            this.renderRepoStatus(cached);
+            return;
+        }
+
+        try {
+            const base = `https://api.github.com/repos/${REPO}/commits`;
+            const [headRes, dataRes] = await Promise.all([
+                fetch(`${base}?sha=main&per_page=1`, { headers: { Accept: 'application/vnd.github+json' } }),
+                fetch(`${base}?sha=main&path=${encodeURIComponent(DATA_PATH)}&per_page=1`, { headers: { Accept: 'application/vnd.github+json' } })
+            ]);
+            if (!headRes.ok) throw new Error(`GitHub respondio ${headRes.status}`);
+
+            const head = (await headRes.json())[0];
+            const dataCommit = dataRes.ok ? (await dataRes.json())[0] : null;
+
+            const status = {
+                hash: head.sha.substring(0, 7),
+                message: head.commit.message.split('\n')[0],
+                committedAt: head.commit.committer.date,
+                dataCommittedAt: dataCommit ? dataCommit.commit.committer.date : null,
+                fetchedAt: Date.now()
+            };
+            try { localStorage.setItem(CACHE_KEY, JSON.stringify(status)); } catch (e) { /* cuota llena */ }
+            this.renderRepoStatus(status);
+        } catch (err) {
+            // Sin red o limite de peticiones agotado: se marca como desconocido
+            // en vez de dejar en pantalla una fecha antigua que parece vigente.
+            this.renderRepoStatus(null);
+        }
+    }
+
+    _readRepoCache(key, ttlMs) {
+        try {
+            const raw = localStorage.getItem(key);
+            if (!raw) return null;
+            const data = JSON.parse(raw);
+            return (Date.now() - (data.fetchedAt || 0) < ttlMs) ? data : null;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    renderRepoStatus(status) {
+        const set = (id, text, title) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.textContent = text;
+            if (title) el.title = title;
+        };
+
+        if (!status) {
+            set('syncDate', 'Estado no disponible');
+            set('syncHash', '—');
+            set('syncMsg', 'No se pudo consultar GitHub en este momento.');
+            set('cfDate', 'Estado no disponible');
+            return;
+        }
+
+        const commitDate = new Date(status.committedAt);
+        set('syncDate', this.formatEsDateTime(commitDate), commitDate.toLocaleString('es-CO'));
+        set('syncHash', status.hash);
+        const msg = status.message.length > 55 ? `${status.message.substring(0, 52)}...` : status.message;
+        set('syncMsg', msg, status.message);
+
+        // Workers Builds publica desde ese mismo commit, unos instantes despues.
+        set('cfDate', this.formatEsDateTime(commitDate), 'Publicado desde el commit ' + status.hash);
+
+        if (status.dataCommittedAt) {
+            const dataDate = new Date(status.dataCommittedAt);
+            set('sgvaDate', this.formatEsDateTime(dataDate), 'Ultimo cambio del dataset en el repositorio');
+            set('sgvaMsg', `Dataset actualizado por ultima vez el ${this.formatEsDateTime(dataDate)}`);
+        }
+    }
+
+    formatEsDateTime(dateObj) {
+        const months = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+        const hrs = String(dateObj.getHours()).padStart(2, '0');
+        const mins = String(dateObj.getMinutes()).padStart(2, '0');
+        return `${dateObj.getDate()} ${months[dateObj.getMonth()]} ${dateObj.getFullYear()}, ${hrs}:${mins}`;
+    }
+
     initSyncStatus() {
         const savedTime = localStorage.getItem('sgva_last_sync_timestamp');
-        if (savedTime) {
-            this.updateSyncTimestamps(parseInt(savedTime, 10));
-        } else {
-            this.updateSyncTimestamps(Date.now());
-        }
+        if (savedTime) this.updateSyncTimestamps(parseInt(savedTime, 10));
         // Auto-refresh relative time display every 60 seconds
         setInterval(() => {
             const t = localStorage.getItem('sgva_last_sync_timestamp');
