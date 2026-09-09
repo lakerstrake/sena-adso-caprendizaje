@@ -1498,9 +1498,7 @@ body {
 
 /* 4. COMPACT 13" - 14" LAPTOPS & 1080p AT 125%/150% DPI (1101px to 1440px) */
 @media (max-width: 1440px) {
-    .candidate-pill {
-        display: none; /* In laptop screens <= 1440px, #btnAuthTrigger and #candidateBanner provide profile info cleanly */
-    }
+
     .nav-candidate-links {
         display: none;
     }
@@ -2155,9 +2153,6 @@ body {
         width: 100%;
         gap: 0.35rem;
     }
-    .candidate-pill {
-        display: none;
-    }
     .nav-tools {
         width: 100%;
         justify-content: space-between;
@@ -2525,3 +2520,114 @@ body {
 .cards-view-grid { align-items: stretch; }
 .clean-card { height: 100%; }
 .clean-card > :last-child { margin-top: auto; }
+
+/* -------------------------------------------------------------------------
+   PERFIL DEL APRENDIZ — formulario y aviso de perfil de ejemplo
+   ------------------------------------------------------------------------- */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 0.75rem;
+}
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 0;
+}
+.form-field-wide { grid-column: 1 / -1; }
+.form-field > span {
+    font-size: 0.79rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+.form-field > span b { color: var(--tier-5); }
+.form-field input {
+    width: 100%;
+    min-height: var(--tap-min);
+    padding: 0.45rem 0.6rem;
+    background: var(--bg-canvas);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-sm);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    font-size: 0.88rem;
+    outline: none;
+    transition: var(--transition-fast);
+}
+.form-field input::placeholder { color: var(--text-dim); }
+.form-field input:focus {
+    border-color: var(--border-focused);
+    box-shadow: var(--ring-focus);
+}
+.form-hint {
+    font-size: 0.79rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+}
+.form-error {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--tier-5);
+    background: var(--tier-5-bg);
+    border: 1px solid var(--tier-5);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.7rem;
+}
+.modal-sub {
+    font-size: 0.81rem;
+    color: var(--text-muted);
+    display: block;
+    line-height: 1.45;
+}
+.modal-footer {
+    padding: 0.7rem 1rem;
+    border-top: 1px solid var(--border-muted);
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.perfil-aviso {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+    margin-left: 0.35rem;
+    padding: 0.1rem 0.45rem;
+    border-radius: var(--radius-xs);
+    background: var(--tier-3-bg);
+    color: var(--tier-3);
+    font-weight: 600;
+}
+.link-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* La pastilla de cabecera es ahora un boton: conserva el aspecto anterior. */
+button.candidate-pill {
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-size: 0.81rem;
+    color: var(--text-main);
+    min-height: var(--tap-min);
+}
+button.candidate-pill:hover { background: var(--bg-surface-hover); }
+
+button.candidate-pill { display: inline-flex !important; }
+
+/* Cabecera del modal: con subtitulo largo, flex-wrap empujaba la X a una
+   linea propia. El texto envuelve dentro de su bloque y el cierre se queda. */
+.modal-header { flex-wrap: nowrap; align-items: flex-start; }
+.modal-header-info { min-width: 0; }
+.modal-header .btn-icon { flex-shrink: 0; }

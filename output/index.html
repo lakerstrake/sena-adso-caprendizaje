@@ -93,16 +93,10 @@
 
             <!-- Right Group: Candidate Profile Bar + Quick Tools -->
             <div class="nav-right-group">
-                <div class="candidate-pill">
-                    <i class="fa-solid fa-user-check" style="color: var(--brand-primary);" aria-hidden="true"></i>
-                    <strong>Juan Manuel Lagos</strong>
-                    <span class="nav-candidate-links">
-                        <a href="https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing" target="_blank" rel="noopener noreferrer" title="Hoja de Vida en PDF"><i class="fa-solid fa-file-pdf" aria-hidden="true"></i> CV</a>
-                        <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN?usp=sharing" target="_blank" rel="noopener noreferrer" title="Certificados académicos"><i class="fa-brands fa-google-drive" aria-hidden="true"></i> Certificados</a>
-                        <a href="https://github.com/lakerstrake" target="_blank" rel="noopener noreferrer" title="Portafolio en GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a>
-                        <a href="https://linkedin.com/in/juan-manuel-lagos-monroy" target="_blank" rel="noopener noreferrer" title="Perfil de LinkedIn"><i class="fa-brands fa-linkedin" aria-hidden="true"></i> LinkedIn</a>
-                    </span>
-                </div>
+                <button class="candidate-pill" data-action="openProfileModal" title="Editar los datos con los que se envían las cartas">
+                    <i class="fa-solid fa-id-card" style="color: var(--brand-primary);" aria-hidden="true"></i>
+                    <strong>Mi perfil</strong>
+                </button>
 
                 <div class="nav-tools">
                     <button class="btn" data-action="exportData" data-format="xlsx" title="Descargar Excel (.xlsx)" aria-label="Exportar Excel" style="padding: 0.22rem 0.45rem;">
@@ -497,6 +491,65 @@
 
     <!-- ZERO-TRUST MASTER AUTHENTICATION GATEKEEPER (ISO/IEC 27001 & NIST SP 800-63B) -->
     <!-- CV REAL-TIME ALERTS & TELEMETRY MODAL -->
+
+    <!-- Perfil del aprendiz: sustituye los datos incrustados en las cartas -->
+    <div class="modal-backdrop" id="profileModal" role="dialog" aria-modal="true" aria-labelledby="perfilTitulo" style="display: none;" data-action="backdropCloseProfile">
+        <div class="modal-panel" style="max-width: 620px;">
+            <div class="modal-header">
+                <div class="modal-header-info">
+                    <h2 id="perfilTitulo"><i class="fa-solid fa-id-card" aria-hidden="true"></i> Mi perfil</h2>
+                    <span class="modal-sub">Tus datos reemplazan los del ejemplo en las 195 cartas, mensajes de WhatsApp y notas de LinkedIn. Se guardan solo en este navegador.</span>
+                </div>
+                <button class="btn btn-icon" data-action="closeProfileModal" aria-label="Cerrar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            </div>
+            <div class="modal-body">
+                <p class="form-error" id="perfilError" role="alert" hidden></p>
+                <div class="form-grid">
+                    <label class="form-field">
+                        <span>Nombre completo <b aria-hidden="true">*</b></span>
+                        <input type="text" id="perfil_nombre" autocomplete="name" placeholder="Ana María Ruiz Peña" required>
+                    </label>
+                    <label class="form-field">
+                        <span>Correo electrónico <b aria-hidden="true">*</b></span>
+                        <input type="email" id="perfil_email" autocomplete="email" placeholder="ana.ruiz@ejemplo.com" required>
+                    </label>
+                    <label class="form-field">
+                        <span>Teléfono / WhatsApp</span>
+                        <input type="tel" id="perfil_telefono" autocomplete="tel" placeholder="(+57) 300 000 0000">
+                    </label>
+                    <label class="form-field">
+                        <span>Formación previa</span>
+                        <input type="text" id="perfil_formacion" placeholder="Técnica en Sistemas (opcional)">
+                    </label>
+                    <label class="form-field form-field-wide">
+                        <span>Enlace a tu Hoja de Vida (PDF)</span>
+                        <input type="url" id="perfil_cv" placeholder="https://drive.google.com/file/d/...">
+                    </label>
+                    <label class="form-field form-field-wide">
+                        <span>Enlace a tus certificados</span>
+                        <input type="url" id="perfil_certificados" placeholder="https://drive.google.com/drive/folders/...">
+                    </label>
+                    <label class="form-field">
+                        <span>GitHub</span>
+                        <input type="url" id="perfil_github" placeholder="https://github.com/tu-usuario">
+                    </label>
+                    <label class="form-field">
+                        <span>LinkedIn</span>
+                        <input type="url" id="perfil_linkedin" placeholder="https://linkedin.com/in/tu-perfil">
+                    </label>
+                </div>
+                <p class="form-hint">
+                    <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                    Nada de esto sale de tu equipo: no hay servidor ni cuenta. Los campos que dejes vacíos se retiran de las cartas.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-action="resetProfile"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Borrar mis datos</button>
+                <button class="btn btn-primary" data-action="saveProfile"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Guardar perfil</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Notification Toast Element -->
     <div class="toast-msg" id="toastMsg" role="alert" aria-live="polite">Mensaje</div>
 

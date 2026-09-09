@@ -106,6 +106,126 @@ class SecurityService {
 // =========================================================================
 // 2. CONFIGURATION & DOMAIN CONSTANTS
 // =========================================================================
+// 3. PERFIL DEL APRENDIZ (intercambiable, guardado en el navegador)
+// =========================================================================
+/**
+ * Las cartas del dataset se redactaron con los datos de una persona concreta.
+ * Este servicio guarda el perfil de quien usa la pagina y reescribe esos datos
+ * al vuelo, de modo que cualquier aprendiz ADSO envie desde su propio nombre
+ * sin tocar el dataset ni necesitar servidor.
+ */
+class ProfileService {
+    static STORAGE_KEY = 'cap_perfil';
+
+    /** Datos tal y como aparecen incrustados en el dataset original. */
+    static SOURCE = Object.freeze({
+        nombre: 'Juan Manuel Lagos Monroy',
+        email: 'jmlagos2003@gmail.com',
+        telefono: '(+57) 300 727 9875',
+        cv: 'https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing',
+        certificados: 'https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN?usp=sharing',
+        github: 'https://github.com/lakerstrake',
+        linkedin: 'https://linkedin.com/in/juan-manuel-lagos-monroy',
+        formacion: '7 semestres de Ingeniería Mecatrónica y titulación como Técnico en Sistemas'
+    });
+
+    static CAMPOS = ['nombre', 'email', 'telefono', 'cv', 'certificados', 'github', 'linkedin', 'formacion'];
+
+    static get() {
+        try {
+            const raw = localStorage.getItem(ProfileService.STORAGE_KEY);
+            if (!raw) return { ...ProfileService.SOURCE, esPropio: false };
+            const guardado = JSON.parse(raw);
+            // Un campo que el aprendiz deja vacio queda vacio: heredar el del
+            // ejemplo le atribuiria un GitHub o unos estudios que no son suyos.
+            const perfil = { esPropio: true };
+            ProfileService.CAMPOS.forEach(k => { perfil[k] = guardado[k] || ''; });
+            return perfil;
+        } catch (e) {
+            return { ...ProfileService.SOURCE, esPropio: false };
+        }
+    }
+
+    static save(datos) {
+        const limpio = {};
+        ProfileService.CAMPOS.forEach(k => {
+            const v = String(datos[k] || '').trim();
+            if (v) limpio[k] = v;
+        });
+        localStorage.setItem(ProfileService.STORAGE_KEY, JSON.stringify(limpio));
+        return ProfileService.get();
+    }
+
+    static reset() {
+        localStorage.removeItem(ProfileService.STORAGE_KEY);
+        return ProfileService.get();
+    }
+
+    /** Solo se aceptan enlaces http(s): evita javascript: y data: en el correo. */
+    static urlValida(u) {
+        try {
+            return ['http:', 'https:'].includes(new URL(u).protocol);
+        } catch (e) {
+            return false;
+        }
+    }
+
+    /** Reescribe un texto del dataset con los datos del perfil activo. */
+    static personalizar(texto) {
+        if (!texto) return '';
+        const p = ProfileService.get();
+        if (!p.esPropio) return texto;
+
+        const S = ProfileService.SOURCE;
+        const nombres = S.nombre.split(' ');
+        const soloNombre = p.nombre.split(' ').slice(0, 2).join(' ') || p.nombre;
+        let out = String(texto);
+
+        // El nombre aparece completo, en dos palabras y a secas: de mas largo a
+        // mas corto, para que la forma corta no parta la larga.
+        out = out.split(S.nombre).join(p.nombre);
+        out = out.split(`${nombres[0]} ${nombres[1]} ${nombres[2]}`).join(p.nombre);
+        out = out.split(`${nombres[0]} ${nombres[1]}`).join(soloNombre);
+        out = out.split(`${nombres[0]}`).join(soloNombre.split(' ')[0]);
+
+        out = out.split(S.email).join(p.email);
+        out = out.split(S.telefono).join(p.telefono);
+        out = out.split('300 727 9875').join(p.telefono.replace(/^\(\+57\)\s*/, ''));
+        out = out.split(S.cv).join(p.cv);
+        out = out.split(S.certificados).join(p.certificados);
+        out = out.split(S.github).join(p.github);
+        out = out.split(S.github.replace('https://', '')).join(p.github.replace(/^https?:\/\//, ''));
+        out = out.split(S.linkedin).join(p.linkedin);
+        out = out.split(S.linkedin.replace('https://', '')).join(p.linkedin.replace(/^https?:\/\//, ''));
+
+        // Formacion previa: el dataset la menciona con tres redacciones. Si el
+        // perfil no declara ninguna, la frase se retira en vez de atribuir
+        // estudios ajenos a quien envia la carta.
+        const F = p.formacion.trim();
+        const fragmentos = [
+            [', con una sólida base académica previa de 7 semestres de Ingeniería Mecatrónica y titulación como Técnico en Sistemas',
+             F ? `, con formación previa en ${F}` : ''],
+            [', 7 semestres de Ingeniería Mecatrónica y disponibilidad inmediata',
+             F ? `, formación previa en ${F} y disponibilidad inmediata` : ', disponibilidad inmediata'],
+            [' (background Mecatrónica)', F ? ` (${F})` : ''],
+            ['7 semestres de Ingeniería Mecatrónica y titulación como Técnico en Sistemas',
+             F || 'formación técnica complementaria'],
+        ];
+        fragmentos.forEach(([viejo, nuevo]) => { out = out.split(viejo).join(nuevo); });
+
+        // Enlaces que el perfil deja en blanco: se retira su linea completa.
+        [['github', '💻'], ['linkedin', '🔗'], ['certificados', '🎓']].forEach(([campo, icono]) => {
+            if (!p[campo]) {
+                out = out.replace(new RegExp('^' + icono + '.*\\n?', 'gm'), '');
+            }
+        });
+
+        return out;
+    }
+}
+
+
+// =========================================================================
 const CONFIG = Object.freeze({
     CANDIDATE: {
         name: "Juan Manuel Lagos Monroy",
@@ -384,43 +504,110 @@ class AppController {
         if (dir) dir.style.display = 'flex';
         if (!banner) return;
 
+        const p = ProfileService.get();
+        const e = SecurityService.escapeHtml;
+        const enlace = (url, clase, icono, texto, sufijo) => url
+            ? `<a href="${e(url)}" target="_blank" rel="noopener noreferrer" class="${clase}"><i class="${icono}" aria-hidden="true"></i> <span>${texto}</span>${sufijo || ''}</a>`
+            : '';
+
+        const aviso = p.esPropio ? '' : `
+            <span class="perfil-aviso">
+                <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                Perfil de ejemplo. <button type="button" class="link-btn" data-action="openProfileModal">Pon tus datos</button> para que las cartas salgan a tu nombre.
+            </span>`;
+
         banner.style.display = 'flex';
         banner.innerHTML = `
             <div class="candidate-banner-main">
-                <div class="candidate-badge-photo" aria-hidden="true">
-                    <i class="fa-solid fa-user-gear"></i>
-                </div>
+                <div class="candidate-badge-photo" aria-hidden="true"><i class="fa-solid fa-user-gear"></i></div>
                 <div class="candidate-meta">
                     <div class="candidate-name-row">
-                        <h2>${CONFIG.CANDIDATE.name}</h2>
+                        <h2>${e(p.nombre)}</h2>
                         <span class="status-pill status-ready"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Disponible Etapa Productiva</span>
                     </div>
                     <p class="candidate-pitch">
-                        <strong>Doble Titulación Técnica:</strong> 7 semestres de Ingeniería Mecatrónica + Técnico en Sistemas.
-                        Aprendiz ADSO SENA con proyectos en producción (React, Node, SQL, Git).
+                        Aprendiz ADSO SENA${p.formacion ? ` · ${e(p.formacion)}` : ''}.
                         <span id="lblBannerTotal">${this.store.rawData.length}</span> vacantes analizadas.
+                        ${aviso}
                     </p>
                 </div>
             </div>
             <div class="candidate-banner-actions">
-                <a href="${CONFIG.CANDIDATE.cvDrive}" target="_blank" rel="noopener noreferrer" class="btn-cv-drive" title="Ver Hoja de Vida oficial (PDF) en Google Drive">
-                    <i class="fa-solid fa-file-pdf" aria-hidden="true"></i> <span>Hoja de Vida</span> <span class="cv-mini-badge">PDF</span>
-                </a>
-                <a href="${CONFIG.CANDIDATE.github}" target="_blank" rel="noopener noreferrer" class="btn-github-link" title="Explorar portafolio de código en GitHub">
-                    <i class="fa-brands fa-github" aria-hidden="true"></i> <span>GitHub</span>
-                </a>
-                <a href="${CONFIG.CANDIDATE.linkedin}" target="_blank" rel="noopener noreferrer" class="btn-linkedin" title="Conectar en LinkedIn">
-                    <i class="fa-brands fa-linkedin" aria-hidden="true"></i> <span>LinkedIn</span>
-                </a>
-                <a href="${CONFIG.CANDIDATE.certsDrive}" target="_blank" rel="noopener noreferrer" class="btn-certs-link" title="Ver Certificados Académicos en Google Drive">
-                    <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> <span>Certificados</span> <span class="cv-mini-badge">Drive</span>
-                </a>
+                <button class="btn btn-primary" data-action="openProfileModal">
+                    <i class="fa-solid fa-id-card" aria-hidden="true"></i> Mi perfil
+                </button>
+                ${enlace(p.cv, 'btn-cv-drive', 'fa-solid fa-file-pdf', 'Hoja de Vida', '<span class="cv-mini-badge">PDF</span>')}
+                ${enlace(p.github, 'btn-github-link', 'fa-brands fa-github', 'GitHub')}
+                ${enlace(p.linkedin, 'btn-linkedin', 'fa-brands fa-linkedin', 'LinkedIn')}
+                ${enlace(p.certificados, 'btn-certs-link', 'fa-solid fa-graduation-cap', 'Certificados', '<span class="cv-mini-badge">Drive</span>')}
                 <button class="btn-dismiss-banner" data-action="dismissNotice" title="Ocultar banner" aria-label="Ocultar banner">
                     <i class="fa-solid fa-xmark" aria-hidden="true"></i>
                 </button>
             </div>
         `;
     }
+
+    openProfileModal() {
+        const modal = document.getElementById('profileModal');
+        if (!modal) return;
+        const p = ProfileService.get();
+        ProfileService.CAMPOS.forEach(k => {
+            const input = document.getElementById(`perfil_${k}`);
+            if (input) input.value = p.esPropio ? (p[k] || '') : '';
+        });
+        const aviso = document.getElementById('perfilError');
+        if (aviso) aviso.hidden = true;
+        modal.style.display = 'flex';
+        document.body.classList.add('modal-open');
+        this.openModalFocus(modal);
+    }
+
+    closeProfileModal() {
+        const modal = document.getElementById('profileModal');
+        if (!modal) return;
+        modal.style.display = 'none';
+        document.body.classList.remove('modal-open');
+        this.releaseModalFocus(modal);
+    }
+
+    saveProfile() {
+        const datos = {};
+        ProfileService.CAMPOS.forEach(k => {
+            const input = document.getElementById(`perfil_${k}`);
+            datos[k] = input ? input.value : '';
+        });
+
+        const aviso = document.getElementById('perfilError');
+        const fallo = (msg) => {
+            if (aviso) { aviso.textContent = msg; aviso.hidden = false; }
+            return false;
+        };
+
+        if (!datos.nombre.trim()) return fallo('Escribe tu nombre completo: es lo que firma cada carta.');
+        if (!datos.email.includes('@')) return fallo('El correo no parece válido.');
+        for (const campo of ['cv', 'certificados', 'github', 'linkedin']) {
+            if (datos[campo].trim() && !ProfileService.urlValida(datos[campo].trim())) {
+                return fallo(`El enlace de ${campo} debe empezar por http:// o https://`);
+            }
+        }
+
+        ProfileService.save(datos);
+        this.closeProfileModal();
+        this.renderCandidateBanner();
+        this.applyFilters();
+        this.showToast(`Perfil guardado · las cartas ahora salen a nombre de ${datos.nombre.trim()}`);
+        return true;
+    }
+
+    resetProfile() {
+        ProfileService.reset();
+        this.closeProfileModal();
+        this.renderCandidateBanner();
+        this.applyFilters();
+        this.showToast('Perfil borrado de este navegador');
+    }
+
+
 
     initTheme() {
         const theme = this.store.theme;
@@ -508,6 +695,7 @@ class AppController {
                 // dejar uno fuera atrapa al usuario de teclado.
                 this.closeDetailModal();
                 this.closeCompareModal();
+                this.closeProfileModal();
             }
             if (e.key === 'Tab') this.trapFocus(e);
         });
@@ -575,15 +763,6 @@ class AppController {
 
     handleAction(action, el, event) {
         switch (action) {
-            case 'togglePasswordVisibility':
-                this.togglePasswordVisibility();
-                break;
-            case 'switchAuthTab':
-                this.switchAuthTab(el.getAttribute('data-tab'));
-                break;
-            case 'submitLogin':
-                this.handleLogin();
-                break;
             case 'switchNavTab':
                 this.switchNavTab(el.getAttribute('data-tab'));
                 break;
@@ -592,6 +771,20 @@ class AppController {
                 break;
             case 'exportData':
                 this.exportData(el.getAttribute('data-format'));
+                break;
+            case 'openProfileModal':
+                this.openProfileModal();
+                break;
+            case 'closeProfileModal':
+            case 'backdropCloseProfile':
+                if (action === 'backdropCloseProfile' && event.target.id !== 'profileModal') return;
+                this.closeProfileModal();
+                break;
+            case 'saveProfile':
+                this.saveProfile();
+                break;
+            case 'resetProfile':
+                this.resetProfile();
                 break;
             case 'dismissNotice':
                 if (this.dom.antiBlockNotice) this.dom.antiBlockNotice.style.display = 'none';
@@ -901,12 +1094,12 @@ class AppController {
 
             const hasEmail = it.email && it.email.includes('@');
             const hasValidWA = SecurityService.isValidMobile(it.telefono);
-            const waUrl = hasValidWA ? SecurityService.getWhatsAppUrl(it.telefono, it.whatsapp_message) : '';
+            const waUrl = hasValidWA ? SecurityService.getWhatsAppUrl(it.telefono, ProfileService.personalizar(it.whatsapp_message)) : '';
 
             const posFormatted = (it.ranking_posicion || 1) < 10 ? '0' + it.ranking_posicion : it.ranking_posicion;
 
-            const mailBody = it.correo_formal_completo || '';
-            const mailSub = `Postulación Contrato ADSO - ${CONFIG.CANDIDATE.name}`;
+            const mailBody = ProfileService.personalizar(it.correo_formal_completo);
+            const mailSub = `Postulación Contrato ADSO - ${ProfileService.get().nombre}`;
 
             const isMobile = SecurityService.isMobile();
             const emailHref = isMobile 
@@ -1069,12 +1262,12 @@ class AppController {
 
             const hasEmail = it.email && it.email.includes('@');
             const hasValidWA = SecurityService.isValidMobile(it.telefono);
-            const waUrl = hasValidWA ? SecurityService.getWhatsAppUrl(it.telefono, it.whatsapp_message) : '';
+            const waUrl = hasValidWA ? SecurityService.getWhatsAppUrl(it.telefono, ProfileService.personalizar(it.whatsapp_message)) : '';
 
             const posFormatted = (it.ranking_posicion || 1) < 10 ? '0' + it.ranking_posicion : it.ranking_posicion;
 
-            const cardMailSub = `Propuesta técnica para ${it.empresa} - ${CONFIG.CANDIDATE.name}`;
-            const cardMailBody = it.correo_formal_completo || '';
+            const cardMailSub = `Propuesta técnica para ${it.empresa} - ${ProfileService.get().nombre}`;
+            const cardMailBody = ProfileService.personalizar(it.correo_formal_completo);
             const isMobile = SecurityService.isMobile();
             const emailHref = isMobile 
                 ? SecurityService.getMailtoUrl(it.email, cardMailSub, cardMailBody)
@@ -1327,8 +1520,8 @@ class AppController {
         setTxt(this.dom.mContactName, it.contacto || 'Equipo de Selección y Gestión Humana');
         if (this.dom.mContactEmail) {
             if (it.email && it.email.includes('@')) {
-                const contactSub = `Propuesta técnica para ${it.empresa} - ${CONFIG.CANDIDATE.name}`;
-                const contactBody = it.correo_formal_completo || '';
+                const contactSub = `Propuesta técnica para ${it.empresa} - ${ProfileService.get().nombre}`;
+                const contactBody = ProfileService.personalizar(it.correo_formal_completo);
                 const contactMailto = SecurityService.getMailtoUrl(it.email, contactSub, contactBody);
                 this.dom.mContactEmail.innerHTML = `<a href="${SecurityService.escapeHtml(contactMailto)}" style="color: var(--tier-2); text-decoration: underline;" title="Abrir en App de Correo (${SecurityService.escapeHtml(it.email)})" data-email-action="true" data-email="${SecurityService.escapeHtml(it.email)}">${SecurityService.escapeHtml(it.email)}</a>`;
             } else {
@@ -1345,10 +1538,6 @@ class AppController {
         // ── ÉXITO & ARGUMENTACIÓN DE RANKING (ACLI v3.0) ────────────────────
         const mPanoramaContainer = document.getElementById('mPanoramaContainer');
         if (mPanoramaContainer) {
-            const stars = (r) => {
-                const full = Math.round(r);
-                return '★'.repeat(full) + '☆'.repeat(5 - full);
-            };
             const posFormatted = (it.ranking_posicion || 1) < 10 ? '0' + it.ranking_posicion : it.ranking_posicion;
             
             const prosList = Array.isArray(it.ranking_pros) 
@@ -1533,9 +1722,9 @@ class AppController {
         if (this.dom.mChLinkedIn) this.dom.mChLinkedIn.className = ch === 'linkedin' ? 'btn btn-linkedin active' : 'btn';
 
         if (ch === 'email') {
-            let subject = `Propuesta técnica y proyectos de software para ${it.empresa} - ${CONFIG.CANDIDATE.name} (ADSO SENA)`;
+            let subject = `Propuesta técnica y proyectos de software para ${it.empresa} - ${ProfileService.get().nombre} (ADSO SENA)`;
 
-            let bodyText = it.correo_formal_completo || '';
+            let bodyText = ProfileService.personalizar(it.correo_formal_completo);
             if (bodyText.startsWith('Asunto:')) {
                 const lines = bodyText.split('\n');
                 subject = lines[0].replace(/^Asunto:\s*/i, '').trim();
@@ -1551,7 +1740,6 @@ class AppController {
             const isMobile = SecurityService.isMobile();
             const gmailLink = hasEmail ? SecurityService.getGmailUrl(it.email, subject, bodyText) : '#';
             const mailtoLink = hasEmail ? SecurityService.getMailtoUrl(it.email, subject, bodyText) : '#';
-            const trackingCvUrl = it.cv_tracking_url || `https://sena-adso-caprendizaje.jmlagos2003.workers.dev/cv?empresa=${encodeURIComponent(it.empresa)}&id=${it.solicitud_id}&src=portal`;
 
             if (this.dom.mOutreachActions) {
                 let emailButtonsHtml = '';
@@ -1576,7 +1764,7 @@ class AppController {
                 `;
             }
         } else if (ch === 'wa') {
-            let waMsg = it.whatsapp_message || '';
+            let waMsg = ProfileService.personalizar(it.whatsapp_message);
             if (this.dom.mOutreachHeading) {
                 this.dom.mOutreachHeading.textContent = 'Mensaje directo de WhatsApp';
             }
@@ -1592,7 +1780,7 @@ class AppController {
                 `;
             }
         } else if (ch === 'linkedin') {
-            let liMsg = it.linkedin_connect_message || '';
+            let liMsg = ProfileService.personalizar(it.linkedin_connect_message);
             if (this.dom.mOutreachHeading) {
                 this.dom.mOutreachHeading.textContent = 'Nota de conexión en LinkedIn (menos de 300 caracteres)';
             }

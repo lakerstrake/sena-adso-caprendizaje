@@ -61,6 +61,7 @@ pip install playwright && playwright install chromium
 cd output && python -m http.server 8899 &
 
 python scripts/test_ui_e2e.py       # 53 aserciones funcionales, de foco y XSS
+python scripts/test_perfil.py       # 30 aserciones del perfil intercambiable
 python scripts/audit_ui_quality.py  # contraste, desbordes y objetivos táctiles
 ```
 
@@ -183,6 +184,29 @@ Se configuran como variables del Worker en Cloudflare, no como secretos de GitHu
 ## 📄 Licencia
 
 Este proyecto está bajo la Licencia [MIT](LICENSE).
+
+---
+
+## 👤 Un perfil por persona
+
+El directorio es de uso general: **cualquier aprendiz ADSO puede enviar las 195
+cartas con sus propios datos**, sin tocar el dataset ni crear una cuenta.
+
+1. Pulsa **Mi perfil** en la cabecera.
+2. Escribe nombre, correo y, si quieres, teléfono, formación previa y enlaces a
+   tu Hoja de Vida, certificados, GitHub y LinkedIn.
+3. Guarda. A partir de ahí, cada carta, mensaje de WhatsApp y nota de LinkedIn
+   sale a tu nombre.
+
+El perfil vive en el `localStorage` del navegador: **no viaja a ningún servidor**
+y no hay cuentas ni contraseñas. Los campos que dejes vacíos se **retiran** de
+las cartas, de modo que nunca se te atribuyen un repositorio, un LinkedIn o unos
+estudios que no son tuyos. Mientras no guardes nada verás un aviso de que estás
+usando el perfil de ejemplo.
+
+Verificado con `scripts/test_perfil.py` (30 aserciones): sustitución en los tres
+canales, campos opcionales vacíos, persistencia, borrado, validación del
+formulario y rechazo de enlaces que no sean `http(s)`.
 
 ---
 
