@@ -39,9 +39,45 @@ sena-adso-caprendizaje/
 ## 🛡️ Cumplimiento de Normativas y Estándares
 
 ### 1. ISO/IEC 25010 (Calidad del Producto de Software)
-- **Rendimiento y Eficiencia:** Carga instantánea (< 200ms) sin dependencias pesadas de frameworks, empaquetado directo en el CDN global de Cloudflare.
-- **Usabilidad (ISO 9241-210):** Tipografía con jerarquía visual (`Inter` y `JetBrains Mono`), feedback interactivo, soporte para modo oscuro/claro y atajos de teclado (`Escape`).
-- **Mantenibilidad:** Separación estricta de responsabilidades (SoC): HTML (Estructura), CSS (Presentación), JS (Lógica de Negocio/Estado).
+- **Rendimiento y Eficiencia:** Carga instantánea sin dependencias pesadas de frameworks, empaquetado directo en el CDN global de Cloudflare.
+- **Usabilidad (ISO 9241-210):** Escala tipográfica con piso de 11.5 px, jerarquía visual (`Inter` y `JetBrains Mono`), feedback interactivo, modo oscuro/claro y atajos de teclado (`Escape`, `Alt + S`).
+- **Mantenibilidad:** Separación estricta de responsabilidades (SoC): HTML (Estructura), CSS (Presentación), JS (Lógica de Negocio/Estado). El color se resuelve por tokens (`--brand-primary`, `--tier-*`), nunca por literales dispersos.
+
+### 1b. WCAG 2.1 AA (Accesibilidad)
+- **Contraste:** Paleta calibrada para ≥ 4.5:1 en texto normal, verificada en tema claro y oscuro.
+- **Objetivos táctiles:** Mínimo 34 px con puntero fino y 44 px en pantallas táctiles (`@media (pointer: coarse)`).
+- **Teclado:** Enlace de salto como primer tabulador, anillo de foco visible, foco atrapado dentro de los diálogos, `Escape` para cerrar y retorno del foco al control invocador.
+- **Semántica:** Un único `<h1>`, todo control con nombre accesible y región `aria-live` que anuncia el recuento de resultados al filtrar.
+
+---
+
+## ✅ Verificación Automatizada
+
+Dos suites ejecutables sobre Chromium (Playwright) acompañan al proyecto:
+
+```bash
+pip install playwright && playwright install chromium
+cd output && python -m http.server 8899 &
+
+python scripts/test_ui_e2e.py       # 60 aserciones funcionales, de foco y XSS
+python scripts/audit_ui_quality.py  # contraste, desbordes y objetivos táctiles
+```
+
+`scripts/build.py` valida el dataset antes de compilar `data.js` y **detiene el build**
+ante campos obligatorios ausentes, `solicitud_id` duplicados, importes sin símbolo de
+moneda o correos sin `@`. La validación corre en CI antes de desplegar.
+
+### Cobertura del banco de pruebas
+| Área | Comprobaciones |
+| --- | --- |
+| Datos | 195 registros, distribución por tier, formato monetario, correos válidos |
+| Filtros | Búsqueda, tiers, chips de stack, canal de contacto, restablecer |
+| Ordenación | Los cinco criterios del selector |
+| Vistas | Tabla, tarjetas, pestañas y paginación accesible |
+| Interacción | Favoritos, comparación de hasta 3, modales y sus pestañas |
+| Accesibilidad | Enlace de salto, `h1` único, foco en diálogos, `aria-live` |
+| Seguridad | Escapado de HTML e inyección desde el buscador |
+| Responsive | 10 viewports de 360 px a 2560 px sin desborde horizontal |
 
 ### 2. ISO/IEC 27001 & OWASP Top 10 (Seguridad de la Información)
 - **Prevención de XSS (A03:2021-Injection):** Sanitización contextual estricta (`SecurityUtils.escapeHtml`) en todas las inserciones del DOM.
