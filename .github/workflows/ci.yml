@@ -1,0 +1,53 @@
+name: Validación del Dataset y Build
+
+# El despliegue lo realiza Cloudflare Workers Builds directamente desde este
+# repositorio (configurado en el dashboard de Cloudflare, no aquí). Este
+# workflow no despliega: valida que el dataset y data.js esten sanos antes de
+# que Workers publique el commit.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Validar dataset y assets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      # Falla si hay campos obligatorios ausentes, ids duplicados,
+      # importes sin simbolo de moneda o correos sin arroba.
+      - name: Validar dataset y recompilar data.js
+        run: python scripts/build.py
+
+      # data.js se compila desde empresas.json: si el commit trae uno sin el
+      # otro, aqui aparece la diferencia antes de llegar a produccion.
+      - name: Comprobar que data.js esta sincronizado con empresas.json
+        run: |
+          if ! git diff --quiet output/assets/js/data.js; then
+            echo "::error::data.js no coincide con empresas.json. Ejecuta 'python scripts/build.py' y vuelve a commitear."
+            git diff --stat output/assets/js/data.js
+            exit 1
+          fi
+          echo "data.js sincronizado."
+
+      - name: Verificar assets criticos del sitio
+        run: |
+          for f in output/index.html output/_headers output/_redirects \
+                   output/assets/css/style.css output/assets/js/app.js; do
+            [ -s "$f" ] || { echo "::error::Falta o esta vacio: $f"; exit 1; }
+          done
+          grep -q "Content-Security-Policy" output/_headers \
+            || { echo "::error::_headers perdio la CSP"; exit 1; }
+          echo "Assets verificados."

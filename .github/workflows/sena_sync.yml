@@ -11,6 +11,10 @@ jobs:
     name: Sincronizar Vacantes Oficiales SGVA SENA
     runs-on: ubuntu-latest
 
+    # Sin credenciales el pipeline no puede autenticarse contra el SGVA.
+    # Se omite el job en lugar de fallar dos veces al dia por correo.
+    if: ${{ vars.SENA_SYNC_ENABLED == 'true' }}
+
     permissions:
       contents: write
 
@@ -28,15 +32,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
-      # Sin credenciales el pipeline no puede autenticarse contra el SGVA.
-      - name: Verificar Credenciales SENA
-        run: |
-          if [ -z "${{ secrets.SENA_USER }}" ] || [ -z "${{ secrets.SENA_PASSWORD }}" ]; then
-            echo "::error::Faltan los secretos SENA_USER y/o SENA_PASSWORD."
-            echo "::error::Configuralos en Settings > Secrets and variables > Actions."
-            exit 1
-          fi
 
       - name: Ejecutar Pipeline de Sincronización SENA
         env:
