@@ -26,7 +26,8 @@ sena-adso-caprendizaje/
 │   │   │   └── data.js            # Módulo de datos sincronizado con el registro oficial
 │   │   └── data/
 │   │       └── empresas.json      # Dataset estructurado JSON
-├── worker.js                      # Cloudflare Edge Worker con Cabeceras de Seguridad (CSP, HSTS)
+├── worker.js                      # Edge Worker: redirección rastreada del CV
+├── requirements.txt               # Dependencias del pipeline ETL
 ├── wrangler.toml                  # Configuración de despliegue en Cloudflare Workers / Pages
 ├── package.json                   # Scripts de ciclo de vida (dev, build, deploy)
 ├── .gitignore                     # Exclusión de artefactos y secretos
@@ -59,7 +60,7 @@ Dos suites ejecutables sobre Chromium (Playwright) acompañan al proyecto:
 pip install playwright && playwright install chromium
 cd output && python -m http.server 8899 &
 
-python scripts/test_ui_e2e.py       # 60 aserciones funcionales, de foco y XSS
+python scripts/test_ui_e2e.py       # 53 aserciones funcionales, de foco y XSS
 python scripts/audit_ui_quality.py  # contraste, desbordes y objetivos táctiles
 ```
 
@@ -70,9 +71,9 @@ moneda o correos sin `@`. La validación corre en CI antes de desplegar.
 ### Cobertura del banco de pruebas
 | Área | Comprobaciones |
 | --- | --- |
-| Datos | 195 registros, distribución por tier, formato monetario, correos válidos |
+| Datos | 195 registros, distribución por tier, correos válidos, ausencia de campos muertos |
 | Filtros | Búsqueda, tiers, chips de stack, canal de contacto, restablecer |
-| Ordenación | Los cinco criterios del selector |
+| Ordenación | Los tres criterios del selector |
 | Vistas | Tabla, tarjetas, pestañas y paginación accesible |
 | Interacción | Favoritos, comparación de hasta 3, modales y sus pestañas |
 | Accesibilidad | Enlace de salto, `h1` único, foco en diálogos, `aria-live` |
@@ -81,7 +82,7 @@ moneda o correos sin `@`. La validación corre en CI antes de desplegar.
 
 ### 2. ISO/IEC 27001 & OWASP Top 10 (Seguridad de la Información)
 - **Prevención de XSS (A03:2021-Injection):** Sanitización contextual estricta (`SecurityUtils.escapeHtml`) en todas las inserciones del DOM.
-- **Cabeceras de Seguridad en el Edge (`worker.js`):**
+- **Cabeceras de Seguridad (`output/_headers`):**
   - `Content-Security-Policy (CSP)` estricta.
   - `Strict-Transport-Security (HSTS)` forzado a 1 año.
   - `X-Content-Type-Options: nosniff` (previene ataques MIME sniffing).
@@ -103,7 +104,7 @@ moneda o correos sin `@`. La validación corre en CI antes de desplegar.
 3. **Simulador de Preguntas Técnicas y Filtros ADSO:**
    - Respuestas modelo y tips de portafolio GitHub para cada empresa.
 4. **Dock de Comparación Frente a Frente:**
-   - Permite seleccionar hasta 3 empresas y evaluar afinidad, calidad web, competencia y salarios proyectados a 5 años.
+   - Permite seleccionar hasta 3 empresas y comparar afinidad técnica, vacantes, postulados y nivel de competencia.
 5. **Exportación Universal:**
    - Descarga el directorio en formatos **Excel (`.xlsx`)** y **CSV (`.csv`)**.
 
@@ -143,35 +144,27 @@ npm run dev
 
 ## ☁️ Despliegue en Cloudflare
 
-### Requisito previo: secretos del repositorio
+El sitio se publica con **Cloudflare Workers Builds**, conectado a este repositorio
+desde el panel de Cloudflare. Cada `push` a `main` queda en producción en menos de
+un minuto; no hace falta ningún secreto en GitHub para que ocurra.
 
-El workflow `.github/workflows/deploy_cloudflare.yml` publica en cada `push` a
-`main`, pero **necesita dos secretos**. Sin ellos el despliegue se detiene y el
-sitio no llega a existir. Configúralos en
-`Settings > Secrets and variables > Actions > New repository secret`:
+- **Producción:** <https://sena-adso-caprendizaje.jmlagos2003.workers.dev>
+- **CI (`.github/workflows/ci.yml`):** valida el dataset y los assets. No despliega.
 
-| Secreto | Dónde obtenerlo |
+### Despliegue manual
+```bash
+npm install
+npx wrangler deploy
+```
+
+### Secretos opcionales
+| Secreto | Para qué sirve |
 | --- | --- |
-| `CLOUDFLARE_API_TOKEN` | Cloudflare Dashboard > My Profile > API Tokens > Create Token, con permiso **Cloudflare Pages: Edit** |
-| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare Dashboard > Workers & Pages, en la barra lateral derecha |
+| `TELEGRAM_BOT_TOKEN` y `TELEGRAM_CHAT_ID` | Avisan al abrirse `/cv`, la Hoja de Vida rastreada |
+| `DISCORD_WEBHOOK_URL` | Igual que el anterior, por Discord |
+| `SENA_USER` y `SENA_PASSWORD` | Sincronización automática del SGVA (activar con la variable `SENA_SYNC_ENABLED`) |
 
-La sincronización automática del SGVA necesita además `SENA_USER` y
-`SENA_PASSWORD`.
-
-Verifica el estado del despliegue con:
-```bash
-gh run list --limit 3
-```
-
-### Opción A: Cloudflare Pages (Recomendado)
-```bash
-npx wrangler pages deploy output --project-name=sena-adso-caprendizaje
-```
-
-### Opción B: Cloudflare Workers
-```bash
-npm run deploy
-```
+Se configuran como variables del Worker en Cloudflare, no como secretos de GitHub.
 
 ---
 
@@ -190,3 +183,27 @@ npm run deploy
 ## 📄 Licencia
 
 Este proyecto está bajo la Licencia [MIT](LICENSE).
+
+---
+
+## 🧹 Depuración de la Interfaz (v3)
+
+Se retiraron las piezas que añadían ruido sin servir al objetivo de contactar empresas:
+
+| Retirado | Motivo |
+| --- | --- |
+| Login de Titular, bloqueo, temporizador e inactividad | Solo enmascaraba en las cartas unos datos de contacto que la propia cabecera muestra, y obligaba a autenticarse antes de escribir a una empresa. Con él salen del repositorio las credenciales en texto plano. |
+| Reputación ★, proyección salarial, rol de salida y curva de aprendizaje | Eran constantes por tier presentadas como análisis por empresa: 135 compañías compartían la misma cifra con decimales. |
+| Ordenar por reputación y por proyección salarial | Al derivarse de esas constantes, solo reagrupaban por tier. |
+| Botones «Actualizar SGVA» y panel flotante de estado | Recargaban el mismo JSON ya incluido en la página; no consultaban al SENA. |
+| Centro de alertas de CV | Dependía del endpoint protegido que desaparece con el login. |
+| `empresas.xlsx`, `cv.html`, `cv/`, `functions/`, capturas de desarrollo | Ficheros sin referencia. Además `cv.html` y `_redirects` interceptaban `/cv` antes que el Worker, dejando sin efecto el aviso de apertura del CV. |
+
+Resultado sobre el peso servido al navegador:
+
+| Recurso | Antes | Ahora |
+| --- | --- | --- |
+| `data.js` | 1583 KB | 1119 KB |
+| `app.js` | 129 KB | 88 KB |
+| `style.css` | 77 KB | 63 KB |
+| Directorio `output/` | 4.5 MB | 2.6 MB |

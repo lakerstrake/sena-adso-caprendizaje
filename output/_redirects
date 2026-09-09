@@ -1,7 +1,3 @@
-# Cloudflare Pages Static Redirects
-/cv https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing 302
-/cv/* https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing 302
-/certificados https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN?usp=sharing 302
-/certificados/* https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN?usp=sharing 302
-/track/cv https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing 302
-/api/track-cv https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing 302
+# Las rutas de la Hoja de Vida las resuelve worker.js, que registra la apertura
+# y avisa antes de redirigir. Declararlas aqui las cortocircuitaba: el edge
+# respondia el 302 sin llegar a invocar el Worker, y la alerta nunca se enviaba.

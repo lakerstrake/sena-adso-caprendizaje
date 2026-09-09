@@ -27,8 +27,13 @@ with sync_playwright() as p:
     check("contadores coherentes", pg.inner_text("#lblTotalCount") == "195")
     segs = pg.evaluate("() => [...document.querySelectorAll('.seg-pill')].map(e=>e.textContent)")
     check("segmentos por tier = dataset", segs == ["195", "22", "135", "14", "24"], segs)
-    money = pg.evaluate("() => window.RAW_DATA.filter(d=>!/^\\s*\\$/.test(d.apoyo_sostenimiento||'')).length")
-    check("apoyo de sostenimiento con formato", money == 0, money)
+    dead = pg.evaluate("""() => {
+        const campos = ['apoyo_sostenimiento','reputacion_rating','escalabilidad_score',
+                        'techo_salarial_5anios','rol_salida_egresado','whatsapp_url',
+                        'curva_aprendizaje_titulo','salario_egresado_jr','cat_color'];
+        return campos.filter(c => window.RAW_DATA.some(d => c in d));
+    }""")
+    check("dataset sin campos constantes ni muertos", dead == [], dead)
     mails = pg.evaluate("() => window.RAW_DATA.filter(d=>d.email && !d.email.includes('@')).length")
     check("sin correos invalidos", mails == 0, mails)
 
@@ -61,9 +66,7 @@ with sync_playwright() as p:
     print("\n== ORDENACION ==")
     if not pg.is_visible("#secondaryFiltersRow"):
         pg.click("#toggleFiltersBtn"); time.sleep(0.5)
-    for value, label in [("escalabilidad_desc", "proyeccion salarial"),
-                         ("reputation_desc", "reputacion"),
-                         ("comp_asc", "menor competencia"),
+    for value, label in [("comp_asc", "menor competencia"),
                          ("vacancies_desc", "mas vacantes"),
                          ("ranking_asc", "ranking base")]:
         pg.select_option("#filterSort", value); time.sleep(0.7)
@@ -125,8 +128,9 @@ with sync_playwright() as p:
         except Exception:
             pass
     check("pestanas del modal navegables", len(tabs) >= 2, tabs)
-    apoyo = pg.evaluate("() => document.querySelector('#detailModal').innerText")
-    check("apoyo de sostenimiento sin prefijo roto", ".423.500 COP" not in apoyo or "$1.423.500" in apoyo)
+    cuerpo = pg.evaluate("() => document.querySelector('#detailModal').innerText")
+    check("modal sin metricas retiradas",
+          not any(t in cuerpo for t in ("Techo Salarial", "Reputación / Clima", "Rol Proyectado")))
     pg.keyboard.press("Escape"); time.sleep(0.5)
     check("modal cierra con Escape", not pg.is_visible("#detailModal"))
 
@@ -139,11 +143,10 @@ with sync_playwright() as p:
     check("tema persiste tras recargar", pg.get_attribute("html", "data-theme") == t1)
     pg.click("#themeBtn"); time.sleep(0.5)
 
-    check("panel de sync arranca plegado", pg.evaluate("() => document.getElementById('syncPanelBody').hidden"))
-    pg.click("#syncPanelHeader"); time.sleep(0.5)
-    check("panel de sync se despliega", not pg.evaluate("() => document.getElementById('syncPanelBody').hidden"))
-    check("aria-expanded coherente", pg.get_attribute("#syncPanelHeader", "aria-expanded") == "true")
-    pg.click("#syncPanelHeader"); time.sleep(0.4)
+    gone = pg.evaluate("""() => ['authModal','sgvaSyncModal','cvAlertsModal','syncPanel',
+        'btnAuthTrigger','lblSessionTimer','btnQuickSyncSgva','btnToolbarSyncSgva']
+        .filter(id => document.getElementById(id))""")
+    check("interfaz sin login, sync ni telemetria", gone == [], gone)
 
     try:
         with pg.expect_download(timeout=8000) as dl:
@@ -167,15 +170,14 @@ with sync_playwright() as p:
         .filter(b=>!(b.innerText||'').trim() && !b.getAttribute('aria-label') && !b.getAttribute('title')).length""") == 0)
 
     print("\n== FOCO Y TECLADO EN DIALOGOS ==")
-    for opener, modal, label in [("#btnAuthTrigger", "#authModal", "acceso"),
-                                 ("#btnSgvaStatusBadge", "#sgvaSyncModal", "sincronizacion")]:
-        pg.click(opener); time.sleep(0.8)
+    for opener, modal, label in [("#tableBody tr:nth-child(1) button:has-text('Detalle')", "#detailModal", "detalle")]:
+        pg.click(opener); time.sleep(1.0)
         inside = pg.evaluate(f"() => document.querySelector('{modal}').contains(document.activeElement)")
         check(f"foco entra en el dialogo de {label}", inside)
         pg.keyboard.press("Escape"); time.sleep(0.6)
         check(f"Escape cierra el dialogo de {label}", not pg.is_visible(modal))
-        back = pg.evaluate(f"() => document.activeElement.id === '{opener[1:]}'")
-        check(f"foco vuelve al invocador ({label})", back, pg.evaluate("() => document.activeElement.id"))
+        back = pg.evaluate("() => document.activeElement.closest('#tableBody') !== null")
+        check(f"foco vuelve al invocador ({label})", back, pg.evaluate("() => document.activeElement.className"))
 
     print("\n== SEGURIDAD (XSS) ==")
     xss = pg.evaluate("""() => {

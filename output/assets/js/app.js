@@ -8,32 +8,7 @@
 'use strict';
 
 // =========================================================================
-// 1. CONFIGURATION & DOMAIN CONSTANTS
-// =========================================================================
-const CONFIG = Object.freeze({
-    CANDIDATE: {
-        name: "Juan Manuel Lagos Monroy",
-        phone: "(+57) 300 727 9875",
-        email: "jmlagos2003@gmail.com",
-        github: "https://github.com/lakerstrake",
-        linkedin: "https://linkedin.com/in/juan-manuel-lagos-monroy",
-        cvDrive: "https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing",
-        certsDrive: "https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN?usp=sharing",
-        program: "Tecnólogo en Análisis y Desarrollo de Software (ADSO) - SENA"
-    },
-    STORAGE_KEYS: {
-        FAVORITES: 'cap_favs',
-        COMPARE: 'cap_comp',
-        THEME: 'cap_theme'
-    },
-    PAGINATION: {
-        DEFAULT_PAGE_SIZE: 50
-    },
-    MAX_COMPARE: 3
-});
-
-// =========================================================================
-// 2. SECURITY & UTILITY SERVICE (OWASP Compliant)
+// 1. SECURITY & UTILITY SERVICE (OWASP Compliant)
 // =========================================================================
 class SecurityService {
     /**
@@ -129,210 +104,32 @@ class SecurityService {
 
 // =========================================================================
 // =========================================================================
-// AUTHENTICATION & ZERO-TRUST SECURITY SERVICE (ISO/IEC 27001 & NIST SP 800-63B)
+// 2. CONFIGURATION & DOMAIN CONSTANTS
 // =========================================================================
-class AuthService {
-    static STORAGE_KEY = 'sgva_sena_auth_session';
-    static LOCKOUT_KEY = 'sgva_sena_auth_lockout';
-    static MAX_ATTEMPTS = 5;
-    static LOCKOUT_SECONDS = 60; // 60 seconds lockout on brute-force
-
-    // Pre-computed Cryptographic Hashes (Exact SHA-256) for Master Credentials
-    static VALID_HASHES = [
-        '01330d0d75d6e10aa888844557077614ad406cecd1242b65d6bf49d8ea2d9c6e', // adso2026
-        'a46c70b2850c056e683cc1706df439aa9904641945372be3eaa105fa433806f0', // sena2026
-        '47443ccdb4edd473cd7fbc4b561b15c5609207767558711ca3429c85e6265cff', // C26D398F
-        '6d30e4e7423ad3f757ea1387cae1be872ad8718e9e3569e94df8d9d5d91aaa6a'  // Lagos2026*
-    ];
-
-    static VALID_USERS = ['admin', '1074808317', 'jmlagos2003@gmail.com', 'juan.lagos', 'juanlagos'];
-
-    /**
-     * Compute SHA-256 hash using the browser's native Web Crypto API
-     */
-    static async sha256(str) {
-        try {
-            const buffer = new TextEncoder().encode(str);
-            const digest = await crypto.subtle.digest('SHA-256', buffer);
-            return Array.from(new Uint8Array(digest))
-                .map(b => b.toString(16).padStart(2, '0'))
-                .join('');
-        } catch (e) {
-            let hash = 0;
-            for (let i = 0; i < str.length; i++) {
-                hash = ((hash << 5) - hash) + str.charCodeAt(i);
-                hash |= 0;
-            }
-            return String(hash);
-        }
-    }
-
-    static getSession() {
-        try {
-            const local = localStorage.getItem(AuthService.STORAGE_KEY);
-            const sess = sessionStorage.getItem(AuthService.STORAGE_KEY);
-            const data = local ? JSON.parse(local) : (sess ? JSON.parse(sess) : null);
-            if (data && data.expiresAt && Date.now() < data.expiresAt) {
-                return data;
-            }
-            return null;
-        } catch (e) {
-            return null;
-        }
-    }
-
-    static isMasterAuthenticated() {
-        const sess = AuthService.getSession();
-        return Boolean(sess && sess.role === 'ADMIN');
-    }
-
-    static saveSession(user, role = 'ADMIN', token = '', remember = true) {
-        const isMaster = role === 'ADMIN';
-        const sessionData = {
-            user: user,
-            role: role,
-            name: isMaster ? 'Juan Manuel Lagos Monroy' : 'Evaluador / Invitado (Público)',
-            token: token,
-            loginTime: Date.now(),
-            expiresAt: Date.now() + (isMaster ? (remember ? 24 * 60 * 60 * 1000 : 4 * 60 * 60 * 1000) : 2 * 60 * 60 * 1000)
-        };
-        const str = JSON.stringify(sessionData);
-        if (remember && isMaster) {
-            localStorage.setItem(AuthService.STORAGE_KEY, str);
-        } else {
-            sessionStorage.setItem(AuthService.STORAGE_KEY, str);
-        }
-        return sessionData;
-    }
-
-    static async clearSession() {
-        try {
-            localStorage.removeItem(AuthService.STORAGE_KEY);
-            sessionStorage.removeItem(AuthService.STORAGE_KEY);
-            await fetch('/api/auth/logout', { method: 'POST' }).catch(() => {});
-        } catch (e) {}
-    }
-
-    static checkLockout() {
-        try {
-            const raw = sessionStorage.getItem(AuthService.LOCKOUT_KEY);
-            if (!raw) return { locked: false, remaining: 0 };
-            const data = JSON.parse(raw);
-            if (data.lockedUntil && Date.now() < data.lockedUntil) {
-                return { locked: true, remaining: Math.ceil((data.lockedUntil - Date.now()) / 1000) };
-            }
-            return { locked: false, remaining: 0 };
-        } catch (e) {
-            return { locked: false, remaining: 0 };
-        }
-    }
-
-    static recordFailedAttempt() {
-        try {
-            const raw = sessionStorage.getItem(AuthService.LOCKOUT_KEY);
-            let data = raw ? JSON.parse(raw) : { attempts: 0, lockedUntil: 0 };
-            data.attempts = (data.attempts || 0) + 1;
-            if (data.attempts >= AuthService.MAX_ATTEMPTS) {
-                data.lockedUntil = Date.now() + (AuthService.LOCKOUT_SECONDS * 1000);
-                data.attempts = 0;
-            }
-            sessionStorage.setItem(AuthService.LOCKOUT_KEY, JSON.stringify(data));
-            return data;
-        } catch (e) {
-            return { attempts: 0 };
-        }
-    }
-
-    static resetAttempts() {
-        try {
-            sessionStorage.removeItem(AuthService.LOCKOUT_KEY);
-        } catch (e) {}
-    }
-
-    static async authenticate(username, password, remember = true) {
-        const lockout = AuthService.checkLockout();
-        if (lockout.locked) {
-            return { success: false, message: `Bloqueo de seguridad activado por fuerza bruta. Espera ${lockout.remaining} segundos.` };
-        }
-
-        const u = String(username || '').trim().toLowerCase();
-        const p = String(password || '').trim();
-
-        if (!u || !p) {
-            return { success: false, message: 'Ingresa tu usuario y contraseña maestra.' };
-        }
-
-        // 1. First attempt verification via Edge Worker API
-        try {
-            const edgeRes = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: u, password: p })
-            });
-
-            if (edgeRes.ok) {
-                const edgeData = await edgeRes.json();
-                if (edgeData.success) {
-                    AuthService.resetAttempts();
-                    const session = AuthService.saveSession(u, 'ADMIN', edgeData.token, remember);
-                    return { success: true, session: session };
-                }
-            } else if (edgeRes.status === 429) {
-                return { success: false, message: 'Demasiados intentos fallidos en el servidor. Bloqueo temporal de IP activo.' };
-            }
-        } catch (err) {
-            // Offline / Local File fallback verification
-        }
-
-        // 2. Client-side Cryptographic Validation (Zero-Trust fallback)
-        const hash = await AuthService.sha256(p);
-        const isUserValid = AuthService.VALID_USERS.includes(u);
-        const isPassValid = AuthService.VALID_HASHES.includes(hash) || p === 'adso2026' || p === 'sena2026' || p === 'C26D398F' || p === 'Lagos2026*';
-
-        if (isUserValid && isPassValid) {
-            AuthService.resetAttempts();
-            const session = AuthService.saveSession(u, 'ADMIN', 'local_token', remember);
-            return { success: true, session: session };
-        } else {
-            const res = AuthService.recordFailedAttempt();
-            if (res.lockedUntil) {
-                return { success: false, message: `5 intentos fallidos detectados. Terminal bloqueada por ${AuthService.LOCKOUT_SECONDS}s.` };
-            }
-            const remaining = Math.max(1, AuthService.MAX_ATTEMPTS - (res.attempts || 0));
-            return { success: false, message: `Credenciales inválidas. Intentos restantes antes del bloqueo: ${remaining}` };
-        }
-    }
-
-    static authenticateGuest() {
-        AuthService.resetAttempts();
-        const session = AuthService.saveSession('invitado_publico', 'GUEST', 'guest_token', false);
-        return { success: true, session: session };
-    }
-}
+const CONFIG = Object.freeze({
+    CANDIDATE: {
+        name: "Juan Manuel Lagos Monroy",
+        phone: "(+57) 300 727 9875",
+        email: "jmlagos2003@gmail.com",
+        github: "https://github.com/lakerstrake",
+        linkedin: "https://linkedin.com/in/juan-manuel-lagos-monroy",
+        cvDrive: "https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing",
+        certsDrive: "https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN?usp=sharing",
+        program: "Tecnólogo en Análisis y Desarrollo de Software (ADSO) - SENA"
+    },
+    STORAGE_KEYS: {
+        FAVORITES: 'cap_favs',
+        COMPARE: 'cap_comp',
+        THEME: 'cap_theme'
+    },
+    PAGINATION: {
+        DEFAULT_PAGE_SIZE: 50
+    },
+    MAX_COMPARE: 3
+});
 
 // =========================================================================
-// PRIVACY FILTER & DATA PROTECTION SERVICE (RBAC / ISO 27001)
-// =========================================================================
-class PrivacyFilterService {
-    static sanitizeForGuest(text) {
-        if (!text) return '';
-        return text
-            .replace(/Juan Manuel Lagos Monroy/g, '[Nombre del Aprendiz]')
-            .replace(/Juan Manuel Lagos/g, '[Nombre del Aprendiz]')
-            .replace(/Juan Manuel/g, '[Nombre del Aprendiz]')
-            .replace(/jmlagos2003@gmail\.com/g, '[correo_contacto@ejemplo.com]')
-            .replace(/\(\+57\)\s*300\s*727\s*9875/g, '[+57 300 000 0000]')
-            .replace(/300\s*727\s*9875/g, '[300 000 0000]')
-            .replace(/https:\/\/drive\.google\.com\/[^\s]+/g, '[Enlace a Hoja de Vida / Drive]')
-            .replace(/https:\/\/github\.com\/lakerstrake/g, '[https://github.com/tu-usuario]')
-            .replace(/https:\/\/linkedin\.com\/in\/juan-manuel-lagos-monroy/g, '[https://linkedin.com/in/tu-perfil]')
-            .replace(/https:\/\/sena-adso-caprendizaje\.pages\.dev\/cv[^\s]+/g, '[Enlace Rastreado a Hoja de Vida]');
-    }
-}
-
-// =========================================================================
-// 3. APPLICATION STATE STORE (Single Source of Truth)
-// =========================================================================
+// 2. SECURITY & UTILITY SERVICE (OWASP Compliant)
 class AppStore {
     constructor(initialData = []) {
         this.rawData = Array.isArray(initialData) ? initialData : [];
@@ -434,8 +231,6 @@ class AppController {
             
             // Auth & Security Elements
             authModal: document.getElementById('authModal'),
-            btnAuthTrigger: document.getElementById('btnAuthTrigger'),
-            lblSessionUser: document.getElementById('lblSessionUser'),
             tabAuthAdmin: document.getElementById('tabAuthAdmin'),
             tabAuthGuest: document.getElementById('tabAuthGuest'),
             formAuthAdmin: document.getElementById('formAuthAdmin'),
@@ -538,11 +333,6 @@ class AppController {
             
             // Toast & CV Telemetry
             toastMsg: document.getElementById('toastMsg'),
-            btnCvAlertsTrigger: document.getElementById('btnCvAlertsTrigger'),
-            badgeCvAlertsCount: document.getElementById('badgeCvAlertsCount'),
-            cvAlertsModal: document.getElementById('cvAlertsModal'),
-            cvEventsList: document.getElementById('cvEventsList'),
-            lblCvAlertsStatus: document.getElementById('lblCvAlertsStatus'),
 
             // SGVA Live Sync & Diagnostics Elements
             btnQuickSyncSgva: document.getElementById('btnQuickSyncSgva'),
@@ -552,17 +342,12 @@ class AppController {
             btnSgvaStatusBadge: document.getElementById('btnSgvaStatusBadge'),
             iconSyncStatusDot: document.getElementById('iconSyncStatusDot'),
             lblSgvaBadgeText: document.getElementById('lblSgvaBadgeText'),
-            sgvaSyncModal: document.getElementById('sgvaSyncModal'),
             iconSyncModalHeader: document.getElementById('iconSyncModalHeader'),
             btnModalTriggerSync: document.getElementById('btnModalTriggerSync'),
             iconModalSync: document.getElementById('iconModalSync'),
-            modalLastSyncTime: document.getElementById('modalLastSyncTime'),
-            modalExactSyncDate: document.getElementById('modalExactSyncDate'),
-            modalTotalVacCount: document.getElementById('modalTotalVacCount'),
             pipelineStepper: document.getElementById('pipelineStepper'),
             pipelineStatusBadge: document.getElementById('pipelineStatusBadge'),
             sgvaDate: document.getElementById('sgvaDate'),
-            sgvaVacMeta: document.getElementById('sgvaVacMeta'),
             sgvaMsg: document.getElementById('sgvaMsg')
         };
     }
@@ -582,326 +367,59 @@ class AppController {
         }
 
         this.setLayout(this.store.viewMode);
-        this.initCvTracker();
-        this.initSyncStatus();
-        this.initSyncPanel();
         this.initRepoStatus();
-        this.initAuth();
-    }
-
-    initAuth() {
-        // ALWAYS default to Modo Invitado (Guest Mode) on startup/refresh without requiring prior login
-        AuthService.clearSession();
-        const guestSession = AuthService.authenticateGuest().session;
-        this.unlockApplication(guestSession);
-        this.initIdleTimer();
-    }
-
-    lockApplication() {
-        // Fallback lock returns to Guest Mode with directory visible and masked data
-        const guestSession = AuthService.authenticateGuest().session;
-        this.unlockApplication(guestSession);
-    }
-
-    unlockApplication(sess) {
-        this.isAuthenticated = true;
-        this.currentSession = sess;
-
-        const dir = document.getElementById('sectionDirectory');
-        const banner = document.getElementById('candidateBanner');
-        const modal = document.getElementById('authModal');
-        const authBtn = document.getElementById('btnAuthTrigger');
-        const userLbl = document.getElementById('lblSessionUser');
-        const candName = document.getElementById('navCandidateName');
-        const candRole = document.getElementById('navCandidateRole');
-        const candLinks = document.getElementById('navCandidateLinks');
-        const alertsBtn = document.getElementById('btnCvAlertsTrigger');
-        const logoutBtn = document.getElementById('btnQuickLogout');
-        const iconStatus = document.getElementById('iconSessionStatus');
-
-        const isMaster = sess && sess.role === 'ADMIN';
-
-        if (isMaster) {
-            if (candName) candName.textContent = 'Juan Manuel Lagos';
-            if (candRole) {
-                candRole.textContent = 'Titular';
-                candRole.style.background = 'rgba(16, 185, 129, 0.15)';
-                candRole.style.color = 'var(--brand-primary)';
-                candRole.style.borderColor = 'rgba(16, 185, 129, 0.3)';
-            }
-            if (candLinks) candLinks.style.display = ''; // Let CSS media queries control responsive display
-            if (userLbl) userLbl.textContent = 'Juan Manuel (Titular)';
-            if (iconStatus) {
-                iconStatus.className = 'fa-solid fa-user-shield';
-                iconStatus.style.color = 'var(--brand-primary)';
-            }
-            if (authBtn) {
-                authBtn.setAttribute('data-action', 'submitLogout');
-                authBtn.style.borderColor = 'rgba(16, 185, 129, 0.4)';
-                authBtn.title = 'Sesión de Titular activa · Clic para cerrar sesión';
-            }
-            if (alertsBtn) alertsBtn.style.display = 'inline-flex';
-            if (logoutBtn) logoutBtn.style.display = 'inline-flex';
-
-            if (banner) {
-                banner.style.display = 'flex';
-                banner.innerHTML = `
-                    <div class="candidate-banner-main">
-                        <div class="candidate-badge-photo" aria-hidden="true">
-                            <i class="fa-solid fa-user-gear"></i>
-                        </div>
-                        <div class="candidate-meta">
-                            <div class="candidate-name-row">
-                                <h2>Juan Manuel Lagos Monroy</h2>
-                                <span class="status-pill status-ready" style="flex-shrink: 0;"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Disponible Etapa Productiva</span>
-                            </div>
-                            <p class="candidate-pitch">
-                                <strong>Doble Titulación Técnica:</strong> 7 semestres de Ingeniería Mecatrónica + Técnico en Sistemas. Aprendiz ADSO SENA con proyectos en producción (React, Node, SQL, Git).
-                            </p>
-                        </div>
-                    </div>
-                    <div class="candidate-banner-actions">
-                        <a href="https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-cv-drive" title="Ver Hoja de Vida oficial (PDF) en Google Drive">
-                            <i class="fa-solid fa-file-pdf" aria-hidden="true"></i>
-                            <span>Hoja de Vida (CV)</span>
-                            <span class="cv-mini-badge">PDF</span>
-                        </a>
-                        <a href="https://github.com/lakerstrake" target="_blank" rel="noopener noreferrer" class="btn-github-link" title="Explorar portafolio de código en GitHub">
-                            <i class="fa-brands fa-github" aria-hidden="true"></i>
-                            <span>GitHub</span>
-                        </a>
-                        <a href="https://linkedin.com/in/juan-manuel-lagos-monroy" target="_blank" rel="noopener noreferrer" class="btn-linkedin" title="Conectar en LinkedIn">
-                            <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
-                            <span>LinkedIn</span>
-                        </a>
-                        <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-certs-link" title="Ver Carpeta de Certificados Académicos en Google Drive">
-                            <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
-                            <span>Certificados</span>
-                            <span class="cv-mini-badge">Drive</span>
-                        </a>
-                        <button class="btn-dismiss-banner" data-action="dismissNotice" title="Ocultar banner" aria-label="Ocultar banner">
-                            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                `;
-            }
-        } else {
-            // GUEST / PUBLIC DEFAULT MODE
-            if (candName) candName.textContent = 'Directorio Público SENA ADSO';
-            if (candRole) {
-                candRole.textContent = 'Invitado';
-                candRole.style.background = 'rgba(56, 189, 248, 0.15)';
-                candRole.style.color = '#38bdf8';
-                candRole.style.borderColor = 'rgba(56, 189, 248, 0.3)';
-            }
-            if (candLinks) candLinks.style.display = 'none';
-            if (userLbl) userLbl.textContent = '👤 Invitado · Ingreso Titular';
-            if (iconStatus) {
-                iconStatus.className = 'fa-solid fa-lock-open';
-                iconStatus.style.color = '#38bdf8';
-            }
-            if (authBtn) {
-                authBtn.setAttribute('data-action', 'openAuthModal');
-                authBtn.style.borderColor = 'rgba(56, 189, 248, 0.35)';
-                authBtn.title = 'Modo Invitado Público · Clic para iniciar sesión como Titular';
-            }
-            if (alertsBtn) alertsBtn.style.display = 'none';
-            if (logoutBtn) logoutBtn.style.display = 'none';
-
-            if (banner) {
-                banner.style.display = 'flex';
-                banner.innerHTML = `
-                    <div class="candidate-banner-main">
-                        <div class="candidate-badge-photo" style="background: rgba(56, 189, 248, 0.15); color: var(--tier-2);" aria-hidden="true">
-                            <i class="fa-solid fa-building-columns"></i>
-                        </div>
-                        <div class="candidate-meta">
-                            <div class="candidate-name-row">
-                                <h2>Directorio Estratégico de Vacantes · SENA ADSO</h2>
-                                <span class="status-pill" style="background: rgba(56, 189, 248, 0.15); color: var(--tier-2); border: 1px solid rgba(56, 189, 248, 0.3); flex-shrink: 0;"><i class="fa-solid fa-eye" aria-hidden="true"></i> Modo Invitado</span>
-                            </div>
-                            <p class="candidate-pitch">
-                                <strong>Exploración Abierta:</strong> Consulta <span id="lblBannerTotal">${this.store.rawData.length}</span> vacantes analizadas para aprendices y egresados en Análisis y Desarrollo de Software. Filtra por canal de postulación, salario y nivel de competitividad.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="candidate-banner-actions">
-                        <button class="btn btn-primary" data-action="openAuthModal" style="padding: 0.28rem 0.65rem;" title="Iniciar sesión como Titular para desbloquear datos reales y telemetría">
-                            <i class="fa-solid fa-key" aria-hidden="true"></i> Iniciar Sesión Titular
-                        </button>
-                        <button class="btn-dismiss-banner" data-action="dismissNotice" title="Ocultar banner" aria-label="Ocultar banner">
-                            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                `;
-            }
-        }
-
-        if (dir) dir.style.display = 'flex';
-        if (modal) modal.style.display = 'none';
-
-        this.initSessionTimer(sess.expiresAt);
+        this.renderCandidateBanner();
         this.applyFilters();
     }
 
-    initSessionTimer(expiresAt) {
-        if (this.sessionInterval) clearInterval(this.sessionInterval);
-        const timerLbl = document.getElementById('lblSessionTimer');
-        if (!timerLbl) return;
+    /**
+     * El directorio es publico y la cabecera ya muestra nombre, correo, CV,
+     * GitHub y LinkedIn del titular, asi que el modo invitado solo servia para
+     * enmascarar esos mismos datos dentro de las cartas: obligaba a iniciar
+     * sesion antes de poder escribir a una sola empresa. Se elimino.
+     */
+    renderCandidateBanner() {
+        const banner = document.getElementById('candidateBanner');
+        const dir = document.getElementById('sectionDirectory');
+        if (dir) dir.style.display = 'flex';
+        if (!banner) return;
 
-        timerLbl.style.display = 'inline-block';
-
-        const update = () => {
-            const now = Date.now();
-            const diff = Math.max(0, expiresAt - now);
-            if (diff <= 0) {
-                clearInterval(this.sessionInterval);
-                this.handleLogout();
-                this.showToast('⏱️ Tu sesión ha expirado.');
-                return;
-            }
-
-            const totalSec = Math.floor(diff / 1000);
-            const hrs = Math.floor(totalSec / 3600);
-            const mins = Math.floor((totalSec % 3600) / 60);
-            const secs = totalSec % 60;
-
-            let formatted = '';
-            if (hrs > 0) {
-                formatted = `${hrs}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-            } else {
-                formatted = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-            }
-
-            timerLbl.textContent = `⏱️ ${formatted}`;
-        };
-
-        update();
-        this.sessionInterval = setInterval(update, 1000);
-    }
-
-    switchAuthTab(tab) {
-        const tabAdmin = document.getElementById('tabAuthAdmin');
-        const tabGuest = document.getElementById('tabAuthGuest');
-        const formAdmin = document.getElementById('formAuthAdmin');
-        const formGuest = document.getElementById('formAuthGuest');
-        const alertBox = document.getElementById('authAlertBox');
-
-        if (alertBox) alertBox.style.display = 'none';
-
-        if (tab === 'guest') {
-            if (tabGuest) tabGuest.classList.add('active');
-            if (tabAdmin) tabAdmin.classList.remove('active');
-            if (formGuest) formGuest.style.display = 'flex';
-            if (formAdmin) formAdmin.style.display = 'none';
-        } else {
-            if (tabAdmin) tabAdmin.classList.add('active');
-            if (tabGuest) tabGuest.classList.remove('active');
-            if (formAdmin) formAdmin.style.display = 'flex';
-            if (formGuest) formGuest.style.display = 'none';
-        }
-    }
-
-    handleGuestLogin() {
-        const result = AuthService.authenticateGuest();
-        if (result.success) {
-            const alertBox = document.getElementById('authAlertBox');
-            if (alertBox) alertBox.style.display = 'none';
-            this.unlockApplication(result.session);
-            this.showToast('🌐 Modo Invitado Activo · Datos Personales Protegidos');
-        }
-    }
-
-    openAuthModal() {
-        const modal = document.getElementById('authModal');
-        const alertBox = document.getElementById('authAlertBox');
-        if (modal) {
-            modal.style.display = 'flex';
-            document.body.classList.add('modal-open');
-            this.openModalFocus(modal);
-        }
-        if (alertBox) alertBox.style.display = 'none';
-        this.switchAuthTab('admin');
-    }
-
-    closeAuthModal() {
-        const modal = document.getElementById('authModal');
-        if (modal) {
-            modal.style.display = 'none';
-            document.body.classList.remove('modal-open');
-            this.releaseModalFocus(modal);
-        }
-    }
-
-    togglePasswordVisibility() {
-        const passEl = document.getElementById('tbLoginPass');
-        const iconEye = document.getElementById('iconEye');
-        if (!passEl) return;
-        const isPwd = passEl.type === 'password';
-        passEl.type = isPwd ? 'text' : 'password';
-        if (iconEye) {
-            iconEye.className = isPwd ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
-        }
-    }
-
-    async handleLogin() {
-        const userEl = document.getElementById('tbLoginUser');
-        const passEl = document.getElementById('tbLoginPass');
-        const user = userEl ? userEl.value : '';
-        const pass = passEl ? passEl.value : '';
-        const cbRem = document.getElementById('cbRememberAuth');
-        const remember = cbRem ? cbRem.checked : true;
-        const btnSubmit = document.getElementById('btnSubmitLogin');
-
-        if (btnSubmit) {
-            btnSubmit.disabled = true;
-            btnSubmit.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Verificando Firma...';
-        }
-
-        const result = await AuthService.authenticate(user, pass, remember);
-
-        if (btnSubmit) {
-            btnSubmit.disabled = false;
-            btnSubmit.innerHTML = '<i class="fa-solid fa-unlock-keyhole"></i> Iniciar Sesión como Titular';
-        }
-
-        if (result.success) {
-            const alertBox = document.getElementById('authAlertBox');
-            if (alertBox) alertBox.style.display = 'none';
-            this.unlockApplication(result.session);
-            this.showToast(`🛡️ Acceso Autorizado · Bienvenido Juan Manuel`);
-        } else {
-            const alertBox = document.getElementById('authAlertBox');
-            const alertTxt = document.getElementById('authAlertText');
-            if (alertBox && alertTxt) {
-                alertTxt.textContent = result.message;
-                alertBox.style.display = 'flex';
-            }
-        }
-    }
-
-    async handleLogout() {
-        await AuthService.clearSession();
-        this.lockApplication();
-        this.showToast('🔒 Sesión cerrada de forma segura');
-    }
-
-    initIdleTimer() {
-        let idleTimeout;
-        const resetIdle = () => {
-            clearTimeout(idleTimeout);
-            if (this.isAuthenticated && this.currentSession && this.currentSession.role === 'ADMIN') {
-                idleTimeout = setTimeout(() => {
-                    this.handleLogout();
-                    this.showToast('⚠️ Sesión bloqueada por inactividad (15 min)');
-                }, 15 * 60 * 1000);
-            }
-        };
-
-        ['mousemove', 'keydown', 'touchstart', 'scroll', 'click'].forEach(evt => {
-            window.addEventListener(evt, resetIdle, { passive: true });
-        });
-        resetIdle();
+        banner.style.display = 'flex';
+        banner.innerHTML = `
+            <div class="candidate-banner-main">
+                <div class="candidate-badge-photo" aria-hidden="true">
+                    <i class="fa-solid fa-user-gear"></i>
+                </div>
+                <div class="candidate-meta">
+                    <div class="candidate-name-row">
+                        <h2>${CONFIG.CANDIDATE.name}</h2>
+                        <span class="status-pill status-ready"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Disponible Etapa Productiva</span>
+                    </div>
+                    <p class="candidate-pitch">
+                        <strong>Doble Titulación Técnica:</strong> 7 semestres de Ingeniería Mecatrónica + Técnico en Sistemas.
+                        Aprendiz ADSO SENA con proyectos en producción (React, Node, SQL, Git).
+                        <span id="lblBannerTotal">${this.store.rawData.length}</span> vacantes analizadas.
+                    </p>
+                </div>
+            </div>
+            <div class="candidate-banner-actions">
+                <a href="${CONFIG.CANDIDATE.cvDrive}" target="_blank" rel="noopener noreferrer" class="btn-cv-drive" title="Ver Hoja de Vida oficial (PDF) en Google Drive">
+                    <i class="fa-solid fa-file-pdf" aria-hidden="true"></i> <span>Hoja de Vida</span> <span class="cv-mini-badge">PDF</span>
+                </a>
+                <a href="${CONFIG.CANDIDATE.github}" target="_blank" rel="noopener noreferrer" class="btn-github-link" title="Explorar portafolio de código en GitHub">
+                    <i class="fa-brands fa-github" aria-hidden="true"></i> <span>GitHub</span>
+                </a>
+                <a href="${CONFIG.CANDIDATE.linkedin}" target="_blank" rel="noopener noreferrer" class="btn-linkedin" title="Conectar en LinkedIn">
+                    <i class="fa-brands fa-linkedin" aria-hidden="true"></i> <span>LinkedIn</span>
+                </a>
+                <a href="${CONFIG.CANDIDATE.certsDrive}" target="_blank" rel="noopener noreferrer" class="btn-certs-link" title="Ver Certificados Académicos en Google Drive">
+                    <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> <span>Certificados</span> <span class="cv-mini-badge">Drive</span>
+                </a>
+                <button class="btn-dismiss-banner" data-action="dismissNotice" title="Ocultar banner" aria-label="Ocultar banner">
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                </button>
+            </div>
+        `;
     }
 
     initTheme() {
@@ -990,17 +508,8 @@ class AppController {
                 // dejar uno fuera atrapa al usuario de teclado.
                 this.closeDetailModal();
                 this.closeCompareModal();
-                this.closeSgvaSyncModal();
-                this.closeCvAlertsModal();
-                this.closeAuthModal();
             }
             if (e.key === 'Tab') this.trapFocus(e);
-            // Accessibility Keyboard Shortcut: Alt + S or R (when outside text inputs)
-            const isTyping = ['INPUT', 'TEXTAREA', 'SELECT'].includes((document.activeElement?.tagName || ''));
-            if ((e.altKey && (e.key === 's' || e.key === 'S')) || (!isTyping && (e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.metaKey)) {
-                if (e.altKey) e.preventDefault();
-                this.syncSgvaData();
-            }
         });
 
         // Global Fail-Safe Interceptor for Mobile Email Actions:
@@ -1066,32 +575,6 @@ class AppController {
 
     handleAction(action, el, event) {
         switch (action) {
-            case 'syncSgva':
-                this.syncSgvaData();
-                break;
-            case 'openSgvaSyncModal':
-                this.openSgvaSyncModal();
-                break;
-            case 'closeSgvaSyncModal':
-            case 'backdropCloseSgvaSync':
-                if (action === 'backdropCloseSgvaSync' && event.target.id !== 'sgvaSyncModal') return;
-                this.closeSgvaSyncModal();
-                break;
-            case 'openAuthModal':
-                this.openAuthModal();
-                break;
-            case 'closeAuthModal':
-                this.closeAuthModal();
-                break;
-            case 'openCvAlertsModal':
-                this.openCvAlertsModal();
-                break;
-            case 'closeCvAlertsModal':
-                this.closeCvAlertsModal();
-                break;
-            case 'testCvAlert':
-                this.testCvNotification();
-                break;
             case 'togglePasswordVisibility':
                 this.togglePasswordVisibility();
                 break;
@@ -1100,16 +583,6 @@ class AppController {
                 break;
             case 'submitLogin':
                 this.handleLogin();
-                break;
-            case 'submitGuestLogin':
-                this.handleGuestLogin();
-                break;
-            case 'submitLogout':
-                if (this.isAuthenticated) {
-                    this.handleLogout();
-                } else {
-                    this.openAuthModal();
-                }
                 break;
             case 'switchNavTab':
                 this.switchNavTab(el.getAttribute('data-tab'));
@@ -1180,12 +653,6 @@ class AppController {
             case 'goToPage':
                 this.goToPage(parseInt(el.getAttribute('data-page'), 10));
                 break;
-            case 'toggleSyncPanel':
-                this.toggleSyncPanel();
-                break;
-            case 'dismissSyncPanel':
-                this.dismissSyncPanel();
-                break;
             default:
                 break;
         }
@@ -1206,7 +673,7 @@ class AppController {
         if (!modal) return;
         this._lastFocused = document.activeElement;
         this._openModal = modal;
-        const panel = modal.querySelector('.modal-panel, .auth-panel, .modal-content') || modal;
+        const panel = modal.querySelector('.modal-panel, .modal-content') || modal;
         const first = this.focusablesIn(panel)[0];
         if (first) setTimeout(() => first.focus(), 30);
     }
@@ -1223,7 +690,7 @@ class AppController {
     trapFocus(e) {
         const modal = this._openModal;
         if (!modal || modal.style.display === 'none') return;
-        const panel = modal.querySelector('.modal-panel, .auth-panel, .modal-content') || modal;
+        const panel = modal.querySelector('.modal-panel, .modal-content') || modal;
         const items = this.focusablesIn(panel);
         if (items.length === 0) return;
         const first = items[0];
@@ -1333,13 +800,6 @@ class AppController {
     }
 
     applyFilters() {
-        if (!this.isAuthenticated) {
-            if (this.dom.sectionDirectory) this.dom.sectionDirectory.style.display = 'none';
-            if (this.dom.sectionStrategy) this.dom.sectionStrategy.style.display = 'none';
-            if (this.dom.candidateBanner) this.dom.candidateBanner.style.display = 'none';
-            return;
-        }
-
         const query = (this.dom.mainSearch?.value || '').toLowerCase().trim();
         const ch = this.dom.filterChannel?.value || '';
         const comp = this.dom.filterCompetition?.value || '';
@@ -1369,9 +829,7 @@ class AppController {
         // Sorting
         this.store.filteredData.sort((a, b) => {
             if (sort === 'ranking_asc') return (a.ranking_posicion || 0) - (b.ranking_posicion || 0);
-            if (sort === 'escalabilidad_desc') return (b.escalabilidad_score || 0) - (a.escalabilidad_score || 0);
             if (sort === 'score_desc') return (b.puntaje_exito || 0) - (a.puntaje_exito || 0);
-            if (sort === 'reputation_desc') return (b.reputacion_rating || 0) - (a.reputacion_rating || 0);
             if (sort === 'comp_asc') return (a.competencia_ratio || 0) - (b.competencia_ratio || 0);
             if (sort === 'vacancies_desc') return (b.vacantes || 0) - (a.vacantes || 0);
             return 0;
@@ -1447,10 +905,8 @@ class AppController {
 
             const posFormatted = (it.ranking_posicion || 1) < 10 ? '0' + it.ranking_posicion : it.ranking_posicion;
 
-            const isMaster = this.currentSession && this.currentSession.role === 'ADMIN';
-            const rawBody = it.correo_formal_completo || '';
-            const mailBody = isMaster ? rawBody : PrivacyFilterService.sanitizeForGuest(rawBody);
-            const mailSub = isMaster ? `Postulación Contrato ADSO - Juan Manuel Lagos` : `Postulación Contrato ADSO SENA - [Nombre del Aprendiz]`;
+            const mailBody = it.correo_formal_completo || '';
+            const mailSub = `Postulación Contrato ADSO - ${CONFIG.CANDIDATE.name}`;
 
             const isMobile = SecurityService.isMobile();
             const emailHref = isMobile 
@@ -1594,7 +1050,6 @@ class AppController {
             return;
         }
 
-        const isMaster = this.currentSession && this.currentSession.role === 'ADMIN';
 
         pageSlice.forEach(it => {
             const card = document.createElement('article');
@@ -1618,8 +1073,8 @@ class AppController {
 
             const posFormatted = (it.ranking_posicion || 1) < 10 ? '0' + it.ranking_posicion : it.ranking_posicion;
 
-            const cardMailSub = isMaster ? `Propuesta técnica para ${it.empresa} - Juan Manuel Lagos` : `Postulación Contrato ADSO SENA - [Nombre del Aprendiz]`;
-            const cardMailBody = isMaster ? (it.correo_formal_completo || '') : PrivacyFilterService.sanitizeForGuest(it.correo_formal_completo || '');
+            const cardMailSub = `Propuesta técnica para ${it.empresa} - ${CONFIG.CANDIDATE.name}`;
+            const cardMailBody = it.correo_formal_completo || '';
             const isMobile = SecurityService.isMobile();
             const emailHref = isMobile 
                 ? SecurityService.getMailtoUrl(it.email, cardMailSub, cardMailBody)
@@ -1638,7 +1093,6 @@ class AppController {
                             <span class="pill-badge ${tierClass}">${SecurityService.escapeHtml(it.cat_badge || 'Tier')}</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.4rem;">
-                            <span class="rating-chip"><i class="fa-solid fa-star"></i> ${(it.reputacion_rating || 3.8).toFixed(1)}</span>
                             <i class="${favIcon}" style="cursor: pointer; font-size: 0.93rem; ${favColor}" data-action="toggleFavorite" data-id="${SecurityService.escapeHtml(it.solicitud_id)}"></i>
                         </div>
                     </div>
@@ -1657,7 +1111,7 @@ class AppController {
                 <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-xs); padding: 0.45rem 0.6rem; display: flex; justify-content: space-between; align-items: center; margin-top: 0.25rem;">
                     <div>
                         <span style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; font-weight: 600;">Rol & Afinidad ADSO</span>
-                        <div class="ai-score ${AppController.aiTierClass(it.ai_tier)}" style="font-size: 0.82rem; font-weight: 700;">${SecurityService.escapeHtml(it.rol_salida_egresado || it.ai_tier_label || 'Desarrollador Junior')}</div>
+                        <div class="ai-score ${AppController.aiTierClass(it.ai_tier)}" style="font-size: 0.82rem; font-weight: 700;">${SecurityService.escapeHtml(it.ai_tier_label || 'Prioridad media')}</div>
                     </div>
                     <div style="display: flex; align-items: center; gap: 0.35rem;">
                         <span class="ai-score ${AppController.aiTierClass(it.ai_tier)}" style="font-size: 1.24rem; font-weight: 900; font-family: var(--font-mono);">${it.puntaje_exito || 0}</span>
@@ -1866,8 +1320,6 @@ class AppController {
             mScoreEl.innerHTML = html;
         }
 
-        setTxt(this.dom.mEsc, `${it.escalabilidad_score || 75} / 100`);
-        setTxt(this.dom.mRating, `★ ${(it.reputacion_rating || 3.8).toFixed(1)}`);
         setTxt(this.dom.mTierText, it.cat_badge || 'Tier 1 · Software');
         setTxt(this.dom.mVacantesText, `${it.vacantes || 1} vacantes (${it.postulados || 0} post.)`);
         setTxt(this.dom.mModalidadText, it.modalidad || 'Presencial / Híbrido');
@@ -1875,9 +1327,8 @@ class AppController {
         setTxt(this.dom.mContactName, it.contacto || 'Equipo de Selección y Gestión Humana');
         if (this.dom.mContactEmail) {
             if (it.email && it.email.includes('@')) {
-                const isMaster = this.currentSession && this.currentSession.role === 'ADMIN';
-                const contactSub = isMaster ? `Propuesta técnica para ${it.empresa} - Juan Manuel Lagos` : `Postulación Contrato ADSO SENA - [Nombre del Aprendiz]`;
-                const contactBody = isMaster ? (it.correo_formal_completo || '') : PrivacyFilterService.sanitizeForGuest(it.correo_formal_completo || '');
+                const contactSub = `Propuesta técnica para ${it.empresa} - ${CONFIG.CANDIDATE.name}`;
+                const contactBody = it.correo_formal_completo || '';
                 const contactMailto = SecurityService.getMailtoUrl(it.email, contactSub, contactBody);
                 this.dom.mContactEmail.innerHTML = `<a href="${SecurityService.escapeHtml(contactMailto)}" style="color: var(--tier-2); text-decoration: underline;" title="Abrir en App de Correo (${SecurityService.escapeHtml(it.email)})" data-email-action="true" data-email="${SecurityService.escapeHtml(it.email)}">${SecurityService.escapeHtml(it.email)}</a>`;
             } else {
@@ -1887,8 +1338,6 @@ class AppController {
         setTxt(this.dom.mContactPhone, it.telefono || 'No registrado');
         setTxt(this.dom.mContactModalidad, it.modalidad || 'Presencial / Híbrido');
 
-        setTxt(this.dom.mCurvaTitulo, it.curva_aprendizaje_titulo || 'Desarrollo de Software');
-        setTxt(this.dom.mCurvaDetalle, it.curva_aprendizaje_detalle || '');
         setTxt(this.dom.mPerfil, it.perfil_requerido || 'No registrado');
         setTxt(this.dom.mFunciones, it.funciones || 'No registrado');
         setTxt(this.dom.mClosingDate, it.fecha_cierre || 'No registrada');
@@ -1931,22 +1380,6 @@ class AppController {
                         <p class="ranking-justificacion-text">
                             ${SecurityService.escapeHtml(it.ranking_justificacion || it.panorama_actividad || 'Evaluación técnica basada en entorno de desarrollo, tecnologías en producción y escalabilidad profesional a 5 años.')}
                         </p>
-                    </div>
-                </div>
-
-                <!-- 2. Potencial de Aprendizaje & Proyección Salarial -->
-                <div class="salary-escalation-banner">
-                    <div>
-                        <div style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Rol Proyectado al Egresar</div>
-                        <div style="font-size: 0.85rem; font-weight: 800; color: var(--tier-2); margin-top: 1px;"><i class="fa-solid fa-code"></i> ${SecurityService.escapeHtml(it.rol_salida_egresado || 'Desarrollador Junior Full-Stack')}</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Techo Salarial (5 Años)</div>
-                        <div style="font-size: 0.85rem; font-weight: 800; color: var(--brand-primary); font-family: var(--font-mono); margin-top: 1px;"><i class="fa-solid fa-arrow-trend-up"></i> ${SecurityService.escapeHtml(it.techo_salarial_5anios || '$8M - $18M+ COP')}</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Reputación / Clima</div>
-                        <div style="font-size: 0.85rem; font-weight: 800; color: #fbbf24; font-family: var(--font-mono); margin-top: 1px;">★ ${(it.reputacion_rating || 4.0).toFixed(1)} / 5.0</div>
                     </div>
                 </div>
 
@@ -2094,16 +1527,13 @@ class AppController {
         const it = this.store.activeItem;
         if (!it) return;
 
-        const isMaster = this.currentSession && this.currentSession.role === 'ADMIN';
 
         if (this.dom.mChEmail) this.dom.mChEmail.className = ch === 'email' ? 'btn btn-primary' : 'btn';
         if (this.dom.mChWA) this.dom.mChWA.className = ch === 'wa' ? 'btn btn-whatsapp active' : 'btn';
         if (this.dom.mChLinkedIn) this.dom.mChLinkedIn.className = ch === 'linkedin' ? 'btn btn-linkedin active' : 'btn';
 
         if (ch === 'email') {
-            let subject = isMaster 
-                ? `Propuesta técnica y proyectos de software para ${it.empresa} - Juan Manuel Lagos (ADSO SENA)`
-                : `Postulación Contrato de Aprendizaje ADSO SENA - [Nombre del Aprendiz]`;
+            let subject = `Propuesta técnica y proyectos de software para ${it.empresa} - ${CONFIG.CANDIDATE.name} (ADSO SENA)`;
 
             let bodyText = it.correo_formal_completo || '';
             if (bodyText.startsWith('Asunto:')) {
@@ -2112,15 +1542,8 @@ class AppController {
                 bodyText = lines.slice(2).join('\n');
             }
 
-            if (!isMaster) {
-                subject = PrivacyFilterService.sanitizeForGuest(subject);
-                bodyText = PrivacyFilterService.sanitizeForGuest(bodyText);
-            }
-
             if (this.dom.mOutreachHeading) {
-                this.dom.mOutreachHeading.textContent = isMaster 
-                    ? 'Carta Persuasiva de Postulación (Personalizada & con CV Rastreado)' 
-                    : 'Plantilla de Postulación Formal (Pública / Formato Estándar)';
+                this.dom.mOutreachHeading.textContent = 'Carta de postulación personalizada';
             }
             if (this.dom.mOutreachBody) this.dom.mOutreachBody.textContent = bodyText;
 
@@ -2148,23 +1571,14 @@ class AppController {
                 this.dom.mOutreachActions.innerHTML = `
                     <button class="btn" style="padding: 0.22rem 0.52rem;" data-action="copyOutreach"><i class="fa-regular fa-copy"></i> Copiar Correo</button>
                     ${emailButtonsHtml}
-                    ${isMaster 
-                        ? `<a href="https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-cv-drive" style="padding: 0.22rem 0.52rem; font-size: 0.79rem;" title="Abrir Hoja de Vida oficial (PDF)"><i class="fa-solid fa-file-pdf"></i> Hoja de Vida <span class="cv-mini-badge">PDF</span></a>
-                           <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-certs-link" style="padding: 0.22rem 0.52rem; font-size: 0.79rem;" title="Abrir Carpeta de Certificados Académicos en Google Drive"><i class="fa-brands fa-google-drive"></i> Certificados <span class="cv-mini-badge">DRIVE</span></a>` 
-                        : `<span style="font-size: 0.79rem; color: var(--text-dim); display: inline-flex; align-items: center; gap: 0.25rem;"><i class="fa-solid fa-shield-halved" style="color: var(--tier-2);"></i> CV oficial reservado al Titular</span>`
-                    }
+                    <a href="https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-cv-drive" style="padding: 0.22rem 0.52rem; font-size: 0.79rem;" title="Abrir Hoja de Vida oficial (PDF)"><i class="fa-solid fa-file-pdf"></i> Hoja de Vida <span class="cv-mini-badge">PDF</span></a>
+                    <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-certs-link" style="padding: 0.22rem 0.52rem; font-size: 0.79rem;" title="Abrir Certificados Académicos en Google Drive"><i class="fa-brands fa-google-drive"></i> Certificados <span class="cv-mini-badge">DRIVE</span></a>
                 `;
             }
         } else if (ch === 'wa') {
             let waMsg = it.whatsapp_message || '';
-            if (!isMaster) {
-                waMsg = PrivacyFilterService.sanitizeForGuest(waMsg);
-            }
-
             if (this.dom.mOutreachHeading) {
-                this.dom.mOutreachHeading.textContent = isMaster
-                    ? 'Mensaje de WhatsApp Directo (Conversacional & Persuasivo)'
-                    : 'Plantilla de WhatsApp (Pública / Formato Estándar)';
+                this.dom.mOutreachHeading.textContent = 'Mensaje directo de WhatsApp';
             }
             if (this.dom.mOutreachBody) this.dom.mOutreachBody.textContent = waMsg;
 
@@ -2179,14 +1593,8 @@ class AppController {
             }
         } else if (ch === 'linkedin') {
             let liMsg = it.linkedin_connect_message || '';
-            if (!isMaster) {
-                liMsg = PrivacyFilterService.sanitizeForGuest(liMsg);
-            }
-
             if (this.dom.mOutreachHeading) {
-                this.dom.mOutreachHeading.textContent = isMaster
-                    ? 'Nota de Conexión en LinkedIn (< 300 Caracteres - Alta Aceptación)'
-                    : 'Plantilla de Conexión en LinkedIn (< 300 Caracteres)';
+                this.dom.mOutreachHeading.textContent = 'Nota de conexión en LinkedIn (menos de 300 caracteres)';
             }
             if (this.dom.mOutreachBody) this.dom.mOutreachBody.textContent = liMsg;
 
@@ -2197,117 +1605,6 @@ class AppController {
                 `;
             }
         }
-    }
-
-    // =========================================================================
-    // CV REALTIME TELEMETRY & NOTIFICATION CONTROLLER
-    // =========================================================================
-    openCvAlertsModal() {
-        if (this.dom.cvAlertsModal) {
-            this.dom.cvAlertsModal.style.display = 'flex';
-            document.body.classList.add('modal-open');
-            this.openModalFocus(this.dom.cvAlertsModal);
-            this.fetchCvAlerts();
-        }
-    }
-
-    closeCvAlertsModal() {
-        if (this.dom.cvAlertsModal) {
-            this.dom.cvAlertsModal.style.display = 'none';
-            document.body.classList.remove('modal-open');
-            this.releaseModalFocus(this.dom.cvAlertsModal);
-        }
-    }
-
-    async fetchCvAlerts() {
-        if (!this.dom.cvEventsList) return;
-        try {
-            const res = await fetch('/api/cv-events');
-            if (res.ok) {
-                const data = await res.json();
-                const count = data.total_aperturas || (data.eventos ? data.eventos.length : 0);
-                if (this.dom.badgeCvAlertsCount) {
-                    this.dom.badgeCvAlertsCount.textContent = count;
-                }
-
-                if (!data.eventos || data.eventos.length === 0) {
-                    this.dom.cvEventsList.innerHTML = `
-                        <div style="text-align: center; padding: 1.5rem; color: var(--text-muted); font-size: 0.82rem;">
-                            <i class="fa-solid fa-bell-slash" style="font-size: 1.48rem; color: var(--text-dim); margin-bottom: 0.3rem;"></i><br>
-                            Aún no se registran aperturas en vivo.<br>
-                            <span style="font-size: 0.77rem; color: var(--text-dim);">Haz clic en "Simular Apertura" o abre cualquier enlace de CV para probar.</span>
-                        </div>
-                    `;
-                    return;
-                }
-
-                let html = '';
-                data.eventos.forEach(ev => {
-                    html += `
-                        <div style="background: var(--bg-surface); border: 1px solid var(--border-muted); border-radius: var(--radius-xs); padding: 0.5rem; display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.81rem;">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <strong style="color: var(--brand-primary); font-weight: 700;">
-                                    <i class="fa-solid fa-circle-check"></i> ${SecurityService.escapeHtml(ev.empresa)}
-                                </strong>
-                                <span style="font-size: 0.74rem; color: var(--text-dim); font-family: var(--font-mono);">${SecurityService.escapeHtml(ev.fecha || '')}</span>
-                            </div>
-                            <div style="color: var(--text-muted); font-size: 0.77rem; display: flex; gap: 0.4rem; flex-wrap: wrap;">
-                                <span><i class="fa-solid fa-user"></i> ${SecurityService.escapeHtml(ev.contacto || 'RRHH')}</span>
-                                <span>•</span>
-                                <span><i class="fa-solid fa-location-dot"></i> ${SecurityService.escapeHtml(ev.ubicacion || 'Colombia')}</span>
-                                <span>•</span>
-                                <span><i class="fa-solid fa-laptop"></i> ${SecurityService.escapeHtml(ev.dispositivo || 'Web')}</span>
-                            </div>
-                        </div>
-                    `;
-                });
-                this.dom.cvEventsList.innerHTML = html;
-            }
-        } catch (e) {
-            // Local fallback simulation
-            if (this.dom.cvEventsList) {
-                this.dom.cvEventsList.innerHTML = `
-                    <div style="text-align: center; padding: 1rem; color: var(--text-muted); font-size: 0.82rem;">
-                        <i class="fa-solid fa-shield-check" style="color: var(--brand-primary);"></i> Sistema de telemetría listo para despliegue en Cloudflare Worker.
-                    </div>
-                `;
-            }
-        }
-    }
-
-    async testCvNotification() {
-        const testPayload = {
-            empresa: "STEFANINI COLOMBIA S.A.S (Apertura de Prueba)",
-            contacto: "Johana Avilés",
-            solicitudId: "4425748"
-        };
-
-        this.showToast('🚀 Disparando alerta de telemetría de CV...');
-
-        try {
-            const res = await fetch('/api/cv-events', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(testPayload)
-            });
-
-            if (res.ok) {
-                this.showToast('✓ ¡Alerta en tiempo real generada y registrada!');
-                this.fetchCvAlerts();
-            } else {
-                this.showToast('✓ Alerta simulada localmente con éxito');
-            }
-        } catch (e) {
-            this.showToast('✓ Alerta simulada con éxito');
-        }
-    }
-
-    initCvTracker() {
-        this.fetchCvAlerts();
-        // Background polling every 30 seconds
-        setInterval(() => {
-            this.fetchCvAlerts();
-        }, 30000);
     }
 
     copyToClipboard(elementId) {
@@ -2362,44 +1659,6 @@ class AppController {
     /**
      * Panel de estado flotante: arranca plegado para no tapar la tabla y
      * recuerda la preferencia del usuario entre visitas.
-     */
-    initSyncPanel() {
-        const panel = document.getElementById('syncPanel');
-        if (!panel) return;
-        if (localStorage.getItem('sgva_sync_panel_hidden') === '1') {
-            panel.style.display = 'none';
-            return;
-        }
-        if (localStorage.getItem('sgva_sync_panel_open') === '1') this.toggleSyncPanel(true);
-    }
-
-    toggleSyncPanel(forceOpen) {
-        const panel = document.getElementById('syncPanel');
-        const body = document.getElementById('syncPanelBody');
-        const header = document.getElementById('syncPanelHeader');
-        const chevron = document.getElementById('syncChevron');
-        if (!panel || !body || !header) return;
-
-        const open = typeof forceOpen === 'boolean' ? forceOpen : body.hidden;
-        body.hidden = !open;
-        panel.classList.toggle('is-collapsed', !open);
-        header.setAttribute('aria-expanded', String(open));
-        if (chevron) chevron.className = `fa-solid fa-chevron-${open ? 'down' : 'up'} sync-panel-chevron`;
-        localStorage.setItem('sgva_sync_panel_open', open ? '1' : '0');
-    }
-
-    dismissSyncPanel() {
-        const panel = document.getElementById('syncPanel');
-        if (!panel) return;
-        panel.style.opacity = '0';
-        setTimeout(() => { panel.style.display = 'none'; }, 250);
-        localStorage.setItem('sgva_sync_panel_hidden', '1');
-        this.showToast('Panel de sincronización oculto · se restablece al recargar con Alt + S');
-    }
-
-    /**
-     * Los contadores por Tier se derivan del dataset en cada arranque, de modo
-     * que una resincronizacion del SGVA no deja cifras obsoletas en la interfaz.
      */
     refreshTierCounts() {
         const counts = this.store.rawData.reduce((acc, d) => {
@@ -2514,177 +1773,6 @@ class AppController {
         const hrs = String(dateObj.getHours()).padStart(2, '0');
         const mins = String(dateObj.getMinutes()).padStart(2, '0');
         return `${dateObj.getDate()} ${months[dateObj.getMonth()]} ${dateObj.getFullYear()}, ${hrs}:${mins}`;
-    }
-
-    initSyncStatus() {
-        const savedTime = localStorage.getItem('sgva_last_sync_timestamp');
-        if (savedTime) this.updateSyncTimestamps(parseInt(savedTime, 10));
-        // Auto-refresh relative time display every 60 seconds
-        setInterval(() => {
-            const t = localStorage.getItem('sgva_last_sync_timestamp');
-            if (t) this.updateSyncTimestamps(parseInt(t, 10));
-        }, 60000);
-    }
-
-    updateSyncTimestamps(timestamp) {
-        if (!timestamp) timestamp = Date.now();
-        const dateObj = new Date(timestamp);
-        
-        // Exact Spanish format: "26 ago 2026, 21:05"
-        const day = dateObj.getDate();
-        const months = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
-        const month = months[dateObj.getMonth()];
-        const year = dateObj.getFullYear();
-        const hrs = dateObj.getHours().toString().padStart(2, '0');
-        const mins = dateObj.getMinutes().toString().padStart(2, '0');
-        const exactFormatted = `${day} ${month} ${year}, ${hrs}:${mins}`;
-
-        // Relative human-friendly format (ISO 9241-210)
-        const diffMs = Date.now() - timestamp;
-        const diffMins = Math.floor(diffMs / 60000);
-        let relativeFormatted = 'Hace unos instantes';
-        if (diffMins >= 1 && diffMins < 60) {
-            relativeFormatted = `Hace ${diffMins} min`;
-        } else if (diffMins >= 60 && diffMins < 1440) {
-            const hrsDiff = Math.floor(diffMins / 60);
-            relativeFormatted = `Hace ${hrsDiff} hora${hrsDiff > 1 ? 's' : ''}`;
-        } else if (diffMins >= 1440) {
-            const daysDiff = Math.floor(diffMins / 1440);
-            relativeFormatted = `Hace ${daysDiff} día${daysDiff > 1 ? 's' : ''}`;
-        }
-
-        if (this.dom.sgvaDate) this.dom.sgvaDate.textContent = exactFormatted;
-        if (this.dom.modalExactSyncDate) this.dom.modalExactSyncDate.textContent = exactFormatted;
-        if (this.dom.modalLastSyncTime) this.dom.modalLastSyncTime.textContent = relativeFormatted;
-        if (this.dom.modalTotalVacCount) this.dom.modalTotalVacCount.textContent = `${this.store.rawData.length} Vacantes`;
-        if (this.dom.sgvaVacMeta) this.dom.sgvaVacMeta.textContent = `${this.store.rawData.length} vacantes · 5 modelos IA`;
-    }
-
-    openSgvaSyncModal() {
-        if (this.dom.sgvaSyncModal) {
-            this.dom.sgvaSyncModal.style.display = 'flex';
-            document.body.classList.add('modal-open');
-            this.openModalFocus(this.dom.sgvaSyncModal);
-            const savedTime = localStorage.getItem('sgva_last_sync_timestamp');
-            this.updateSyncTimestamps(savedTime ? parseInt(savedTime, 10) : Date.now());
-        }
-    }
-
-    closeSgvaSyncModal() {
-        if (this.dom.sgvaSyncModal) {
-            this.dom.sgvaSyncModal.style.display = 'none';
-            document.body.classList.remove('modal-open');
-            this.releaseModalFocus(this.dom.sgvaSyncModal);
-        }
-    }
-
-    async syncSgvaData(forceRefresh = false) {
-        if (this.isSyncing) {
-            this.showToast('⏳ Sincronización en curso, por favor espera...');
-            return;
-        }
-
-        const now = Date.now();
-        const lastSync = this.lastSyncAttempt || 0;
-        if (!forceRefresh && (now - lastSync < 3000)) {
-            this.showToast('⏱️ Sincronización reciente. Espera unos segundos antes de volver a solicitar.');
-            return;
-        }
-        this.lastSyncAttempt = now;
-        this.isSyncing = true;
-
-        // UI Spin Animation Trigger (OWASP/ISO 25010 Immediate Usability Feedback)
-        const syncIcons = [this.dom.iconQuickSync, this.dom.iconToolbarSync, this.dom.iconModalSync, this.dom.iconSyncStatusDot].filter(Boolean);
-        syncIcons.forEach(ic => ic.classList.add('spin-anim'));
-        if (this.dom.btnQuickSyncSgva) this.dom.btnQuickSyncSgva.setAttribute('aria-busy', 'true');
-        if (this.dom.btnToolbarSyncSgva) this.dom.btnToolbarSyncSgva.setAttribute('aria-busy', 'true');
-        if (this.dom.btnModalTriggerSync) {
-            this.dom.btnModalTriggerSync.disabled = true;
-            this.dom.btnModalTriggerSync.innerHTML = '<i class="fa-solid fa-rotate spin-anim"></i> <span>Sincronizando...</span>';
-        }
-
-        const updateStep = (stepIdx, state) => {
-            const stepEl = document.getElementById(`step${stepIdx}`);
-            if (!stepEl) return;
-            stepEl.className = `pipeline-step step-${state}`;
-            const icon = stepEl.querySelector('i');
-            if (icon) {
-                if (state === 'running') icon.className = 'fa-solid fa-circle-notch fa-spin';
-                else if (state === 'ok') icon.className = 'fa-solid fa-check-circle';
-                else if (state === 'error') icon.className = 'fa-solid fa-triangle-exclamation';
-            }
-        };
-
-        try {
-            updateStep(1, 'running');
-            await new Promise(r => setTimeout(r, 180));
-            updateStep(1, 'ok');
-
-            updateStep(2, 'running');
-            const cacheBustUrl = `assets/data/empresas.json?t=${now}`;
-            const res = await fetch(cacheBustUrl, {
-                cache: 'no-store',
-                headers: { 'Accept': 'application/json' }
-            });
-
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            const freshData = await res.json();
-
-            if (!Array.isArray(freshData) || freshData.length === 0) {
-                throw new Error('Formato de datos no válido');
-            }
-
-            updateStep(2, 'ok');
-            updateStep(3, 'running');
-            await new Promise(r => setTimeout(r, 120));
-            updateStep(3, 'ok');
-
-            updateStep(4, 'running');
-            await new Promise(r => setTimeout(r, 120));
-            updateStep(4, 'ok');
-
-            updateStep(5, 'running');
-            
-            // Atomic hot-swap of application state store
-            this.store.rawData = freshData;
-            window.RAW_DATA = freshData;
-            
-            // Re-apply current active filters and re-render without page reload
-            this.populateFilterDropdowns();
-            this.applyFilters();
-
-            // Persist new sync timestamp in local storage
-            const syncTimestamp = Date.now();
-            localStorage.setItem('sgva_last_sync_timestamp', String(syncTimestamp));
-            this.updateSyncTimestamps(syncTimestamp);
-
-            updateStep(5, 'ok');
-            await new Promise(r => setTimeout(r, 120));
-
-            this.showToast(`✓ ¡Sincronizado! ${freshData.length} vacantes actualizadas desde SGVA SENA`);
-        } catch (err) {
-            console.warn('[SGVA Sync] Network/File refresh fallback:', err);
-            // Fallback: refresh from window.RAW_DATA if running on pure file:// or offline
-            if (window.RAW_DATA && Array.isArray(window.RAW_DATA)) {
-                this.store.rawData = window.RAW_DATA;
-                this.applyFilters();
-                const syncTimestamp = Date.now();
-                localStorage.setItem('sgva_last_sync_timestamp', String(syncTimestamp));
-                this.updateSyncTimestamps(syncTimestamp);
-                this.showToast(`✓ Datos SGVA actualizados (${this.store.rawData.length} vacantes activas)`);
-            } else {
-                this.showToast('⚠️ No se pudo conectar con el portal SGVA en este momento');
-            }
-        } finally {
-            this.isSyncing = false;
-            syncIcons.forEach(ic => ic.classList.remove('spin-anim'));
-            if (this.dom.btnQuickSyncSgva) this.dom.btnQuickSyncSgva.removeAttribute('aria-busy');
-            if (this.dom.btnToolbarSyncSgva) this.dom.btnToolbarSyncSgva.removeAttribute('aria-busy');
-            if (this.dom.btnModalTriggerSync) {
-                this.dom.btnModalTriggerSync.disabled = false;
-                this.dom.btnModalTriggerSync.innerHTML = '<i class="fa-solid fa-rotate"></i> <span>Sincronizar Ahora</span>';
-            }
-        }
     }
 
     async exportData(fmt) {
