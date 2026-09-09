@@ -89,6 +89,42 @@ class SecurityService {
         if (body) params.set('body', body);
         return `https://mail.google.com/mail/?${params.toString()}`;
     }
+
+    /**
+     * Reliable cross-platform detection for mobile devices, touch devices and mobile viewports (<= 768px).
+     * @returns {boolean}
+     */
+    static isMobile() {
+        if (typeof window === 'undefined') return false;
+        const ua = (navigator.userAgent || navigator.vendor || window.opera || '').toLowerCase();
+        const isMobileUA = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile/i.test(ua);
+        const isMobileViewport = window.innerWidth <= 768;
+        const hasTouch = (typeof navigator.maxTouchPoints === 'number' && navigator.maxTouchPoints > 0) || ('ontouchstart' in window);
+        return isMobileUA || isMobileViewport || (hasTouch && window.innerWidth <= 1024);
+    }
+
+    /**
+     * Constructs an RFC 6068 compliant mailto URL with prefilled recipient, subject, and body.
+     * Line breaks are converted to CRLF (%0D%0A) to ensure native mobile clients (Gmail, Apple Mail, Outlook)
+     * preserve paragraph and newline formatting properly without opening a web browser.
+     * @param {string} to
+     * @param {string} subject
+     * @param {string} body
+     * @returns {string}
+     */
+    static getMailtoUrl(to, subject, body) {
+        if (!to) return '#';
+        const params = [];
+        if (subject) {
+            params.push(`subject=${encodeURIComponent(subject)}`);
+        }
+        if (body) {
+            const normalizedBody = String(body).replace(/\r\n/g, '\n').replace(/\n/g, '\r\n');
+            params.push(`body=${encodeURIComponent(normalizedBody)}`);
+        }
+        const qs = params.length > 0 ? `?${params.join('&')}` : '';
+        return `mailto:${encodeURIComponent(to.trim())}${qs}`;
+    }
 }
 
 // =========================================================================
@@ -143,6 +179,11 @@ class AuthService {
         } catch (e) {
             return null;
         }
+    }
+
+    static isMasterAuthenticated() {
+        const sess = AuthService.getSession();
+        return Boolean(sess && sess.role === 'ADMIN');
     }
 
     static saveSession(user, role = 'ADMIN', token = '', remember = true) {
@@ -303,6 +344,7 @@ class AppStore {
         // Smart responsive view mode default
         const isMobileScreen = typeof window !== 'undefined' && window.innerWidth < 768;
         this.viewMode = isMobileScreen ? 'cards' : 'table';
+        this._lastIsMobile = typeof window !== 'undefined' ? SecurityService.isMobile() : false;
         
         this.currentPage = 1;
         this.pageSize = CONFIG.PAGINATION.DEFAULT_PAGE_SIZE;
@@ -532,21 +574,17 @@ class AppController {
         this.bindEvents();
         this.updateFavCounter();
         this.updateCompareDock();
+        this.refreshTierCounts();
 
         // Mobile-first responsive optimization
         if (window.innerWidth < 768) {
             this.store.viewMode = 'cards';
-            const b = document.getElementById('syncPanelBody');
-            const ch = document.getElementById('syncChevron');
-            if (b && ch) {
-                b.style.display = 'none';
-                ch.className = 'fa-solid fa-chevron-up';
-            }
         }
 
         this.setLayout(this.store.viewMode);
         this.initCvTracker();
         this.initSyncStatus();
+        this.initSyncPanel();
         this.initAuth();
     }
 
@@ -613,7 +651,7 @@ class AppController {
                         </div>
                         <div class="candidate-meta">
                             <div class="candidate-name-row">
-                                <h1>Juan Manuel Lagos Monroy</h1>
+                                <h2>Juan Manuel Lagos Monroy</h2>
                                 <span class="status-pill status-ready" style="flex-shrink: 0;"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Disponible Etapa Productiva</span>
                             </div>
                             <p class="candidate-pitch">
@@ -673,16 +711,16 @@ class AppController {
                 banner.style.display = 'flex';
                 banner.innerHTML = `
                     <div class="candidate-banner-main">
-                        <div class="candidate-badge-photo" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;" aria-hidden="true">
+                        <div class="candidate-badge-photo" style="background: rgba(56, 189, 248, 0.15); color: var(--tier-2);" aria-hidden="true">
                             <i class="fa-solid fa-building-columns"></i>
                         </div>
                         <div class="candidate-meta">
                             <div class="candidate-name-row">
-                                <h1>Directorio Estratégico de Vacantes · SENA ADSO</h1>
-                                <span class="status-pill" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); flex-shrink: 0;"><i class="fa-solid fa-eye" aria-hidden="true"></i> Modo Invitado</span>
+                                <h2>Directorio Estratégico de Vacantes · SENA ADSO</h2>
+                                <span class="status-pill" style="background: rgba(56, 189, 248, 0.15); color: var(--tier-2); border: 1px solid rgba(56, 189, 248, 0.3); flex-shrink: 0;"><i class="fa-solid fa-eye" aria-hidden="true"></i> Modo Invitado</span>
                             </div>
                             <p class="candidate-pitch">
-                                <strong>Exploración Abierta:</strong> Consulta 179 vacantes analizadas para aprendices y egresados en Análisis y Desarrollo de Software. Filtra por canal de postulación, salario y nivel de competitividad.
+                                <strong>Exploración Abierta:</strong> Consulta <span id="lblBannerTotal">${this.store.rawData.length}</span> vacantes analizadas para aprendices y egresados en Análisis y Desarrollo de Software. Filtra por canal de postulación, salario y nivel de competitividad.
                             </p>
                         </div>
                     </div>
@@ -779,6 +817,7 @@ class AppController {
         if (modal) {
             modal.style.display = 'flex';
             document.body.classList.add('modal-open');
+            this.openModalFocus(modal);
         }
         if (alertBox) alertBox.style.display = 'none';
         this.switchAuthTab('admin');
@@ -789,6 +828,7 @@ class AppController {
         if (modal) {
             modal.style.display = 'none';
             document.body.classList.remove('modal-open');
+            this.releaseModalFocus(modal);
         }
     }
 
@@ -945,16 +985,81 @@ class AppController {
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
+                // Todos los dialogos deben ceder a Escape, incluido el de acceso:
+                // dejar uno fuera atrapa al usuario de teclado.
                 this.closeDetailModal();
                 this.closeCompareModal();
                 this.closeSgvaSyncModal();
+                this.closeCvAlertsModal();
+                this.closeAuthModal();
             }
+            if (e.key === 'Tab') this.trapFocus(e);
             // Accessibility Keyboard Shortcut: Alt + S or R (when outside text inputs)
             const isTyping = ['INPUT', 'TEXTAREA', 'SELECT'].includes((document.activeElement?.tagName || ''));
             if ((e.altKey && (e.key === 's' || e.key === 'S')) || (!isTyping && (e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.metaKey)) {
                 if (e.altKey) e.preventDefault();
                 this.syncSgvaData();
             }
+        });
+
+        // Global Fail-Safe Interceptor for Mobile Email Actions:
+        // Guarantees that on mobile devices / viewports, any email click opens the native email app via mailto:
+        // and NEVER opens a new browser tab / window.
+        document.addEventListener('click', (e) => {
+            const emailTarget = e.target.closest('[data-email-action="true"], .mini-mail-app, .btn-mail-app, .mini-gmail, .btn-gmail, a[href^="mailto:"], a[href*="mail.google.com"]');
+            if (!emailTarget) return;
+
+            if (SecurityService.isMobile()) {
+                const rawHref = emailTarget.getAttribute('href') || '';
+                
+                // If it points to Gmail web compose, block browser navigation and redirect to mailto:
+                if (rawHref.includes('mail.google.com')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    try {
+                        const parsed = new URL(rawHref, window.location.origin);
+                        const to = parsed.searchParams.get('to') || emailTarget.getAttribute('data-email') || '';
+                        const su = parsed.searchParams.get('su') || '';
+                        const body = parsed.searchParams.get('body') || '';
+                        const mailtoUri = SecurityService.getMailtoUrl(to, su, body);
+                        window.location.href = mailtoUri;
+                    } catch (err) {
+                        const fallbackEmail = emailTarget.getAttribute('data-email') || '';
+                        if (fallbackEmail) window.location.href = `mailto:${encodeURIComponent(fallbackEmail)}`;
+                    }
+                    return;
+                }
+
+                // If it's mailto:, ensure no target="_blank" so mobile browser doesn't open an empty tab
+                if (rawHref.startsWith('mailto:')) {
+                    if (emailTarget.getAttribute('target')) {
+                        emailTarget.removeAttribute('target');
+                    }
+                    if (emailTarget.getAttribute('rel')) {
+                        emailTarget.removeAttribute('rel');
+                    }
+                }
+            }
+        }, { capture: true });
+
+        // Responsive Viewport Resize Listener: Update layout and buttons dynamically when crossing mobile breakpoint
+        let resizeTimer = null;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                const isMobileNow = SecurityService.isMobile();
+                if (this.store && this.store._lastIsMobile !== isMobileNow) {
+                    this.store._lastIsMobile = isMobileNow;
+                    if (this.store.viewMode === 'cards') {
+                        this.renderCards();
+                    } else {
+                        this.renderTable();
+                    }
+                    if (this.store.activeDetailItem && this.store.modalTab === 'outreach') {
+                        this.renderOutreachChannel(this.store.modalChannel || 'email');
+                    }
+                }
+            }, 200);
         });
     }
 
@@ -1074,9 +1179,70 @@ class AppController {
             case 'goToPage':
                 this.goToPage(parseInt(el.getAttribute('data-page'), 10));
                 break;
+            case 'toggleSyncPanel':
+                this.toggleSyncPanel();
+                break;
+            case 'dismissSyncPanel':
+                this.dismissSyncPanel();
+                break;
             default:
                 break;
         }
+    }
+
+    /**
+     * Gestion de foco de dialogos (WAI-ARIA APG): al abrir, el foco entra en el
+     * panel; al cerrar, vuelve al control que lo invoco.
+     */
+    static FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+    focusablesIn(panel) {
+        return [...panel.querySelectorAll(AppController.FOCUSABLE)]
+            .filter(el => el.offsetParent !== null || el === document.activeElement);
+    }
+
+    openModalFocus(modal) {
+        if (!modal) return;
+        this._lastFocused = document.activeElement;
+        this._openModal = modal;
+        const panel = modal.querySelector('.modal-panel, .auth-panel, .modal-content') || modal;
+        const first = this.focusablesIn(panel)[0];
+        if (first) setTimeout(() => first.focus(), 30);
+    }
+
+    releaseModalFocus(modal) {
+        if (this._openModal !== modal) return;
+        this._openModal = null;
+        if (this._lastFocused && document.contains(this._lastFocused)) {
+            this._lastFocused.focus();
+        }
+        this._lastFocused = null;
+    }
+
+    trapFocus(e) {
+        const modal = this._openModal;
+        if (!modal || modal.style.display === 'none') return;
+        const panel = modal.querySelector('.modal-panel, .auth-panel, .modal-content') || modal;
+        const items = this.focusablesIn(panel);
+        if (items.length === 0) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+        }
+    }
+
+    /**
+     * El dataset trae un hex por tier pensado solo para el tema oscuro.
+     * Se traduce a una clase para que el color lo resuelvan los tokens.
+     */
+    static aiTierClass(tier) {
+        const map = { S: 'is-tier-s', A: 'is-tier-a', B: 'is-tier-b', C: 'is-tier-b', D: 'is-tier-d' };
+        return map[String(tier || '').toUpperCase()] || 'is-tier-a';
     }
 
     updateFilterBadge() {
@@ -1238,9 +1404,9 @@ class AppController {
                 <tr>
                     <td colspan="11" style="text-align: center; padding: 3.5rem 1rem;">
                         <div style="display: flex; flex-direction: column; align-items: center; gap: 0.6rem; color: var(--text-muted);">
-                            <i class="fa-solid fa-magnifying-glass" style="font-size: 1.8rem; color: var(--text-dim);" aria-hidden="true"></i>
-                            <strong style="color: var(--text-main); font-size: 0.86rem;">No se encontraron vacantes con los criterios seleccionados</strong>
-                            <p style="font-size: 0.72rem; max-width: 380px;">Prueba ajustando los términos de búsqueda o restableciendo los filtros para ver las 179 oportunidades.</p>
+                            <i class="fa-solid fa-magnifying-glass" style="font-size: 1.9rem; color: var(--text-dim);" aria-hidden="true"></i>
+                            <strong style="color: var(--text-main); font-size: 0.96rem;">No se encontraron vacantes con los criterios seleccionados</strong>
+                            <p style="font-size: 0.82rem; max-width: 380px;">Prueba ajustando los términos de búsqueda o restableciendo los filtros para ver las ${this.store.rawData.length} oportunidades.</p>
                             <button class="btn btn-primary" data-action="resetFilters" style="margin-top: 0.3rem;">
                                 <i class="fa-solid fa-rotate-left"></i> Restablecer Filtros
                             </button>
@@ -1278,14 +1444,21 @@ class AppController {
             const hasValidWA = SecurityService.isValidMobile(it.telefono);
             const waUrl = hasValidWA ? SecurityService.getWhatsAppUrl(it.telefono, it.whatsapp_message) : '';
 
-            const cleanApoyo = "$1.423.500 COP";
-            const cleanTecho5A = it.techo_salarial_5anios ? it.techo_salarial_5anios.split('(')[0].replace('COP','').trim() : '$10M-$22M';
             const posFormatted = (it.ranking_posicion || 1) < 10 ? '0' + it.ranking_posicion : it.ranking_posicion;
 
             const isMaster = this.currentSession && this.currentSession.role === 'ADMIN';
             const rawBody = it.correo_formal_completo || '';
             const mailBody = isMaster ? rawBody : PrivacyFilterService.sanitizeForGuest(rawBody);
             const mailSub = isMaster ? `Postulación Contrato ADSO - Juan Manuel Lagos` : `Postulación Contrato ADSO SENA - [Nombre del Aprendiz]`;
+
+            const isMobile = SecurityService.isMobile();
+            const emailHref = isMobile 
+                ? SecurityService.getMailtoUrl(it.email, mailSub, mailBody)
+                : SecurityService.getGmailUrl(it.email, mailSub, mailBody);
+            const emailTarget = isMobile ? '' : 'target="_blank" rel="noopener noreferrer"';
+            const emailClass = isMobile ? 'mini-btn mini-mail-app' : 'mini-btn mini-gmail';
+            const emailIcon = isMobile ? '<i class="fa-solid fa-envelope"></i>' : '<i class="fa-brands fa-google"></i>';
+            const emailTitle = isMobile ? `Abrir en App de Correo (${SecurityService.escapeHtml(it.email)})` : `Redactar en Gmail (${SecurityService.escapeHtml(it.email)})`;
 
             tr.innerHTML = `
                 <td style="text-align: center;">
@@ -1306,25 +1479,25 @@ class AppController {
                     <div style="display: flex; gap: 0.22rem; flex-wrap: wrap; align-items: center;">
                         ${(it.stack_tags && it.stack_tags.length > 0)
                             ? it.stack_tags.slice(0, 3).map(t => `<span class="stack-chip">${SecurityService.escapeHtml(t)}</span>`).join('')
-                            : `<span style="color:var(--text-dim);font-size:0.64rem;">ADSO General</span>`
+                            : `<span style="color:var(--text-dim);font-size:0.76rem;">ADSO General</span>`
                         }
                     </div>
                 </td>
                 <td style="text-align: center;">
                     <div style="display: inline-flex; align-items: center; gap: 0.3rem;">
-                        <strong style="color: ${it.ai_tier_color || 'var(--brand-primary)'}; font-family: var(--font-mono); font-size: 0.84rem;">${it.puntaje_exito || 0}</strong>
-                        <span style="font-size: 0.56rem; font-weight: 800; padding: 0.04rem 0.26rem; border-radius: 3px; background: ${(it.ai_tier_color || '#10b981')}22; color: ${it.ai_tier_color || '#10b981'};">T${it.ai_tier || '?'}</span>
+                        <strong class="ai-score ${AppController.aiTierClass(it.ai_tier)}" style="font-family: var(--font-mono); font-size: 0.94rem;">${it.puntaje_exito || 0}</strong>
+                        <span class="ai-tier-chip ${AppController.aiTierClass(it.ai_tier)}">T${it.ai_tier || '?'}</span>
                     </div>
                 </td>
                 <td>
-                    <span style="display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.68rem; white-space: nowrap;">
+                    <span style="display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.79rem; white-space: nowrap;">
                         <span class="ratio-dot ${dotClass}"></span>
                         <span>${it.vacantes || 1} vac · ${it.postulados || 0} post</span>
                     </span>
                 </td>
                 <td style="text-align: right;">
                     <div class="row-actions">
-                        ${hasEmail ? `<a href="${SecurityService.escapeHtml(SecurityService.getGmailUrl(it.email, mailSub, mailBody))}" target="_blank" rel="noopener noreferrer" class="mini-btn mini-gmail" title="Redactar en Gmail (${SecurityService.escapeHtml(it.email)})"><i class="fa-brands fa-google"></i></a>` : ''}
+                        ${hasEmail ? `<a href="${SecurityService.escapeHtml(emailHref)}" ${emailTarget} class="${emailClass}" title="${emailTitle}" data-email-action="true" data-email="${SecurityService.escapeHtml(it.email)}">${emailIcon}</a>` : ''}
                         ${hasValidWA ? `<a href="${SecurityService.escapeHtml(waUrl)}" target="_blank" rel="noopener noreferrer" class="mini-btn mini-wa" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
                         ${it.linkedin_contact_search_url ? `<a href="${SecurityService.escapeHtml(it.linkedin_contact_search_url)}" target="_blank" rel="noopener noreferrer" class="mini-btn" title="Buscar en LinkedIn"><i class="fa-brands fa-linkedin" style="color: var(--linkedin-color);"></i></a>` : ''}
                         <button class="mini-btn" style="font-weight: 700;" data-action="openDetailModal" data-id="${SecurityService.escapeHtml(it.solicitud_id)}">Detalle</button>
@@ -1348,39 +1521,38 @@ class AppController {
             return;
         }
 
-        const isMobile = window.innerWidth < 640;
-        let html = '';
+        const page = this.store.currentPage;
+        const prev = Math.max(1, page - 1);
+        const next = Math.min(totalPages, page + 1);
+        const atStart = page === 1;
+        const atEnd = page === totalPages;
 
-        if (isMobile) {
-            html = `
-                <div style="display: flex; align-items: center; gap: 0.35rem;">
-                    <button class="btn" style="padding: 0.2rem 0.45rem; font-size: 0.68rem;" data-action="goToPage" data-page="${Math.max(1, this.store.currentPage - 1)}" ${this.store.currentPage === 1 ? 'disabled style="opacity: 0.4; cursor: not-allowed;"' : ''} aria-label="Página anterior">
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </button>
-                    <span style="font-size: 0.68rem; font-family: var(--font-mono); color: var(--text-main); font-weight: 600; padding: 0 0.2rem;">
-                        ${this.store.currentPage} / ${totalPages}
-                    </span>
-                    <button class="btn" style="padding: 0.2rem 0.45rem; font-size: 0.68rem;" data-action="goToPage" data-page="${Math.min(totalPages, this.store.currentPage + 1)}" ${this.store.currentPage === totalPages ? 'disabled style="opacity: 0.4; cursor: not-allowed;"' : ''} aria-label="Página siguiente">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </button>
-                </div>
-            `;
-        } else {
-            html += `<button class="btn" style="padding: 0.18rem 0.45rem; font-size: 0.68rem;" data-action="goToPage" data-page="${Math.max(1, this.store.currentPage - 1)}" ${this.store.currentPage === 1 ? 'disabled style="opacity: 0.4; cursor: not-allowed;"' : ''}><i class="fa-solid fa-chevron-left"></i></button>`;
+        // Un unico atributo style por boton: el disabled anterior emitia un
+        // segundo style que el parser descartaba junto con el estado apagado.
+        const arrow = (target, disabled, dir, label) =>
+            `<button class="btn page-btn" data-action="goToPage" data-page="${target}"` +
+            `${disabled ? ' disabled' : ''} aria-label="${label}">` +
+            `<i class="fa-solid fa-chevron-${dir}" aria-hidden="true"></i></button>`;
 
-            for (let i = 1; i <= totalPages; i++) {
-                if (totalPages > 6 && Math.abs(i - this.store.currentPage) > 2 && i !== 1 && i !== totalPages) {
-                    if (i === 2 || i === totalPages - 1) {
-                        html += `<span style="color: var(--text-dim); padding: 0 0.15rem;">...</span>`;
-                    }
-                    continue;
-                }
-                const activeStyle = i === this.store.currentPage ? 'background: var(--brand-primary); color: #fff; border-color: var(--brand-primary);' : '';
-                html += `<button class="btn" style="padding: 0.18rem 0.45rem; font-size: 0.68rem; min-width: 26px; ${activeStyle}" data-action="goToPage" data-page="${i}">${i}</button>`;
-            }
-
-            html += `<button class="btn" style="padding: 0.18rem 0.45rem; font-size: 0.68rem;" data-action="goToPage" data-page="${Math.min(totalPages, this.store.currentPage + 1)}" ${this.store.currentPage === totalPages ? 'disabled style="opacity: 0.4; cursor: not-allowed;"' : ''}><i class="fa-solid fa-chevron-right"></i></button>`;
+        if (window.innerWidth < 640) {
+            this.dom.paginationPages.innerHTML =
+                arrow(prev, atStart, 'left', 'Página anterior') +
+                `<span class="page-indicator">${page} / ${totalPages}</span>` +
+                arrow(next, atEnd, 'right', 'Página siguiente');
+            return;
         }
+
+        let html = arrow(prev, atStart, 'left', 'Página anterior');
+        for (let i = 1; i <= totalPages; i++) {
+            if (totalPages > 6 && Math.abs(i - page) > 2 && i !== 1 && i !== totalPages) {
+                if (i === 2 || i === totalPages - 1) html += `<span class="page-gap" aria-hidden="true">…</span>`;
+                continue;
+            }
+            const current = i === page;
+            html += `<button class="btn page-btn${current ? ' is-current' : ''}" data-action="goToPage" data-page="${i}"` +
+                    `${current ? ' aria-current="page"' : ''} aria-label="Página ${i} de ${totalPages}">${i}</button>`;
+        }
+        html += arrow(next, atEnd, 'right', 'Página siguiente');
 
         this.dom.paginationPages.innerHTML = html;
     }
@@ -1407,9 +1579,9 @@ class AppController {
             grid.innerHTML = `
                 <div style="grid-column: 1/-1; text-align: center; padding: 3.5rem 1rem; background: var(--bg-surface); border: 1px solid var(--border-muted); border-radius: var(--radius-md);">
                     <div style="display: flex; flex-direction: column; align-items: center; gap: 0.6rem; color: var(--text-muted);">
-                        <i class="fa-solid fa-magnifying-glass" style="font-size: 1.8rem; color: var(--text-dim);" aria-hidden="true"></i>
-                        <strong style="color: var(--text-main); font-size: 0.86rem;">No se encontraron vacantes con los filtros actuales</strong>
-                        <p style="font-size: 0.72rem; max-width: 380px;">Prueba ajustando los términos de búsqueda o restableciendo los filtros para ver las 179 oportunidades.</p>
+                        <i class="fa-solid fa-magnifying-glass" style="font-size: 1.9rem; color: var(--text-dim);" aria-hidden="true"></i>
+                        <strong style="color: var(--text-main); font-size: 0.96rem;">No se encontraron vacantes con los filtros actuales</strong>
+                        <p style="font-size: 0.82rem; max-width: 380px;">Prueba ajustando los términos de búsqueda o restableciendo los filtros para ver las ${this.store.rawData.length} oportunidades.</p>
                         <button class="btn btn-primary" data-action="resetFilters" style="margin-top: 0.3rem;">
                             <i class="fa-solid fa-rotate-left"></i> Restablecer Filtros
                         </button>
@@ -1445,44 +1617,56 @@ class AppController {
 
             const posFormatted = (it.ranking_posicion || 1) < 10 ? '0' + it.ranking_posicion : it.ranking_posicion;
 
+            const cardMailSub = isMaster ? `Propuesta técnica para ${it.empresa} - Juan Manuel Lagos` : `Postulación Contrato ADSO SENA - [Nombre del Aprendiz]`;
+            const cardMailBody = isMaster ? (it.correo_formal_completo || '') : PrivacyFilterService.sanitizeForGuest(it.correo_formal_completo || '');
+            const isMobile = SecurityService.isMobile();
+            const emailHref = isMobile 
+                ? SecurityService.getMailtoUrl(it.email, cardMailSub, cardMailBody)
+                : SecurityService.getGmailUrl(it.email, cardMailSub, cardMailBody);
+            const emailTarget = isMobile ? '' : 'target="_blank" rel="noopener noreferrer"';
+            const emailClass = isMobile ? 'mini-btn mini-mail-app' : 'mini-btn mini-gmail';
+            const emailIcon = isMobile ? '<i class="fa-solid fa-envelope"></i>' : '<i class="fa-brands fa-google"></i>';
+            const emailLabel = isMobile ? 'Correo (App)' : 'Gmail';
+            const emailTitle = isMobile ? `Abrir en App de Correo (${SecurityService.escapeHtml(it.email)})` : `Redactar en Gmail (${SecurityService.escapeHtml(it.email)})`;
+
             card.innerHTML = `
                 <div style="display: flex; flex-direction: column; gap: 0.45rem;">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div style="display: flex; align-items: center; gap: 0.35rem;">
-                            <span style="font-family: var(--font-mono); font-weight: 700; color: var(--text-dim); font-size: 0.72rem;">#${posFormatted}</span>
+                            <span style="font-family: var(--font-mono); font-weight: 700; color: var(--text-dim); font-size: 0.82rem;">#${posFormatted}</span>
                             <span class="pill-badge ${tierClass}">${SecurityService.escapeHtml(it.cat_badge || 'Tier')}</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.4rem;">
                             <span class="rating-chip"><i class="fa-solid fa-star"></i> ${(it.reputacion_rating || 3.8).toFixed(1)}</span>
-                            <i class="${favIcon}" style="cursor: pointer; font-size: 0.82rem; ${favColor}" data-action="toggleFavorite" data-id="${SecurityService.escapeHtml(it.solicitud_id)}"></i>
+                            <i class="${favIcon}" style="cursor: pointer; font-size: 0.93rem; ${favColor}" data-action="toggleFavorite" data-id="${SecurityService.escapeHtml(it.solicitud_id)}"></i>
                         </div>
                     </div>
                     <div>
-                        <h3 style="font-size: 0.86rem; font-weight: 700; color: var(--text-main); line-height: 1.25; margin-bottom: 0.15rem;">${SecurityService.escapeHtml(it.empresa)}</h3>
-                        <div style="font-size: 0.66rem; color: var(--text-dim);">${SecurityService.escapeHtml(it.ciudad || '')}, ${SecurityService.escapeHtml(it.departamento || '')} • ${it.vacantes || 1} vac · ${it.postulados || 0} post</div>
+                        <h3 style="font-size: 0.96rem; font-weight: 700; color: var(--text-main); line-height: 1.25; margin-bottom: 0.15rem;">${SecurityService.escapeHtml(it.empresa)}</h3>
+                        <div style="font-size: 0.77rem; color: var(--text-dim);">${SecurityService.escapeHtml(it.ciudad || '')}, ${SecurityService.escapeHtml(it.departamento || '')} • ${it.vacantes || 1} vac · ${it.postulados || 0} post</div>
                     </div>
                     <div style="display: flex; gap: 0.22rem; flex-wrap: wrap; margin-top: 0.1rem;">
                         ${(it.stack_tags && it.stack_tags.length > 0)
                             ? it.stack_tags.slice(0, 4).map(t => `<span class="stack-chip">${SecurityService.escapeHtml(t)}</span>`).join('')
-                            : `<span style="color:var(--text-dim);font-size:0.64rem;">ADSO General</span>`
+                            : `<span style="color:var(--text-dim);font-size:0.76rem;">ADSO General</span>`
                         }
                     </div>
                 </div>
 
                 <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-xs); padding: 0.45rem 0.6rem; display: flex; justify-content: space-between; align-items: center; margin-top: 0.25rem;">
                     <div>
-                        <span style="font-size: 0.58rem; color: var(--text-dim); text-transform: uppercase; font-weight: 600;">Rol & Afinidad ADSO</span>
-                        <div style="font-size: 0.72rem; font-weight: 700; color: ${it.ai_tier_color || 'var(--brand-primary)'};">${SecurityService.escapeHtml(it.rol_salida_egresado || it.ai_tier_label || 'Desarrollador Junior')}</div>
+                        <span style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; font-weight: 600;">Rol & Afinidad ADSO</span>
+                        <div class="ai-score ${AppController.aiTierClass(it.ai_tier)}" style="font-size: 0.82rem; font-weight: 700;">${SecurityService.escapeHtml(it.rol_salida_egresado || it.ai_tier_label || 'Desarrollador Junior')}</div>
                     </div>
                     <div style="display: flex; align-items: center; gap: 0.35rem;">
-                        <span style="font-size: 1.15rem; font-weight: 900; font-family: var(--font-mono); color: ${it.ai_tier_color || 'var(--brand-primary)'};">${it.puntaje_exito || 0}</span>
-                        <span style="font-size: 0.58rem; font-weight: 800; padding: 0.05rem 0.3rem; border-radius: 3px; background: ${(it.ai_tier_color || '#10b981')}22; color: ${it.ai_tier_color || '#10b981'};">T${it.ai_tier || '?'}</span>
+                        <span class="ai-score ${AppController.aiTierClass(it.ai_tier)}" style="font-size: 1.24rem; font-weight: 900; font-family: var(--font-mono);">${it.puntaje_exito || 0}</span>
+                        <span class="ai-tier-chip ${AppController.aiTierClass(it.ai_tier)}">T${it.ai_tier || '?'}</span>
                     </div>
                 </div>
 
                 <div style="display: flex; justify-content: flex-end; align-items: center; border-top: 1px solid var(--border-muted); padding-top: 0.45rem; margin-top: 0.25rem;">
                     <div class="row-actions">
-                        ${hasEmail ? `<a href="${SecurityService.escapeHtml(SecurityService.getGmailUrl(it.email, isMaster ? `Propuesta técnica para ${it.empresa} - Juan Manuel Lagos` : `Postulación Contrato ADSO SENA - [Nombre del Aprendiz]`, isMaster ? (it.correo_formal_completo || '') : PrivacyFilterService.sanitizeForGuest(it.correo_formal_completo || '')))}" target="_blank" rel="noopener noreferrer" class="mini-btn mini-gmail" title="Redactar en Gmail (${SecurityService.escapeHtml(it.email)})"><i class="fa-brands fa-google"></i> Gmail</a>` : ''}
+                        ${hasEmail ? `<a href="${SecurityService.escapeHtml(emailHref)}" ${emailTarget} class="${emailClass}" title="${emailTitle}" data-email-action="true" data-email="${SecurityService.escapeHtml(it.email)}">${emailIcon} ${emailLabel}</a>` : ''}
                         ${hasValidWA ? `<a href="${SecurityService.escapeHtml(waUrl)}" target="_blank" rel="noopener noreferrer" class="mini-btn mini-wa" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i> WA</a>` : ''}
                         <button class="mini-btn" style="font-weight: 700;" data-action="openDetailModal" data-id="${SecurityService.escapeHtml(it.solicitud_id)}">Ver Detalle ↗</button>
                     </div>
@@ -1554,15 +1738,23 @@ class AppController {
 
         if (count === 0) {
             dock.style.display = 'none';
+            document.body.classList.remove('dock-active');
             return;
         }
         dock.style.display = 'flex';
+        document.body.classList.add('dock-active');
 
         let html = '';
         this.store.compareList.forEach(id => {
             const it = this.store.rawData.find(d => String(d.solicitud_id) === String(id));
             if (it) {
-                html += `<span class="pill-badge pill-tier-1">${SecurityService.escapeHtml(it.empresa.substring(0, 14))}... <i class="fa-solid fa-xmark" style="cursor: pointer; margin-left: 2px;" data-action="toggleCompare" data-id="${SecurityService.escapeHtml(it.solicitud_id)}"></i></span>`;
+                const name = SecurityService.escapeHtml(it.empresa);
+                const short = SecurityService.escapeHtml(it.empresa.substring(0, 14));
+                html += `<span class="pill-badge pill-tier-1 dock-chip" title="${name}">${short}…` +
+                        `<button type="button" class="dock-chip-remove" data-action="toggleCompare" ` +
+                        `data-id="${SecurityService.escapeHtml(it.solicitud_id)}" ` +
+                        `aria-label="Quitar ${name} de la comparación">` +
+                        `<i class="fa-solid fa-xmark" aria-hidden="true"></i></button></span>`;
             }
         });
         if (this.dom.dockList) this.dom.dockList.innerHTML = html;
@@ -1586,17 +1778,17 @@ class AppController {
 
         let html = '<thead><tr><th style="padding: 0.5rem; text-align: left;">Criterio</th>';
         items.forEach(it => {
-            html += `<th style="padding: 0.5rem; text-align: left;"><strong style="color: var(--brand-primary);">${SecurityService.escapeHtml(it.empresa)}</strong><div style="font-size: 0.65rem; color: var(--text-dim);">#${it.ranking_posicion} • ${SecurityService.escapeHtml(it.cat_badge || '')}</div></th>`;
+            html += `<th style="padding: 0.5rem; text-align: left;"><strong style="color: var(--brand-primary);">${SecurityService.escapeHtml(it.empresa)}</strong><div style="font-size: 0.77rem; color: var(--text-dim);">#${it.ranking_posicion} • ${SecurityService.escapeHtml(it.cat_badge || '')}</div></th>`;
         });
         html += '</tr></thead><tbody>';
 
         const fields = [
-            { label: "Afinidad & Tier IA", fn: it => `<strong style="color: ${it.ai_tier_color || 'var(--brand-primary)'};">${it.puntaje_exito} / 100 (Tier ${it.ai_tier || '?'})</strong>` },
+            { label: "Afinidad & Tier IA", fn: it => `<strong class="ai-score ${AppController.aiTierClass(it.ai_tier)}">${it.puntaje_exito} / 100 (Tier ${it.ai_tier || '?'})</strong>` },
             { label: "Categoría", fn: it => `<span class="pill-badge pill-tier-1">${SecurityService.escapeHtml(it.cat_badge || '')}</span>` },
             { label: "Stack Tecnológico", fn: it => (it.stack_tags && it.stack_tags.length > 0) ? it.stack_tags.slice(0, 4).map(t => `<span class="stack-chip">${SecurityService.escapeHtml(t)}</span>`).join(' ') : 'ADSO General' },
-            { label: "Actividad Principal", fn: it => `<div style="font-size: 0.68rem; color: var(--text-muted); line-height: 1.4;">${SecurityService.escapeHtml((it.panorama_actividad || it.funciones || '').slice(0, 140))}...</div>` },
+            { label: "Actividad Principal", fn: it => `<div style="font-size: 0.79rem; color: var(--text-muted); line-height: 1.4;">${SecurityService.escapeHtml((it.panorama_actividad || it.funciones || '').slice(0, 140))}...</div>` },
             { label: "Vacantes / Cupos", fn: it => `<strong style="color: var(--tier-2);">${it.vacantes || 1} vacantes</strong> (${it.postulados || 0} postulados)` },
-            { label: "Contacto Directo", fn: it => `<div><strong>${SecurityService.escapeHtml(it.contacto || 'RRHH')}</strong><div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--brand-primary);">${SecurityService.escapeHtml(it.email || '')}</div></div>` }
+            { label: "Contacto Directo", fn: it => `<div><strong>${SecurityService.escapeHtml(it.contacto || 'RRHH')}</strong><div style="font-family: var(--font-mono); font-size: 0.77rem; color: var(--brand-primary);">${SecurityService.escapeHtml(it.email || '')}</div></div>` }
         ];
 
         fields.forEach(f => {
@@ -1609,6 +1801,7 @@ class AppController {
         if (this.dom.compareModal) {
             this.dom.compareModal.style.display = 'flex';
             document.body.classList.add('modal-open');
+            this.openModalFocus(this.dom.compareModal);
         }
     }
 
@@ -1616,6 +1809,7 @@ class AppController {
         if (this.dom.compareModal) {
             this.dom.compareModal.style.display = 'none';
             document.body.classList.remove('modal-open');
+            this.releaseModalFocus(this.dom.compareModal);
         }
     }
 
@@ -1643,12 +1837,12 @@ class AppController {
             ];
             const tierColor = it.ai_tier_color || '#6b7280';
             let html = `<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
-                <span style="font-size:1.4rem;font-weight:900;font-family:var(--font-mono);color:${tierColor};">${it.puntaje_exito||0}</span>
+                <span style="font-size:1.48rem;font-weight:900;font-family:var(--font-mono);color:${tierColor};">${it.puntaje_exito||0}</span>
                 <div>
-                    <div style="font-size:0.62rem;font-weight:700;color:${tierColor};padding:0.08rem 0.4rem;border-radius:4px;background:${tierColor}22;border:1px solid ${tierColor}44;display:inline-block;">
+                    <div style="font-size:0.74rem;font-weight:700;color:${tierColor};padding:0.08rem 0.4rem;border-radius:4px;background:${tierColor}22;border:1px solid ${tierColor}44;display:inline-block;">
                         Tier ${it.ai_tier||'?'} — ${SecurityService.escapeHtml(it.ai_tier_label||'')}
                     </div>
-                    <div style="font-size:0.58rem;color:var(--text-dim);margin-top:0.15rem;">Confianza de consenso: <strong style="color:var(--text-muted);">${SecurityService.escapeHtml(it.ai_consensus_confidence||'N/A')}</strong></div>
+                    <div style="font-size:0.72rem;color:var(--text-dim);margin-top:0.15rem;">Confianza de consenso: <strong style="color:var(--text-muted);">${SecurityService.escapeHtml(it.ai_consensus_confidence||'N/A')}</strong></div>
                 </div>
             </div>
             <div style="display:flex;flex-direction:column;gap:0.3rem;">`;
@@ -1658,9 +1852,9 @@ class AppController {
                 const pct = Math.min(100, val);
                 html += `<div>
                     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
-                        <span style="font-size:0.6rem;font-weight:700;color:var(--text-muted);font-family:var(--font-mono);">${m.label}</span>
-                        <span style="font-size:0.58rem;color:var(--text-dim);">${m.desc}</span>
-                        <span style="font-size:0.62rem;font-weight:700;color:${col};font-family:var(--font-mono);">${val}</span>
+                        <span style="font-size:0.72rem;font-weight:700;color:var(--text-muted);font-family:var(--font-mono);">${m.label}</span>
+                        <span style="font-size:0.72rem;color:var(--text-dim);">${m.desc}</span>
+                        <span style="font-size:0.74rem;font-weight:700;color:${col};font-family:var(--font-mono);">${val}</span>
                     </div>
                     <div style="height:4px;border-radius:2px;background:rgba(255,255,255,0.06);overflow:hidden;">
                         <div style="height:100%;width:${pct}%;background:${col};border-radius:2px;transition:width 0.6s ease;"></div>
@@ -1678,7 +1872,17 @@ class AppController {
         setTxt(this.dom.mModalidadText, it.modalidad || 'Presencial / Híbrido');
 
         setTxt(this.dom.mContactName, it.contacto || 'Equipo de Selección y Gestión Humana');
-        setTxt(this.dom.mContactEmail, it.email || 'No registrado');
+        if (this.dom.mContactEmail) {
+            if (it.email && it.email.includes('@')) {
+                const isMaster = this.currentSession && this.currentSession.role === 'ADMIN';
+                const contactSub = isMaster ? `Propuesta técnica para ${it.empresa} - Juan Manuel Lagos` : `Postulación Contrato ADSO SENA - [Nombre del Aprendiz]`;
+                const contactBody = isMaster ? (it.correo_formal_completo || '') : PrivacyFilterService.sanitizeForGuest(it.correo_formal_completo || '');
+                const contactMailto = SecurityService.getMailtoUrl(it.email, contactSub, contactBody);
+                this.dom.mContactEmail.innerHTML = `<a href="${SecurityService.escapeHtml(contactMailto)}" style="color: var(--tier-2); text-decoration: underline;" title="Abrir en App de Correo (${SecurityService.escapeHtml(it.email)})" data-email-action="true" data-email="${SecurityService.escapeHtml(it.email)}">${SecurityService.escapeHtml(it.email)}</a>`;
+            } else {
+                this.dom.mContactEmail.textContent = 'No registrado';
+            }
+        }
         setTxt(this.dom.mContactPhone, it.telefono || 'No registrado');
         setTxt(this.dom.mContactModalidad, it.modalidad || 'Presencial / Híbrido');
 
@@ -1715,12 +1919,12 @@ class AppController {
                     <div class="ranking-arg-header">
                         <div style="display: flex; align-items: center; gap: 0.4rem;">
                             <span class="ranking-pos-badge"><i class="fa-solid fa-trophy"></i> Puesto #${posFormatted} de 195</span>
-                            <span class="pill-badge pill-tier-1" style="background: ${(it.ai_tier_color || '#10b981')}18; color: ${it.ai_tier_color || '#10b981'}; border-color: ${(it.ai_tier_color || '#10b981')}44;">${SecurityService.escapeHtml(it.cat_badge || 'Tier')}</span>
+                            <span class="pill-badge ai-tier-pill ${AppController.aiTierClass(it.ai_tier)}">${SecurityService.escapeHtml(it.cat_badge || 'Tier')}</span>
                         </div>
                         <span class="learning-pill"><i class="fa-solid fa-graduation-cap"></i> ${SecurityService.escapeHtml(it.aprendizaje_potencial || 'Software & Sistemas')}</span>
                     </div>
                     <div>
-                        <div style="font-size: 0.62rem; font-weight: 800; color: var(--brand-primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.2rem;">
+                        <div style="font-size: 0.74rem; font-weight: 800; color: var(--brand-primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.2rem;">
                             🎯 ¿Por qué esta empresa ocupa esta posición?
                         </div>
                         <p class="ranking-justificacion-text">
@@ -1732,16 +1936,16 @@ class AppController {
                 <!-- 2. Potencial de Aprendizaje & Proyección Salarial -->
                 <div class="salary-escalation-banner">
                     <div>
-                        <div style="font-size: 0.58rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Rol Proyectado al Egresar</div>
-                        <div style="font-size: 0.74rem; font-weight: 800; color: #38bdf8; margin-top: 1px;"><i class="fa-solid fa-code"></i> ${SecurityService.escapeHtml(it.rol_salida_egresado || 'Desarrollador Junior Full-Stack')}</div>
+                        <div style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Rol Proyectado al Egresar</div>
+                        <div style="font-size: 0.85rem; font-weight: 800; color: var(--tier-2); margin-top: 1px;"><i class="fa-solid fa-code"></i> ${SecurityService.escapeHtml(it.rol_salida_egresado || 'Desarrollador Junior Full-Stack')}</div>
                     </div>
                     <div>
-                        <div style="font-size: 0.58rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Techo Salarial (5 Años)</div>
-                        <div style="font-size: 0.74rem; font-weight: 800; color: #10b981; font-family: var(--font-mono); margin-top: 1px;"><i class="fa-solid fa-arrow-trend-up"></i> ${SecurityService.escapeHtml(it.techo_salarial_5anios || '$8M - $18M+ COP')}</div>
+                        <div style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Techo Salarial (5 Años)</div>
+                        <div style="font-size: 0.85rem; font-weight: 800; color: var(--brand-primary); font-family: var(--font-mono); margin-top: 1px;"><i class="fa-solid fa-arrow-trend-up"></i> ${SecurityService.escapeHtml(it.techo_salarial_5anios || '$8M - $18M+ COP')}</div>
                     </div>
                     <div>
-                        <div style="font-size: 0.58rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Reputación / Clima</div>
-                        <div style="font-size: 0.74rem; font-weight: 800; color: #fbbf24; font-family: var(--font-mono); margin-top: 1px;">★ ${(it.reputacion_rating || 4.0).toFixed(1)} / 5.0</div>
+                        <div style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Reputación / Clima</div>
+                        <div style="font-size: 0.85rem; font-weight: 800; color: #fbbf24; font-family: var(--font-mono); margin-top: 1px;">★ ${(it.reputacion_rating || 4.0).toFixed(1)} / 5.0</div>
                     </div>
                 </div>
 
@@ -1755,7 +1959,7 @@ class AppController {
                         <div style="display: flex; flex-direction: column; gap: 0.3rem;">
                             ${prosList.map(p => `
                                 <div class="arg-item">
-                                    <i class="fa-solid fa-check" style="color: #10b981;"></i>
+                                    <i class="fa-solid fa-check" style="color: var(--brand-primary);"></i>
                                     <span>${SecurityService.escapeHtml(p)}</span>
                                 </div>
                             `).join('')}
@@ -1780,20 +1984,20 @@ class AppController {
 
                 <!-- 4. Stack Tecnológico Real en Producción -->
                 <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-xs); padding: 0.6rem 0.75rem;">
-                    <div style="font-size: 0.6rem; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.3rem;">
+                    <div style="font-size: 0.72rem; font-weight: 700; color: var(--brand-primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.3rem;">
                         <i class="fa-solid fa-layer-group"></i> Tecnologías y Entorno de Producción
                     </div>
                     <div style="display: flex; flex-wrap: wrap; gap: 0.25rem;">
-                        ${stackList.map(t => `<span class="stack-chip" style="font-size: 0.62rem; padding: 0.15rem 0.45rem;">${SecurityService.escapeHtml(t)}</span>`).join('')}
+                        ${stackList.map(t => `<span class="stack-chip" style="font-size: 0.74rem; padding: 0.15rem 0.45rem;">${SecurityService.escapeHtml(t)}</span>`).join('')}
                     </div>
                 </div>
 
                 <!-- 5. Veredicto Técnico IA -->
                 <div style="padding: 0.55rem 0.75rem; border-radius: var(--radius-xs); background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.25);">
-                    <div style="font-size: 0.6rem; font-weight: 800; color: #a5b4fc; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.15rem; display: flex; align-items: center; gap: 0.3rem;">
+                    <div style="font-size: 0.72rem; font-weight: 800; color: #a5b4fc; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.15rem; display: flex; align-items: center; gap: 0.3rem;">
                         <i class="fa-solid fa-robot"></i> Veredicto de Orientación Profesional ADSO
                     </div>
-                    <div style="font-size: 0.7rem; color: var(--text-main); line-height: 1.55;">
+                    <div style="font-size: 0.81rem; color: var(--text-main); line-height: 1.55;">
                         ${SecurityService.escapeHtml(it.panorama_veredicto || 'Oportunidad evaluada bajo el índice ACLI de aprendizaje y éxito profesional.')}
                     </div>
                 </div>
@@ -1811,8 +2015,8 @@ class AppController {
         if (tl && it.hitos_carrera) {
             let html = '';
             it.hitos_carrera.forEach(h => {
-                html += `<div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-xs); padding: 0.45rem; font-size: 0.68rem;">
-                    <span style="color: var(--text-dim); text-transform: uppercase; font-weight: 700; font-size: 0.6rem;">${SecurityService.escapeHtml(h.periodo)}</span>
+                html += `<div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-xs); padding: 0.45rem; font-size: 0.79rem;">
+                    <span style="color: var(--text-dim); text-transform: uppercase; font-weight: 700; font-size: 0.72rem;">${SecurityService.escapeHtml(h.periodo)}</span>
                     <div style="font-weight: 700; color: var(--text-main); margin: 2px 0;">${SecurityService.escapeHtml(h.rol)}</div>
                     <div style="color: var(--brand-primary); font-family: var(--font-mono); font-weight: 700;">${SecurityService.escapeHtml(h.salario)}</div>
                 </div>`;
@@ -1826,10 +2030,10 @@ class AppController {
             let html = '';
             it.preguntas_entrevista.forEach((q, idx) => {
                 html += `
-                    <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-sm); padding: 0.65rem; font-size: 0.72rem;">
+                    <div style="background: var(--bg-canvas); border: 1px solid var(--border-muted); border-radius: var(--radius-sm); padding: 0.65rem; font-size: 0.82rem;">
                         <strong style="color: var(--tier-2);">#${idx + 1} ${SecurityService.escapeHtml(q.pregunta)}</strong>
                         <div style="color: var(--text-muted); margin: 0.3rem 0; line-height: 1.4;">${SecurityService.escapeHtml(q.respuesta_modelo)}</div>
-                        <div style="color: var(--brand-primary); font-size: 0.68rem;"><i class="fa-brands fa-github"></i> ${SecurityService.escapeHtml(q.tip_github)}</div>
+                        <div style="color: var(--brand-primary); font-size: 0.79rem;"><i class="fa-brands fa-github"></i> ${SecurityService.escapeHtml(q.tip_github)}</div>
                     </div>
                 `;
             });
@@ -1842,6 +2046,7 @@ class AppController {
         if (this.dom.detailModal) {
             this.dom.detailModal.style.display = 'flex';
             document.body.classList.add('modal-open');
+            this.openModalFocus(this.dom.detailModal);
         }
     }
 
@@ -1849,6 +2054,7 @@ class AppController {
         if (this.dom.detailModal) {
             this.dom.detailModal.style.display = 'none';
             document.body.classList.remove('modal-open');
+            this.releaseModalFocus(this.dom.detailModal);
         }
     }
 
@@ -1918,19 +2124,33 @@ class AppController {
             if (this.dom.mOutreachBody) this.dom.mOutreachBody.textContent = bodyText;
 
             const hasEmail = it.email && it.email.includes('@');
+            const isMobile = SecurityService.isMobile();
             const gmailLink = hasEmail ? SecurityService.getGmailUrl(it.email, subject, bodyText) : '#';
-            const mailtoLink = hasEmail ? `mailto:${encodeURIComponent(it.email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}` : '#';
+            const mailtoLink = hasEmail ? SecurityService.getMailtoUrl(it.email, subject, bodyText) : '#';
             const trackingCvUrl = it.cv_tracking_url || `https://sena-adso-caprendizaje.pages.dev/cv?empresa=${encodeURIComponent(it.empresa)}&id=${it.solicitud_id}&src=portal`;
 
             if (this.dom.mOutreachActions) {
+                let emailButtonsHtml = '';
+                if (!hasEmail) {
+                    emailButtonsHtml = '<span style="font-size: 0.79rem; color: var(--text-dim);">Sin correo registrado</span>';
+                } else if (isMobile) {
+                    // Mobile version: Directly open native email app, NO browser navigation
+                    emailButtonsHtml = `<a href="${SecurityService.escapeHtml(mailtoLink)}" class="btn btn-mail-app" style="padding: 0.22rem 0.52rem;" title="Abrir en tu App de Correo (Gmail / Apple Mail / Outlook)" data-email-action="true" data-email="${SecurityService.escapeHtml(it.email)}"><i class="fa-solid fa-envelope-open-text"></i> Abrir en App de Correo</a>`;
+                } else {
+                    // Desktop version: Provide web compose in Gmail as primary or local mail client
+                    emailButtonsHtml = `
+                        <a href="${SecurityService.escapeHtml(gmailLink)}" target="_blank" rel="noopener noreferrer" class="btn btn-gmail" style="padding: 0.22rem 0.52rem;" title="Redactar correo de postulación directamente en Gmail"><i class="fa-brands fa-google"></i> Redactar en Gmail</a>
+                        <a href="${SecurityService.escapeHtml(mailtoLink)}" class="btn" style="padding: 0.22rem 0.52rem;" title="Abrir en cliente de correo local (Outlook / Apple Mail)" data-email-action="true" data-email="${SecurityService.escapeHtml(it.email)}"><i class="fa-solid fa-envelope"></i> Correo (App)</a>
+                    `;
+                }
+
                 this.dom.mOutreachActions.innerHTML = `
                     <button class="btn" style="padding: 0.22rem 0.52rem;" data-action="copyOutreach"><i class="fa-regular fa-copy"></i> Copiar Correo</button>
-                    ${hasEmail ? `<a href="${SecurityService.escapeHtml(gmailLink)}" target="_blank" rel="noopener noreferrer" class="btn btn-gmail" style="padding: 0.22rem 0.52rem;" title="Redactar correo de postulación directamente en Gmail"><i class="fa-brands fa-google"></i> Redactar en Gmail</a>` : '<span style="font-size: 0.68rem; color: var(--text-dim);">Sin correo registrado</span>'}
-                    ${hasEmail ? `<a href="${mailtoLink}" class="btn" style="padding: 0.22rem 0.52rem;" title="Abrir en cliente de correo local (Outlook / Apple Mail)"><i class="fa-solid fa-envelope"></i> Correo (App)</a>` : ''}
+                    ${emailButtonsHtml}
                     ${isMaster 
-                        ? `<a href="https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-cv-drive" style="padding: 0.22rem 0.52rem; font-size: 0.68rem;" title="Abrir Hoja de Vida oficial (PDF)"><i class="fa-solid fa-file-pdf"></i> Hoja de Vida <span class="cv-mini-badge">PDF</span></a>
-                           <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-certs-link" style="padding: 0.22rem 0.52rem; font-size: 0.68rem;" title="Abrir Carpeta de Certificados Académicos en Google Drive"><i class="fa-brands fa-google-drive"></i> Certificados <span class="cv-mini-badge">DRIVE</span></a>` 
-                        : `<span style="font-size: 0.68rem; color: var(--text-dim); display: inline-flex; align-items: center; gap: 0.25rem;"><i class="fa-solid fa-shield-halved" style="color: #38bdf8;"></i> CV oficial reservado al Titular</span>`
+                        ? `<a href="https://drive.google.com/file/d/1r89tS4JI4OKwSuzyyfPhGn4ylZTRlrln/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-cv-drive" style="padding: 0.22rem 0.52rem; font-size: 0.79rem;" title="Abrir Hoja de Vida oficial (PDF)"><i class="fa-solid fa-file-pdf"></i> Hoja de Vida <span class="cv-mini-badge">PDF</span></a>
+                           <a href="https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-certs-link" style="padding: 0.22rem 0.52rem; font-size: 0.79rem;" title="Abrir Carpeta de Certificados Académicos en Google Drive"><i class="fa-brands fa-google-drive"></i> Certificados <span class="cv-mini-badge">DRIVE</span></a>` 
+                        : `<span style="font-size: 0.79rem; color: var(--text-dim); display: inline-flex; align-items: center; gap: 0.25rem;"><i class="fa-solid fa-shield-halved" style="color: var(--tier-2);"></i> CV oficial reservado al Titular</span>`
                     }
                 `;
             }
@@ -1953,7 +2173,7 @@ class AppController {
             if (this.dom.mOutreachActions) {
                 this.dom.mOutreachActions.innerHTML = `
                     <button class="btn" style="padding: 0.2rem 0.5rem;" data-action="copyOutreach"><i class="fa-regular fa-copy"></i> Copiar Mensaje</button>
-                    ${hasValidWA ? `<a href="${SecurityService.escapeHtml(waUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="padding: 0.2rem 0.5rem;"><i class="fa-brands fa-whatsapp"></i> Abrir Chat</a>` : '<span style="font-size: 0.68rem; color: var(--text-dim);"><i class="fa-solid fa-phone"></i> Teléfono PBX / Fijo</span>'}
+                    ${hasValidWA ? `<a href="${SecurityService.escapeHtml(waUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="padding: 0.2rem 0.5rem;"><i class="fa-brands fa-whatsapp"></i> Abrir Chat</a>` : '<span style="font-size: 0.79rem; color: var(--text-dim);"><i class="fa-solid fa-phone"></i> Teléfono PBX / Fijo</span>'}
                 `;
             }
         } else if (ch === 'linkedin') {
@@ -1985,6 +2205,7 @@ class AppController {
         if (this.dom.cvAlertsModal) {
             this.dom.cvAlertsModal.style.display = 'flex';
             document.body.classList.add('modal-open');
+            this.openModalFocus(this.dom.cvAlertsModal);
             this.fetchCvAlerts();
         }
     }
@@ -1993,6 +2214,7 @@ class AppController {
         if (this.dom.cvAlertsModal) {
             this.dom.cvAlertsModal.style.display = 'none';
             document.body.classList.remove('modal-open');
+            this.releaseModalFocus(this.dom.cvAlertsModal);
         }
     }
 
@@ -2009,10 +2231,10 @@ class AppController {
 
                 if (!data.eventos || data.eventos.length === 0) {
                     this.dom.cvEventsList.innerHTML = `
-                        <div style="text-align: center; padding: 1.5rem; color: var(--text-muted); font-size: 0.72rem;">
-                            <i class="fa-solid fa-bell-slash" style="font-size: 1.4rem; color: var(--text-dim); margin-bottom: 0.3rem;"></i><br>
+                        <div style="text-align: center; padding: 1.5rem; color: var(--text-muted); font-size: 0.82rem;">
+                            <i class="fa-solid fa-bell-slash" style="font-size: 1.48rem; color: var(--text-dim); margin-bottom: 0.3rem;"></i><br>
                             Aún no se registran aperturas en vivo.<br>
-                            <span style="font-size: 0.65rem; color: var(--text-dim);">Haz clic en "Simular Apertura" o abre cualquier enlace de CV para probar.</span>
+                            <span style="font-size: 0.77rem; color: var(--text-dim);">Haz clic en "Simular Apertura" o abre cualquier enlace de CV para probar.</span>
                         </div>
                     `;
                     return;
@@ -2021,14 +2243,14 @@ class AppController {
                 let html = '';
                 data.eventos.forEach(ev => {
                     html += `
-                        <div style="background: var(--bg-surface); border: 1px solid var(--border-muted); border-radius: var(--radius-xs); padding: 0.5rem; display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.7rem;">
+                        <div style="background: var(--bg-surface); border: 1px solid var(--border-muted); border-radius: var(--radius-xs); padding: 0.5rem; display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.81rem;">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <strong style="color: #10b981; font-weight: 700;">
+                                <strong style="color: var(--brand-primary); font-weight: 700;">
                                     <i class="fa-solid fa-circle-check"></i> ${SecurityService.escapeHtml(ev.empresa)}
                                 </strong>
-                                <span style="font-size: 0.62rem; color: var(--text-dim); font-family: var(--font-mono);">${SecurityService.escapeHtml(ev.fecha || '')}</span>
+                                <span style="font-size: 0.74rem; color: var(--text-dim); font-family: var(--font-mono);">${SecurityService.escapeHtml(ev.fecha || '')}</span>
                             </div>
-                            <div style="color: var(--text-muted); font-size: 0.66rem; display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                            <div style="color: var(--text-muted); font-size: 0.77rem; display: flex; gap: 0.4rem; flex-wrap: wrap;">
                                 <span><i class="fa-solid fa-user"></i> ${SecurityService.escapeHtml(ev.contacto || 'RRHH')}</span>
                                 <span>•</span>
                                 <span><i class="fa-solid fa-location-dot"></i> ${SecurityService.escapeHtml(ev.ubicacion || 'Colombia')}</span>
@@ -2044,8 +2266,8 @@ class AppController {
             // Local fallback simulation
             if (this.dom.cvEventsList) {
                 this.dom.cvEventsList.innerHTML = `
-                    <div style="text-align: center; padding: 1rem; color: var(--text-muted); font-size: 0.72rem;">
-                        <i class="fa-solid fa-shield-check" style="color: #10b981;"></i> Sistema de telemetría listo para despliegue en Cloudflare Worker.
+                    <div style="text-align: center; padding: 1rem; color: var(--text-muted); font-size: 0.82rem;">
+                        <i class="fa-solid fa-shield-check" style="color: var(--brand-primary);"></i> Sistema de telemetría listo para despliegue en Cloudflare Worker.
                     </div>
                 `;
             }
@@ -2136,6 +2358,67 @@ class AppController {
     // =========================================================================
     // 5. SGVA LIVE SYNCHRONIZATION & TELEMETRY ENGINE
     // =========================================================================
+    /**
+     * Panel de estado flotante: arranca plegado para no tapar la tabla y
+     * recuerda la preferencia del usuario entre visitas.
+     */
+    initSyncPanel() {
+        const panel = document.getElementById('syncPanel');
+        if (!panel) return;
+        if (localStorage.getItem('sgva_sync_panel_hidden') === '1') {
+            panel.style.display = 'none';
+            return;
+        }
+        if (localStorage.getItem('sgva_sync_panel_open') === '1') this.toggleSyncPanel(true);
+    }
+
+    toggleSyncPanel(forceOpen) {
+        const panel = document.getElementById('syncPanel');
+        const body = document.getElementById('syncPanelBody');
+        const header = document.getElementById('syncPanelHeader');
+        const chevron = document.getElementById('syncChevron');
+        if (!panel || !body || !header) return;
+
+        const open = typeof forceOpen === 'boolean' ? forceOpen : body.hidden;
+        body.hidden = !open;
+        panel.classList.toggle('is-collapsed', !open);
+        header.setAttribute('aria-expanded', String(open));
+        if (chevron) chevron.className = `fa-solid fa-chevron-${open ? 'down' : 'up'} sync-panel-chevron`;
+        localStorage.setItem('sgva_sync_panel_open', open ? '1' : '0');
+    }
+
+    dismissSyncPanel() {
+        const panel = document.getElementById('syncPanel');
+        if (!panel) return;
+        panel.style.opacity = '0';
+        setTimeout(() => { panel.style.display = 'none'; }, 250);
+        localStorage.setItem('sgva_sync_panel_hidden', '1');
+        this.showToast('Panel de sincronización oculto · se restablece al recargar con Alt + S');
+    }
+
+    /**
+     * Los contadores por Tier se derivan del dataset en cada arranque, de modo
+     * que una resincronizacion del SGVA no deja cifras obsoletas en la interfaz.
+     */
+    refreshTierCounts() {
+        const counts = this.store.rawData.reduce((acc, d) => {
+            acc[d.cat_id] = (acc[d.cat_id] || 0) + 1;
+            return acc;
+        }, {});
+        const total = this.store.rawData.length;
+
+        document.querySelectorAll('.tier-seg-btn').forEach(btn => {
+            const tier = btn.getAttribute('data-tier');
+            const pill = btn.querySelector('.seg-pill');
+            if (pill) pill.textContent = tier ? (counts[tier] || 0) : total;
+        });
+
+        if (this.dom.pillTotalCount) this.dom.pillTotalCount.textContent = total;
+        if (this.dom.lblTotalCount) this.dom.lblTotalCount.textContent = total;
+        const bannerTotal = document.getElementById('lblBannerTotal');
+        if (bannerTotal) bannerTotal.textContent = total;
+    }
+
     initSyncStatus() {
         const savedTime = localStorage.getItem('sgva_last_sync_timestamp');
         if (savedTime) {
@@ -2188,6 +2471,7 @@ class AppController {
         if (this.dom.sgvaSyncModal) {
             this.dom.sgvaSyncModal.style.display = 'flex';
             document.body.classList.add('modal-open');
+            this.openModalFocus(this.dom.sgvaSyncModal);
             const savedTime = localStorage.getItem('sgva_last_sync_timestamp');
             this.updateSyncTimestamps(savedTime ? parseInt(savedTime, 10) : Date.now());
         }
@@ -2197,6 +2481,7 @@ class AppController {
         if (this.dom.sgvaSyncModal) {
             this.dom.sgvaSyncModal.style.display = 'none';
             document.body.classList.remove('modal-open');
+            this.releaseModalFocus(this.dom.sgvaSyncModal);
         }
     }
 
