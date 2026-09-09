@@ -41,12 +41,17 @@ PURE_TECH_PATTERNS = [
     r'globaltek', r'logiciel', r'choucair', r'tcs', r'globant', r'endava', r'mercadolibre'
 ]
 
-# Corporate Enterprise Patterns (Large Banks, Fintechs, Major Multilatinas)
+# Corporate Enterprise Patterns (Large Banks, Fintechs, Major Multilatinas, Telecom, Energy)
 CORPORATE_PATTERNS = [
     r'\bbanco\b', r'\bbancam', r'\bseguros\b', r'\bfinancier', r'\bcredit',
     r'nalsani', r'totto', r'sylvania', r'feilo', r'falabella', r'exito', r'nutresa',
-    r'sura', r'bolivar', r'davivienda', r'bancolombia', r'occidente', r'av villas'
+    r'sura', r'bolivar', r'davivienda', r'bancolombia', r'occidente', r'av villas',
+    r'ecopetrol', r'epm', r'isa', r'isagen', r'promigas', r'terpel', r'cenit',
+    r'claro', r'tigo', r'movistar', r'etb', r'une', r'avianca', r'latam',
+    r'bavaria', r'postobon', r'corona', r'grupo argos', r'grup o', r'grupo sura',
+    r'minsait', r'telefónica', r'telecom'
 ]
+
 
 # Non-Tech / Operational / Agro / Warehouse / Retail Patterns
 NON_TECH_PATTERNS = [
