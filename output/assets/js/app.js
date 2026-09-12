@@ -126,10 +126,13 @@ class ProfileService {
         certificados: 'https://drive.google.com/drive/folders/1BZ-qBNdPeYsxW84zIq_ls97UkPlQcHyN?usp=sharing',
         github: 'https://github.com/lakerstrake',
         linkedin: 'https://linkedin.com/in/juan-manuel-lagos-monroy',
-        formacion: '7 semestres de Ingeniería Mecatrónica y titulación como Técnico en Sistemas'
+        formacion: '7 semestres de Ingeniería Mecatrónica y titulación como Técnico en Sistemas',
+        profesion: '',
+        experiencia: ''
     });
 
-    static CAMPOS = ['nombre', 'email', 'telefono', 'cv', 'certificados', 'github', 'linkedin', 'formacion'];
+    static CAMPOS = ['nombre', 'profesion', 'experiencia', 'email', 'telefono',
+                     'cv', 'certificados', 'github', 'linkedin', 'formacion'];
 
     static get() {
         try {
@@ -224,6 +227,178 @@ class ProfileService {
     }
 }
 
+
+// =========================================================================
+// 4. MODOS DE BUSQUEDA (Software ADSO / Ingenieria Industrial)
+// =========================================================================
+/**
+ * El mismo directorio de empresas sirve a dos perfiles distintos. En vez de
+ * duplicar la aplicacion, cada modo decide como se agrupa, se ordena y se
+ * redacta la postulacion sobre el mismo conjunto de empresas reales.
+ *
+ * El modo industrial se apoya en la actividad economica que cada empresa
+ * declara en el registro mercantil (codigo CIIU), no en la etiqueta de
+ * software con la que se enriquecio el dataset originalmente.
+ */
+class ModeService {
+    static STORAGE_KEY = 'cap_modo';
+
+    static MODOS = Object.freeze({
+        software: {
+            id: 'software',
+            etiqueta: 'Software · ADSO',
+            icono: 'fa-solid fa-code',
+            titulo: 'Contratos de Aprendizaje ADSO',
+            descripcion: 'Vacantes de aprendizaje SENA en análisis y desarrollo de software.',
+            columnaGrupo: 'Categoría',
+            columnaDetalle: 'Stack tecnológico',
+            columnaScore: 'Afinidad IA',
+            profesion: 'Aprendiz ADSO SENA',
+            disponibilidad: 'Disponible Etapa Productiva',
+            unidadPlural: 'vacantes',
+            marca: 'SENA · ADSO',
+            marcaSub: 'Directorio Estratégico'
+        },
+        industrial: {
+            id: 'industrial',
+            etiqueta: 'Ingeniería Industrial',
+            icono: 'fa-solid fa-industry',
+            titulo: 'Directorio Empresarial · Ingeniería Industrial',
+            descripcion: 'Empresas colombianas verificadas en el registro mercantil, ordenadas por afinidad con procesos, producción y logística.',
+            columnaGrupo: 'Sector económico',
+            columnaDetalle: 'Actividad verificada (CIIU)',
+            columnaScore: 'Relevancia',
+            profesion: 'Ingeniero Industrial',
+            disponibilidad: 'Disponible para vincularse',
+            unidadPlural: 'empresas',
+            marca: 'Directorio Industrial',
+            marcaSub: 'Ingeniería Industrial · Colombia'
+        }
+    });
+
+    /** Sectores ordenados por afinidad con el perfil de ingenieria industrial. */
+    static SECTORES = Object.freeze([
+        'Manufactura', 'Transporte y Logística', 'Minería y Petróleo', 'Energía',
+        'Construcción', 'Agroindustria', 'Comercio y Distribución',
+        'Consultoría e Ingeniería', 'Servicios a Empresas', 'Salud', 'Tecnología'
+    ]);
+
+    static get() {
+        const guardado = localStorage.getItem(ModeService.STORAGE_KEY);
+        return ModeService.MODOS[guardado] ? guardado : 'software';
+    }
+
+    static set(modo) {
+        if (!ModeService.MODOS[modo]) return ModeService.get();
+        localStorage.setItem(ModeService.STORAGE_KEY, modo);
+        return modo;
+    }
+
+    static config() {
+        return ModeService.MODOS[ModeService.get()];
+    }
+
+    static esIndustrial() {
+        return ModeService.get() === 'industrial';
+    }
+
+    /**
+     * Redacta la postulacion de ingenieria industrial con datos reales de la
+     * empresa y del perfil activo. Se compone en el navegador en lugar de
+     * viajar en el dataset: asi siempre refleja a quien esta usando la pagina
+     * y no añade 200 KB de texto repetido a la descarga.
+     */
+    static cartaIndustrial(it, canal) {
+        const p = ProfileService.get();
+        const nombre = p.nombre || '[Tu nombre]';
+        const profesion = p.profesion || 'Ingeniero(a) Industrial';
+        // El registro trae nombres en mayusculas sostenidas: encabezar una carta
+        // con "Estimado(a) MANUELA" se lee como correo masivo.
+        const propio = (t) => String(t || '').toLowerCase()
+            .replace(/(^|[\s'-])([a-záéíóúñ])/g, (m, sep, c) => sep + c.toUpperCase());
+        const contacto = (it.contacto || '').trim();
+        const saludo = contacto.length > 2
+            ? 'Estimado(a) ' + propio(contacto.split(' ')[0])
+            : 'Estimado equipo de Gestión Humana';
+        const empresa = it.empresa || 'su compañía';
+        const actividad = (it.ind_actividad || 'su sector').toLowerCase();
+        const enfoque = it.ind_enfoque || 'la mejora de procesos y la productividad';
+        const herramientas = it.ind_herramientas || 'gestión por procesos, análisis de datos e indicadores';
+        const ciudad = it.ciudad ? ' en ' + it.ciudad : '';
+        const experiencia = p.experiencia
+            ? 'Cuento con ' + p.experiencia + '.'
+            : 'Me encuentro en búsqueda activa de una oportunidad donde aportar desde el primer día.';
+
+        if (canal === 'wa') {
+            const wa = [
+                saludo + ', un cordial saludo.',
+                '',
+                'Mi nombre es ' + nombre + ', ' + profesion + '. Me dirijo a ustedes con interés en vincularme a *' + empresa + '*.',
+                '',
+                'Conozco que su actividad se centra en ' + actividad + ', y mi perfil aporta en ' + enfoque + '.'
+            ];
+            if (p.cv) wa.push('', 'Hoja de vida: ' + p.cv);
+            wa.push('', '¿Sería posible hacerles llegar mi perfil para sus procesos de selección? Quedo atento(a). Gracias por su tiempo.');
+            return wa.join('\n');
+        }
+
+        if (canal === 'linkedin') {
+            const corto = saludo + ', soy ' + nombre + ', ' + profesion +
+                '. Me interesa aportar en ' + enfoque.split(',')[0] + ' en ' + empresa +
+                '. Me encantaría conectar y compartirle mi perfil.';
+            return corto.length > 290 ? corto.substring(0, 287) + '...' : corto;
+        }
+
+        const l = [
+            saludo + ',',
+            '',
+            'Me dirijo a ustedes con el fin de postular mi perfil profesional a los procesos de selección de ' + empresa + ciudad + '.',
+            '',
+            'Soy ' + profesion + (p.formacion ? ', con formación complementaria en ' + p.formacion : '') + '. ' +
+            experiencia + ' Mi perfil se orienta a ' + enfoque + ', apoyándome en ' + herramientas + '.',
+            '',
+            'Identifico que ' + empresa + ' desarrolla su actividad en ' + actividad +
+            ', un entorno donde la ingeniería industrial aporta de forma directa en la estandarización de procesos, ' +
+            'el control de indicadores y la reducción de costos operativos. Me interesa contribuir a esos frentes con ' +
+            'rigor técnico y orientación a resultados medibles.',
+            '',
+            'Comparto mis datos para su consulta:'
+        ];
+        if (p.cv) l.push('Hoja de Vida: ' + p.cv);
+        if (p.certificados) l.push('Certificados: ' + p.certificados);
+        if (p.linkedin) l.push('LinkedIn: ' + p.linkedin);
+        if (p.telefono) l.push('Teléfono: ' + p.telefono);
+        if (p.email) l.push('Correo: ' + p.email);
+        l.push(
+            '',
+            'Agradezco la atención prestada y quedo atento(a) a la posibilidad de una entrevista.',
+            '',
+            'Cordialmente,',
+            nombre,
+            profesion
+        );
+        return l.join('\n');
+    }
+
+    static asuntoIndustrial(it) {
+        const p = ProfileService.get();
+        return 'Postulación ' + (p.profesion || 'Ingeniería Industrial') +
+               ' - ' + (p.nombre || '[Tu nombre]') + ' | ' + (it.empresa || '');
+    }
+
+    /** Texto de postulacion del modo activo, para cualquiera de los 3 canales. */
+    static carta(it, canal) {
+        if (ModeService.esIndustrial()) return ModeService.cartaIndustrial(it, canal);
+        if (canal === 'wa') return ProfileService.personalizar(it.whatsapp_message);
+        if (canal === 'linkedin') return ProfileService.personalizar(it.linkedin_connect_message);
+        return ProfileService.personalizar(it.correo_formal_completo);
+    }
+
+    static asunto(it) {
+        if (ModeService.esIndustrial()) return ModeService.asuntoIndustrial(it);
+        return 'Postulación Contrato ADSO - ' + ProfileService.get().nombre;
+    }
+}
 
 // =========================================================================
 const CONFIG = Object.freeze({
@@ -479,7 +654,7 @@ class AppController {
         this.bindEvents();
         this.updateFavCounter();
         this.updateCompareDock();
-        this.refreshTierCounts();
+        this.renderModeUI();
 
         // Mobile-first responsive optimization
         if (window.innerWidth < 768) {
@@ -505,6 +680,7 @@ class AppController {
         if (!banner) return;
 
         const p = ProfileService.get();
+        const cfg = ModeService.config();
         const e = SecurityService.escapeHtml;
         const enlace = (url, clase, icono, texto, sufijo) => url
             ? `<a href="${e(url)}" target="_blank" rel="noopener noreferrer" class="${clase}"><i class="${icono}" aria-hidden="true"></i> <span>${texto}</span>${sufijo || ''}</a>`
@@ -523,11 +699,11 @@ class AppController {
                 <div class="candidate-meta">
                     <div class="candidate-name-row">
                         <h2>${e(p.nombre)}</h2>
-                        <span class="status-pill status-ready"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Disponible Etapa Productiva</span>
+                        <span class="status-pill status-ready"><i class="fa-solid fa-bolt" aria-hidden="true"></i> ${e(cfg.disponibilidad)}</span>
                     </div>
                     <p class="candidate-pitch">
-                        Aprendiz ADSO SENA${p.formacion ? ` · ${e(p.formacion)}` : ''}.
-                        <span id="lblBannerTotal">${this.store.rawData.length}</span> vacantes analizadas.
+                        ${e(p.profesion || cfg.profesion)}${p.experiencia ? ` · ${e(p.experiencia)}` : ''}${p.formacion ? ` · ${e(p.formacion)}` : ''}.
+                        <span id="lblBannerTotal">${this.store.rawData.length}</span> ${e(cfg.unidadPlural)} en el directorio.
                         ${aviso}
                     </p>
                 </div>
@@ -786,6 +962,9 @@ class AppController {
             case 'resetProfile':
                 this.resetProfile();
                 break;
+            case 'setMode':
+                this.setMode(el.getAttribute('data-mode'));
+                break;
             case 'dismissNotice':
                 if (this.dom.antiBlockNotice) this.dom.antiBlockNotice.style.display = 'none';
                 break;
@@ -901,6 +1080,127 @@ class AppController {
      * El dataset trae un hex por tier pensado solo para el tema oscuro.
      * Se traduce a una clase para que el color lo resuelvan los tokens.
      */
+    /** Color del indicador de relevancia industrial por tramos. */
+    static indScoreClass(score) {
+        const n = Number(score) || 0;
+        if (n >= 90) return 'is-tier-s';
+        if (n >= 75) return 'is-tier-a';
+        if (n >= 60) return 'is-tier-b';
+        return 'is-tier-d';
+    }
+
+    setMode(modo) {
+        if (modo === ModeService.get()) return;
+        ModeService.set(modo);
+        // Los grupos de un modo no existen en el otro: se limpia la seleccion.
+        this.store.activeTier = '';
+        this.store.activeStack = '';
+        this.store.currentPage = 1;
+        if (this.dom.mainSearch) this.dom.mainSearch.value = '';
+        this.renderModeUI();
+        this.renderCandidateBanner();
+        this.applyFilters();
+        this.showToast(`Modo ${ModeService.config().etiqueta} activo`);
+    }
+
+    /** Ajusta cabeceras, grupos y textos al modo activo. */
+    renderModeUI() {
+        const cfg = ModeService.config();
+        const industrial = ModeService.esIndustrial();
+        document.body.classList.toggle('modo-industrial', industrial);
+
+        document.querySelectorAll('[data-action="setMode"]').forEach(b => {
+            const activo = b.getAttribute('data-mode') === cfg.id;
+            b.classList.toggle('active', activo);
+            b.setAttribute('aria-pressed', String(activo));
+        });
+
+        const th = document.querySelectorAll('.data-table thead th');
+        if (th.length >= 7) {
+            th[4].textContent = cfg.columnaGrupo;
+            th[5].textContent = cfg.columnaDetalle;
+            th[6].textContent = cfg.columnaScore;
+        }
+
+        const stackRow = document.querySelector('.stack-row');
+        if (stackRow) stackRow.hidden = industrial;
+
+        if (this.dom.mainSearch) {
+            this.dom.mainSearch.placeholder = industrial
+                ? 'Buscar por empresa, NIT, ciudad, sector o actividad (CIIU)...'
+                : 'Buscar por empresa, NIT, ciudad, stack (React, Node, SQL)...';
+        }
+
+        const brandIcon = document.querySelector('.brand-badge i');
+        if (brandIcon) brandIcon.className = cfg.icono;
+
+        const marca = document.querySelector('.brand-title h1');
+        const marcaSub = document.querySelector('.brand-title span');
+        if (marca) marca.textContent = cfg.marca;
+        if (marcaSub) marcaSub.textContent = cfg.marcaSub;
+
+        // Nota de procedencia: en modo industrial el usuario debe saber que el
+        // contacto es real pero la vacante publicada es de contrato de
+        // aprendizaje, no una oferta de ingenieria.
+        const nota = document.getElementById('notaModo');
+        if (nota) {
+            nota.hidden = !industrial;
+            if (industrial) {
+                nota.innerHTML = '<i class="fa-solid fa-circle-info" aria-hidden="true"></i> ' +
+                    '<span><strong>Cómo usar este directorio:</strong> los correos y teléfonos son los que ' +
+                    'cada empresa publicó en el portal del SENA para recibir postulaciones, y su actividad ' +
+                    'económica está verificada contra el registro mercantil. Las vacantes listadas son ' +
+                    'contratos de aprendizaje, así que el uso aquí es enviar tu hoja de vida de forma ' +
+                    'espontánea al área de Gestión Humana, no responder a esa vacante.</span>';
+            }
+        }
+
+        document.querySelectorAll('[data-unidad]').forEach(el => {
+            el.textContent = cfg.unidadPlural;
+        });
+
+        this.renderGrupos();
+    }
+
+    /** Botones de grupo: tiers en software, sectores reales en industrial. */
+    renderGrupos() {
+        const cont = document.querySelector('.tier-segments');
+        if (!cont) return;
+        const industrial = ModeService.esIndustrial();
+        const campo = industrial ? 'ind_sector' : 'cat_id';
+
+        const conteo = this.store.rawData.reduce((acc, d) => {
+            const k = d[campo];
+            if (k) acc[k] = (acc[k] || 0) + 1;
+            return acc;
+        }, {});
+
+        let grupos;
+        if (industrial) {
+            grupos = ModeService.SECTORES
+                .filter(sec => conteo[sec])
+                .map(sec => ({ valor: sec, texto: sec, clase: '' }));
+        } else {
+            grupos = [
+                { valor: 'TIER_1', texto: 'Tier 1 · Élite Tech', clase: 'seg-1' },
+                { valor: 'TIER_2', texto: 'Tier 2 · Sistemas', clase: 'seg-2' },
+                { valor: 'TIER_3', texto: 'Tier 3 · Soporte TI', clase: 'seg-3' },
+                { valor: 'TIER_5', texto: 'Tier 5 · No TI', clase: '' }
+            ].filter(g => conteo[g.valor]);
+        }
+
+        const total = this.store.rawData.length;
+        const activo = this.store.activeTier;
+        let html = `<button class="tier-seg-btn${activo ? '' : ' active'}" data-action="filterTier" data-tier="">` +
+                   `Todos <span class="seg-pill">${total}</span></button>`;
+        grupos.forEach(g => {
+            html += `<button class="tier-seg-btn ${g.clase}${activo === g.valor ? ' active' : ''}" ` +
+                    `data-action="filterTier" data-tier="${SecurityService.escapeHtml(g.valor)}">` +
+                    `${SecurityService.escapeHtml(g.texto)} <span class="seg-pill">${conteo[g.valor]}</span></button>`;
+        });
+        cont.innerHTML = html;
+    }
+
     static aiTierClass(tier) {
         const map = { S: 'is-tier-s', A: 'is-tier-a', B: 'is-tier-b', C: 'is-tier-b', D: 'is-tier-d' };
         return map[String(tier || '').toUpperCase()] || 'is-tier-a';
@@ -1002,14 +1302,15 @@ class AppController {
 
         this.store.filteredData = this.store.rawData.filter(it => {
             if (this.store.filterFavs && !this.store.isFavorite(it.solicitud_id)) return false;
-            if (this.store.activeTier && it.cat_id !== this.store.activeTier) return false;
+            const campoGrupo = ModeService.esIndustrial() ? 'ind_sector' : 'cat_id';
+            if (this.store.activeTier && it[campoGrupo] !== this.store.activeTier) return false;
             if (this.store.activeStack && (!it.stack_tags || !it.stack_tags.includes(this.store.activeStack))) return false;
             if (ch === 'WHATSAPP' && !it.is_whatsapp) return false;
             if (ch === 'EMAIL' && (!it.email || !it.email.includes('@'))) return false;
             if (comp && it.facilidad_code !== comp) return false;
 
             if (query) {
-                const combined = `${it.empresa} ${it.nit} ${it.ciudad} ${it.departamento} ${it.funciones} ${it.perfil_requerido} ${it.contacto} ${it.email} ${it.telefono}`.toLowerCase();
+                const combined = `${it.empresa} ${it.nit} ${it.ciudad} ${it.departamento} ${it.funciones} ${it.perfil_requerido} ${it.contacto} ${it.email} ${it.telefono} ${it.ind_sector || ''} ${it.ind_actividad || ''}`.toLowerCase();
                 if (!combined.includes(query)) return false;
             }
 
@@ -1020,7 +1321,12 @@ class AppController {
         });
 
         // Sorting
+        // En modo industrial el orden por defecto es la afinidad del sector con
+        // procesos, produccion y logistica, no el ranking pensado para software.
+        const industrial = ModeService.esIndustrial();
         this.store.filteredData.sort((a, b) => {
+            if (industrial && sort === 'ranking_asc') return (b.ind_score || 0) - (a.ind_score || 0);
+            if (sort === 'score_desc' && industrial) return (b.ind_score || 0) - (a.ind_score || 0);
             if (sort === 'ranking_asc') return (a.ranking_posicion || 0) - (b.ranking_posicion || 0);
             if (sort === 'score_desc') return (b.puntaje_exito || 0) - (a.puntaje_exito || 0);
             if (sort === 'comp_asc') return (a.competencia_ratio || 0) - (b.competencia_ratio || 0);
@@ -1094,12 +1400,12 @@ class AppController {
 
             const hasEmail = it.email && it.email.includes('@');
             const hasValidWA = SecurityService.isValidMobile(it.telefono);
-            const waUrl = hasValidWA ? SecurityService.getWhatsAppUrl(it.telefono, ProfileService.personalizar(it.whatsapp_message)) : '';
+            const waUrl = hasValidWA ? SecurityService.getWhatsAppUrl(it.telefono, ModeService.carta(it, 'wa')) : '';
 
             const posFormatted = (it.ranking_posicion || 1) < 10 ? '0' + it.ranking_posicion : it.ranking_posicion;
 
-            const mailBody = ProfileService.personalizar(it.correo_formal_completo);
-            const mailSub = `Postulación Contrato ADSO - ${ProfileService.get().nombre}`;
+            const mailBody = ModeService.carta(it, 'email');
+            const mailSub = ModeService.asunto(it);
 
             const isMobile = SecurityService.isMobile();
             const emailHref = isMobile 
@@ -1124,19 +1430,29 @@ class AppController {
                         <span class="cell-sub">${SecurityService.escapeHtml(it.ciudad || '')}, ${SecurityService.escapeHtml(it.departamento || '')} • NIT: ${SecurityService.escapeHtml(it.nit || 'N/A')}</span>
                     </div>
                 </td>
-                <td><span class="pill-badge ${tierClass}">${SecurityService.escapeHtml(it.cat_badge || 'Tier')}</span></td>
+                <td>${ModeService.esIndustrial()
+                    ? `<span class="pill-badge sector-badge" title="Sector según el registro mercantil">${SecurityService.escapeHtml(it.ind_sector || 'Sin verificar')}</span>`
+                    : `<span class="pill-badge ${tierClass}">${SecurityService.escapeHtml(it.cat_badge || 'Tier')}</span>`}</td>
                 <td>
                     <div style="display: flex; gap: 0.22rem; flex-wrap: wrap; align-items: center;">
-                        ${(it.stack_tags && it.stack_tags.length > 0)
-                            ? it.stack_tags.slice(0, 3).map(t => `<span class="stack-chip">${SecurityService.escapeHtml(t)}</span>`).join('')
-                            : `<span style="color:var(--text-dim);font-size:0.76rem;">ADSO General</span>`
+                        ${ModeService.esIndustrial()
+                            ? `<span class="ciiu-cell" title="Actividad declarada en el registro mercantil">
+                                   <span class="ciiu-code">${SecurityService.escapeHtml(it.rues_ciiu || '----')}</span>
+                                   <span class="ciiu-text">${SecurityService.escapeHtml(it.ind_actividad || 'Sin verificar')}</span>
+                               </span>`
+                            : (it.stack_tags && it.stack_tags.length > 0)
+                                ? it.stack_tags.slice(0, 3).map(t => `<span class="stack-chip">${SecurityService.escapeHtml(t)}</span>`).join('')
+                                : `<span style="color:var(--text-dim);font-size:0.76rem;">ADSO General</span>`
                         }
                     </div>
                 </td>
                 <td style="text-align: center;">
                     <div style="display: inline-flex; align-items: center; gap: 0.3rem;">
-                        <strong class="ai-score ${AppController.aiTierClass(it.ai_tier)}" style="font-family: var(--font-mono); font-size: 0.94rem;">${it.puntaje_exito || 0}</strong>
-                        <span class="ai-tier-chip ${AppController.aiTierClass(it.ai_tier)}">T${it.ai_tier || '?'}</span>
+                        ${ModeService.esIndustrial()
+                            ? `<strong class="ai-score ${AppController.indScoreClass(it.ind_score)}" style="font-family: var(--font-mono); font-size: 0.94rem;">${it.ind_score || 0}</strong>
+                               ${it.rues_verificado ? '<span class="verif-chip" title="Verificada en el registro mercantil (RUES)"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></span>' : ''}`
+                            : `<strong class="ai-score ${AppController.aiTierClass(it.ai_tier)}" style="font-family: var(--font-mono); font-size: 0.94rem;">${it.puntaje_exito || 0}</strong>
+                               <span class="ai-tier-chip ${AppController.aiTierClass(it.ai_tier)}">T${it.ai_tier || '?'}</span>`}
                     </div>
                 </td>
                 <td>
@@ -1262,12 +1578,12 @@ class AppController {
 
             const hasEmail = it.email && it.email.includes('@');
             const hasValidWA = SecurityService.isValidMobile(it.telefono);
-            const waUrl = hasValidWA ? SecurityService.getWhatsAppUrl(it.telefono, ProfileService.personalizar(it.whatsapp_message)) : '';
+            const waUrl = hasValidWA ? SecurityService.getWhatsAppUrl(it.telefono, ModeService.carta(it, 'wa')) : '';
 
             const posFormatted = (it.ranking_posicion || 1) < 10 ? '0' + it.ranking_posicion : it.ranking_posicion;
 
-            const cardMailSub = `Propuesta técnica para ${it.empresa} - ${ProfileService.get().nombre}`;
-            const cardMailBody = ProfileService.personalizar(it.correo_formal_completo);
+            const cardMailSub = ModeService.asunto(it);
+            const cardMailBody = ModeService.carta(it, 'email');
             const isMobile = SecurityService.isMobile();
             const emailHref = isMobile 
                 ? SecurityService.getMailtoUrl(it.email, cardMailSub, cardMailBody)
@@ -1520,8 +1836,8 @@ class AppController {
         setTxt(this.dom.mContactName, it.contacto || 'Equipo de Selección y Gestión Humana');
         if (this.dom.mContactEmail) {
             if (it.email && it.email.includes('@')) {
-                const contactSub = `Propuesta técnica para ${it.empresa} - ${ProfileService.get().nombre}`;
-                const contactBody = ProfileService.personalizar(it.correo_formal_completo);
+                const contactSub = ModeService.asunto(it);
+                const contactBody = ModeService.carta(it, 'email');
                 const contactMailto = SecurityService.getMailtoUrl(it.email, contactSub, contactBody);
                 this.dom.mContactEmail.innerHTML = `<a href="${SecurityService.escapeHtml(contactMailto)}" style="color: var(--tier-2); text-decoration: underline;" title="Abrir en App de Correo (${SecurityService.escapeHtml(it.email)})" data-email-action="true" data-email="${SecurityService.escapeHtml(it.email)}">${SecurityService.escapeHtml(it.email)}</a>`;
             } else {
@@ -1722,9 +2038,9 @@ class AppController {
         if (this.dom.mChLinkedIn) this.dom.mChLinkedIn.className = ch === 'linkedin' ? 'btn btn-linkedin active' : 'btn';
 
         if (ch === 'email') {
-            let subject = `Propuesta técnica y proyectos de software para ${it.empresa} - ${ProfileService.get().nombre} (ADSO SENA)`;
+            let subject = ModeService.asunto(it);
 
-            let bodyText = ProfileService.personalizar(it.correo_formal_completo);
+            let bodyText = ModeService.carta(it, 'email');
             if (bodyText.startsWith('Asunto:')) {
                 const lines = bodyText.split('\n');
                 subject = lines[0].replace(/^Asunto:\s*/i, '').trim();
@@ -1764,7 +2080,7 @@ class AppController {
                 `;
             }
         } else if (ch === 'wa') {
-            let waMsg = ProfileService.personalizar(it.whatsapp_message);
+            let waMsg = ModeService.carta(it, 'wa');
             if (this.dom.mOutreachHeading) {
                 this.dom.mOutreachHeading.textContent = 'Mensaje directo de WhatsApp';
             }
@@ -1780,7 +2096,7 @@ class AppController {
                 `;
             }
         } else if (ch === 'linkedin') {
-            let liMsg = ProfileService.personalizar(it.linkedin_connect_message);
+            let liMsg = ModeService.carta(it, 'linkedin');
             if (this.dom.mOutreachHeading) {
                 this.dom.mOutreachHeading.textContent = 'Nota de conexión en LinkedIn (menos de 300 caracteres)';
             }

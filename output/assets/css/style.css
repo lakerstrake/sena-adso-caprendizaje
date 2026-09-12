@@ -2631,3 +2631,125 @@ button.candidate-pill { display: inline-flex !important; }
 .modal-header { flex-wrap: nowrap; align-items: flex-start; }
 .modal-header-info { min-width: 0; }
 .modal-header .btn-icon { flex-shrink: 0; }
+
+/* =============================================================================
+   MODO DUAL — Software ADSO / Ingeniería Industrial
+   ============================================================================= */
+.mode-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 2px;
+    background: var(--bg-canvas);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+}
+.mode-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.32rem 0.7rem;
+    min-height: calc(var(--tap-min) - 4px);
+    background: transparent;
+    border: none;
+    border-radius: calc(var(--radius-sm) - 2px);
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-size: 0.81rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+.mode-btn:hover { color: var(--text-main); }
+.mode-btn.active {
+    background: var(--brand-primary);
+    color: var(--on-brand);
+    font-weight: 700;
+    box-shadow: var(--shadow-subtle);
+}
+
+/* Identidad corporativa sobria cuando el perfil es de ingeniería industrial. */
+body.modo-industrial {
+    --brand-primary: #38bdf8;
+    --brand-primary-bg: rgba(56, 189, 248, 0.12);
+    --on-brand: #04202e;
+}
+[data-theme="light"] body.modo-industrial,
+body.modo-industrial[data-theme="light"] {
+    --brand-primary: #0369a1;
+    --on-brand: #ffffff;
+}
+body.modo-industrial .brand-badge {
+    background: linear-gradient(135deg, #0369a1, #1e3a5f);
+}
+
+/* Sector económico verificado en el registro mercantil. */
+.sector-badge {
+    background: var(--tier-2-bg);
+    color: var(--tier-2);
+    border: 1px solid var(--tier-2-bg);
+    font-weight: 700;
+}
+
+/* Actividad CIIU: código monoespaciado + descripción oficial. */
+.ciiu-cell {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    min-width: 0;
+}
+.ciiu-code {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--text-dim);
+    background: var(--bg-canvas);
+    border: 1px solid var(--border-muted);
+    border-radius: 3px;
+    padding: 0.05rem 0.3rem;
+    flex-shrink: 0;
+}
+.ciiu-text {
+    font-size: 0.79rem;
+    color: var(--text-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 230px;
+}
+
+.verif-chip {
+    color: var(--brand-primary);
+    font-size: 0.79rem;
+    line-height: 1;
+}
+
+/* El atributo hidden debe ganar sobre el display:flex de la fila de chips. */
+.stack-row[hidden] { display: none !important; }
+
+/* Nota de procedencia de los datos en el modo industrial. */
+.nota-modo {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.6rem 0.85rem;
+    background: var(--tier-2-bg);
+    border: 1px solid var(--tier-2);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    font-size: 0.81rem;
+    line-height: 1.5;
+}
+.nota-modo strong { color: var(--text-main); }
+.nota-modo i { color: var(--tier-2); margin-top: 0.15rem; flex-shrink: 0; }
+.nota-modo[hidden] { display: none !important; }
+
+/* El selector de modo cede texto antes que recortar la barra de utilidades. */
+.mode-corto { display: none; }
+@media (max-width: 1400px) {
+    .mode-largo { display: none; }
+    .mode-corto { display: inline; }
+    .mode-btn { padding: 0.32rem 0.55rem; }
+}

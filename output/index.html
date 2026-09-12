@@ -77,6 +77,16 @@
                     </div>
                 </div>
 
+                <!-- Selector de perfil profesional -->
+                <div class="mode-switch" role="group" aria-label="Perfil profesional">
+                    <button class="mode-btn active" data-action="setMode" data-mode="software" aria-pressed="true">
+                        <i class="fa-solid fa-code" aria-hidden="true"></i> <span class="mode-largo">Software · ADSO</span><span class="mode-corto">ADSO</span>
+                    </button>
+                    <button class="mode-btn" data-action="setMode" data-mode="industrial" aria-pressed="false">
+                        <i class="fa-solid fa-industry" aria-hidden="true"></i> <span class="mode-largo">Ing. Industrial</span><span class="mode-corto">Industrial</span>
+                    </button>
+                </div>
+
                 <!-- Main Navigation Tabs -->
                 <nav class="nav-pills main-nav-pills" role="navigation" aria-label="Navegación principal">
                     <button class="nav-pill-btn active" id="pillDirectory" data-action="switchNavTab" data-tab="directory" aria-current="page">
@@ -154,6 +164,8 @@
         <!-- SECTION 1: DIRECTORY WORKSPACE (Zero-Trust Protected) -->
         <section id="sectionDirectory" style="display: none; flex-direction: column; flex: 1; min-height: 0; gap: 0.45rem; width: 100%;">
 
+            <p class="nota-modo" id="notaModo" hidden></p>
+
             <!-- Unified Filter Deck -->
             <div class="filter-deck" role="search" aria-label="Filtros de búsqueda">
                 <!-- Primary Filter Controls -->
@@ -166,10 +178,6 @@
                     <!-- Tier Segments Track (Smooth Swipeable) -->
                     <div class="tier-segments" role="group" aria-label="Filtrar por categoría de empresa">
                         <button class="tier-seg-btn active" data-action="filterTier" data-tier="">Todos <span class="seg-pill">195</span></button>
-                        <button class="tier-seg-btn seg-1" data-action="filterTier" data-tier="TIER_1">Tier 1 · Élite Tech <span class="seg-pill">22</span></button>
-                        <button class="tier-seg-btn seg-2" data-action="filterTier" data-tier="TIER_2">Tier 2 · Sistemas <span class="seg-pill">135</span></button>
-                        <button class="tier-seg-btn seg-3" data-action="filterTier" data-tier="TIER_3">Tier 3 · Soporte TI <span class="seg-pill">14</span></button>
-                        <button class="tier-seg-btn" data-action="filterTier" data-tier="TIER_5">Tier 5 · No TI <span class="seg-pill">24</span></button>
                     </div>
 
                     <button class="btn" id="toggleFiltersBtn" aria-label="Mostrar u ocultar filtros secundarios avanzados" data-action="toggleSecondaryFilters" style="padding: 0.28rem 0.55rem;">
@@ -236,7 +244,7 @@
             <!-- Table Toolbar -->
             <div class="table-toolbar">
                 <div class="table-toolbar-left">
-                    <div class="results-count" role="status" aria-live="polite" aria-atomic="true">Mostrando <strong id="lblVisibleCount">195</strong> de <strong id="lblTotalCount">195</strong> vacantes</div>
+                    <div class="results-count" role="status" aria-live="polite" aria-atomic="true">Mostrando <strong id="lblVisibleCount">195</strong> de <strong id="lblTotalCount">195</strong> <span data-unidad>vacantes</span></div>
                 </div>
                 <div class="table-toolbar-right">
                     <button class="btn" style="padding: 0.22rem 0.45rem; font-size: 0.79rem;" data-action="resetFilters" title="Restablecer filtros">
@@ -512,6 +520,14 @@
                     <label class="form-field">
                         <span>Correo electrónico <b aria-hidden="true">*</b></span>
                         <input type="email" id="perfil_email" autocomplete="email" placeholder="ana.ruiz@ejemplo.com" required>
+                    </label>
+                    <label class="form-field">
+                        <span>Profesión / Título</span>
+                        <input type="text" id="perfil_profesion" placeholder="Ingeniero Industrial">
+                    </label>
+                    <label class="form-field">
+                        <span>Experiencia</span>
+                        <input type="text" id="perfil_experiencia" placeholder="3 años en manufactura y logística">
                     </label>
                     <label class="form-field">
                         <span>Teléfono / WhatsApp</span>

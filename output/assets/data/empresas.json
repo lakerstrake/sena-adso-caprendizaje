@@ -58,7 +58,17 @@
       "Mayor exigencia técnica en la entrevista inicial (pruebas de lógica, JavaScript/Python/SQL o React).",
       "Ritmo de trabajo dinámico con sprints y entregables continuos.",
       "Generalmente requiere alta autonomía en resolución de problemas algorítmicos."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "CLARO INSURANCE S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "7310",
+    "ind_actividad": "Publicidad",
+    "ind_sector": "Consultoría e Ingeniería",
+    "ind_score": 64,
+    "ind_enfoque": "levantamiento y rediseño de procesos y formulación de proyectos",
+    "ind_herramientas": "mapeo de procesos BPMN, análisis de datos y evaluación financiera de proyectos"
   },
   {
     "solicitud_id": "4426157",
@@ -119,7 +129,17 @@
       "Mayor exigencia técnica en la entrevista inicial (pruebas de lógica, JavaScript/Python/SQL o React).",
       "Ritmo de trabajo dinámico con sprints y entregables continuos.",
       "Generalmente requiere alta autonomía en resolución de problemas algorítmicos."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "SOFTWARE INMOBILIARIO WASI S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "ARMENIA",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 42,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4421726",
@@ -179,7 +199,17 @@
       "Mayor exigencia técnica en la entrevista inicial (pruebas de lógica, JavaScript/Python/SQL o React).",
       "Ritmo de trabajo dinámico con sprints y entregables continuos.",
       "Generalmente requiere alta autonomía en resolución de problemas algorítmicos."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "GEOCOM SOFTWARE COLOMBIA SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 40,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4425748",
@@ -239,7 +269,17 @@
       "Mayor exigencia técnica en la entrevista inicial (pruebas de lógica, JavaScript/Python/SQL o React).",
       "Ritmo de trabajo dinámico con sprints y entregables continuos.",
       "Generalmente requiere alta autonomía en resolución de problemas algorítmicos."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "STEFANINI COLOMBIA S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 43,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4423748",
@@ -300,7 +340,17 @@
       "Mayor exigencia técnica en la entrevista inicial (pruebas de lógica, JavaScript/Python/SQL o React).",
       "Ritmo de trabajo dinámico con sprints y entregables continuos.",
       "Generalmente requiere alta autonomía en resolución de problemas algorítmicos."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "TELEMATICA SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6190",
+    "ind_actividad": "Otras telecomunicaciones",
+    "ind_sector": "Tecnología",
+    "ind_score": 38,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4427124",
@@ -361,7 +411,17 @@
       "Mayor exigencia técnica en la entrevista inicial (pruebas de lógica, JavaScript/Python/SQL o React).",
       "Ritmo de trabajo dinámico con sprints y entregables continuos.",
       "Generalmente requiere alta autonomía en resolución de problemas algorítmicos."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "SII GROUP COLOMBIA SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4426125",
@@ -422,7 +482,17 @@
       "Mayor exigencia técnica en la entrevista inicial (pruebas de lógica, JavaScript/Python/SQL o React).",
       "Ritmo de trabajo dinámico con sprints y entregables continuos.",
       "Generalmente requiere alta autonomía en resolución de problemas algorítmicos."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "OMNI.PRO COLOMBIA S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4425291",
@@ -481,7 +551,17 @@
       "Mayor exigencia técnica en la entrevista inicial (pruebas de lógica, JavaScript/Python/SQL o React).",
       "Ritmo de trabajo dinámico con sprints y entregables continuos.",
       "Generalmente requiere alta autonomía en resolución de problemas algorítmicos."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "DESIGNER SOFTWARE S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4420729",
@@ -544,7 +624,17 @@
       "Mayor exigencia técnica en la entrevista inicial (pruebas de lógica, JavaScript/Python/SQL o React).",
       "Ritmo de trabajo dinámico con sprints y entregables continuos.",
       "Generalmente requiere alta autonomía en resolución de problemas algorítmicos."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "TECNOLOGIAS LAN S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "MEDELLIN PARA ANTIOQUIA",
+    "rues_ciiu": "6311",
+    "ind_actividad": "Procesamiento de datos y hosting",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4418824",
@@ -605,7 +695,17 @@
       "Mayor exigencia técnica en la entrevista inicial (pruebas de lógica, JavaScript/Python/SQL o React).",
       "Ritmo de trabajo dinámico con sprints y entregables continuos.",
       "Generalmente requiere alta autonomía en resolución de problemas algorítmicos."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "SOFTWARE QUALITY ASSURANCE S.A.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "MEDELLIN PARA ANTIOQUIA",
+    "rues_ciiu": "6209",
+    "ind_actividad": "Otras actividades de tecnologías de información",
+    "ind_sector": "Tecnología",
+    "ind_score": 43,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4406830",
@@ -666,7 +766,17 @@
       "Mayor exigencia técnica en la entrevista inicial (pruebas de lógica, JavaScript/Python/SQL o React).",
       "Ritmo de trabajo dinámico con sprints y entregables continuos.",
       "Generalmente requiere alta autonomía en resolución de problemas algorítmicos."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "GLOBAL MVM S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "MEDELLIN PARA ANTIOQUIA",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 40,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4406895",
@@ -727,7 +837,17 @@
       "Mayor exigencia técnica en la entrevista inicial (pruebas de lógica, JavaScript/Python/SQL o React).",
       "Ritmo de trabajo dinámico con sprints y entregables continuos.",
       "Generalmente requiere alta autonomía en resolución de problemas algorítmicos."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "GLOBAL MVM S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "MEDELLIN PARA ANTIOQUIA",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 40,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4406886",
@@ -788,7 +908,17 @@
       "Mayor exigencia técnica en la entrevista inicial (pruebas de lógica, JavaScript/Python/SQL o React).",
       "Ritmo de trabajo dinámico con sprints y entregables continuos.",
       "Generalmente requiere alta autonomía en resolución de problemas algorítmicos."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "GLOBAL MVM S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "MEDELLIN PARA ANTIOQUIA",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 40,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4392839",
@@ -849,7 +979,17 @@
       "Mayor exigencia técnica en la entrevista inicial (pruebas de lógica, JavaScript/Python/SQL o React).",
       "Ritmo de trabajo dinámico con sprints y entregables continuos.",
       "Generalmente requiere alta autonomía en resolución de problemas algorítmicos."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "PROFESSIONAL CONSULTING SERVICES S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "HUILA",
+    "rues_ciiu": "8220",
+    "ind_actividad": "Centros de llamadas (contact center)",
+    "ind_sector": "Servicios a Empresas",
+    "ind_score": 58,
+    "ind_enfoque": "diseño de procesos, productividad del personal e indicadores de servicio",
+    "ind_herramientas": "estudio de métodos, dimensionamiento de capacidad y tableros de control"
   },
   {
     "solicitud_id": "4421972",
@@ -910,7 +1050,17 @@
       "Mayor exigencia técnica en la entrevista inicial (pruebas de lógica, JavaScript/Python/SQL o React).",
       "Ritmo de trabajo dinámico con sprints y entregables continuos.",
       "Generalmente requiere alta autonomía en resolución de problemas algorítmicos."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "RSM COLOMBIA BPO & CONSULTING SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6920",
+    "ind_actividad": "Contabilidad y auditoría",
+    "ind_sector": "Consultoría e Ingeniería",
+    "ind_score": 58,
+    "ind_enfoque": "levantamiento y rediseño de procesos y formulación de proyectos",
+    "ind_herramientas": "mapeo de procesos BPMN, análisis de datos y evaluación financiera de proyectos"
   },
   {
     "solicitud_id": "4417753",
@@ -971,7 +1121,17 @@
       "Mayor exigencia técnica en la entrevista inicial (pruebas de lógica, JavaScript/Python/SQL o React).",
       "Ritmo de trabajo dinámico con sprints y entregables continuos.",
       "Generalmente requiere alta autonomía en resolución de problemas algorítmicos."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "SOLUCIONES WIGA S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "3313",
+    "ind_actividad": "Mantenimiento y reparación de equipo electrónico y óptico",
+    "ind_sector": "Manufactura",
+    "ind_score": 84,
+    "ind_enfoque": "optimización de líneas de producción, balanceo de cargas y reducción de desperdicio",
+    "ind_herramientas": "Lean Manufacturing, estudio de tiempos y movimientos, OEE y control estadístico de procesos"
   },
   {
     "solicitud_id": "4421902",
@@ -1032,7 +1192,17 @@
       "Mayor exigencia técnica en la entrevista inicial (pruebas de lógica, JavaScript/Python/SQL o React).",
       "Ritmo de trabajo dinámico con sprints y entregables continuos.",
       "Generalmente requiere alta autonomía en resolución de problemas algorítmicos."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "DIGITAL SOLUTIONS FOR BUSINESS S A S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4415187",
@@ -1090,7 +1260,17 @@
       "Mayor exigencia técnica en la entrevista inicial (pruebas de lógica, JavaScript/Python/SQL o React).",
       "Ritmo de trabajo dinámico con sprints y entregables continuos.",
       "Generalmente requiere alta autonomía en resolución de problemas algorítmicos."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "HIBERUS DIGITAL COLOMBIA S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4424066",
@@ -1149,7 +1329,17 @@
       "Mayor exigencia técnica en la entrevista inicial (pruebas de lógica, JavaScript/Python/SQL o React).",
       "Ritmo de trabajo dinámico con sprints y entregables continuos.",
       "Generalmente requiere alta autonomía en resolución de problemas algorítmicos."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "POSICIÓN DIGITAL S.A.S. Y TAMBIÉN PODRÁ GIRAR COMO CHEF SMART MARKETING MIX O DENTSU CREATIVE COLOMBIA",
+    "rues_estado": "MATRÍCULA NUEVA, CONSTITUCIÓN POR TRASLADO",
+    "rues_camara": "ABURRA SUR",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4415777",
@@ -1211,7 +1401,17 @@
       "Mayor exigencia técnica en la entrevista inicial (pruebas de lógica, JavaScript/Python/SQL o React).",
       "Ritmo de trabajo dinámico con sprints y entregables continuos.",
       "Generalmente requiere alta autonomía en resolución de problemas algorítmicos."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "ARQUITECSOFT S.A.S.",
+    "rues_estado": "MATRÍCULA NUEVA, CONSTITUCIÓN POR TRASLADO",
+    "rues_camara": "CALI",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 40,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4423083",
@@ -1272,7 +1472,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "ASISTE MAS SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "8299",
+    "ind_actividad": "Otros servicios de apoyo a empresas",
+    "ind_sector": "Servicios a Empresas",
+    "ind_score": 54,
+    "ind_enfoque": "diseño de procesos, productividad del personal e indicadores de servicio",
+    "ind_herramientas": "estudio de métodos, dimensionamiento de capacidad y tableros de control"
   },
   {
     "solicitud_id": "4423517",
@@ -1333,7 +1543,17 @@
       "Mayor exigencia técnica en la entrevista inicial (pruebas de lógica, JavaScript/Python/SQL o React).",
       "Ritmo de trabajo dinámico con sprints y entregables continuos.",
       "Generalmente requiere alta autonomía en resolución de problemas algorítmicos."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "AVAL SOLUCIONES DIGITALES SA",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6619",
+    "ind_actividad": "Otras actividades auxiliares de servicios financieros",
+    "ind_sector": "Financiero",
+    "ind_score": 44,
+    "ind_enfoque": "eficiencia operativa y automatización de procesos",
+    "ind_herramientas": "mapeo de procesos, control interno y análisis de datos"
   },
   {
     "solicitud_id": "4421798",
@@ -1394,7 +1614,17 @@
       "Mayor exigencia técnica en la entrevista inicial (pruebas de lógica, JavaScript/Python/SQL o React).",
       "Ritmo de trabajo dinámico con sprints y entregables continuos.",
       "Generalmente requiere alta autonomía en resolución de problemas algorítmicos."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "ORGANIZACIÓN DE ALTA TECNOLOGÍA S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "PEREIRA",
+    "rues_ciiu": "8621",
+    "ind_actividad": "Actividades de medicina general",
+    "ind_sector": "Salud",
+    "ind_score": 52,
+    "ind_enfoque": "mejora de procesos asistenciales y administrativos",
+    "ind_herramientas": "gestión por procesos, habilitación, indicadores de oportunidad y mejora continua"
   },
   {
     "solicitud_id": "4426535",
@@ -1454,7 +1684,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "MASIVIAN SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 40,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4427362",
@@ -1515,7 +1755,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "LABORATORIOS OSA S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "CALI",
+    "rues_ciiu": "2100",
+    "ind_actividad": "Fabricación de productos farmacéuticos",
+    "ind_sector": "Manufactura",
+    "ind_score": 90,
+    "ind_enfoque": "optimización de líneas de producción, balanceo de cargas y reducción de desperdicio",
+    "ind_herramientas": "Lean Manufacturing, estudio de tiempos y movimientos, OEE y control estadístico de procesos"
   },
   {
     "solicitud_id": "4428388",
@@ -1573,7 +1823,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "TANQUES DEL NORDESTE S.A.",
+    "rues_estado": "MATRÍCULA NUEVA, CONSTITUCIÓN POR TRASLADO",
+    "rues_camara": "ABURRA SUR",
+    "rues_ciiu": "4923",
+    "ind_actividad": "Transporte de carga por carretera",
+    "ind_sector": "Transporte y Logística",
+    "ind_score": 86,
+    "ind_enfoque": "planeación de la cadena de abastecimiento, gestión de inventarios y diseño de rutas",
+    "ind_herramientas": "modelos de inventario, S&OP, indicadores de nivel de servicio y costeo logístico"
   },
   {
     "solicitud_id": "4426529",
@@ -1632,7 +1892,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "PRIMAX COLOMBIA S.A.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "4661",
+    "ind_actividad": "Comercio al por mayor de combustibles",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 68,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4428612",
@@ -1693,7 +1963,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "INGENIERIA Y DISEÑO INGEDISA S A",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "7112",
+    "ind_actividad": "Actividades de ingeniería y consultoría técnica",
+    "ind_sector": "Consultoría e Ingeniería",
+    "ind_score": 64,
+    "ind_enfoque": "levantamiento y rediseño de procesos y formulación de proyectos",
+    "ind_herramientas": "mapeo de procesos BPMN, análisis de datos y evaluación financiera de proyectos"
   },
   {
     "solicitud_id": "4428548",
@@ -1754,7 +2034,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "UNIVERSIDAD COOPERATIVA DE COLOMBIA",
+    "rues_estado": "MATRÍCULA NUEVA, CONSTITUCIÓN POR TRASLADO",
+    "rues_camara": "MEDELLIN PARA ANTIOQUIA",
+    "rues_ciiu": "8544",
+    "ind_actividad": "Educación superior",
+    "ind_sector": "Educación",
+    "ind_score": 46,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4426199",
@@ -1815,7 +2105,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "INDUSTRIAS ECTRICOL S.A.S.",
+    "rues_estado": "MATRÍCULA NUEVA, CONSTITUCIÓN POR TRASLADO",
+    "rues_camara": "FACATATIVA",
+    "rues_ciiu": "2712",
+    "ind_actividad": "Fabricación de aparatos de distribución eléctrica",
+    "ind_sector": "Manufactura",
+    "ind_score": 90,
+    "ind_enfoque": "optimización de líneas de producción, balanceo de cargas y reducción de desperdicio",
+    "ind_herramientas": "Lean Manufacturing, estudio de tiempos y movimientos, OEE y control estadístico de procesos"
   },
   {
     "solicitud_id": "4426532",
@@ -1875,7 +2175,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "MASIVIAN SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4426541",
@@ -1935,7 +2245,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "MASIVIAN SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4426394",
@@ -1996,7 +2316,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "AGESO S.A.S. ASESORIAS EN GERENCIA Y SALUD OCUPACIONAL.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "CUCUTA",
+    "rues_ciiu": "8699",
+    "ind_actividad": "Otras actividades de atención de la salud",
+    "ind_sector": "Salud",
+    "ind_score": 58,
+    "ind_enfoque": "mejora de procesos asistenciales y administrativos",
+    "ind_herramientas": "gestión por procesos, habilitación, indicadores de oportunidad y mejora continua"
   },
   {
     "solicitud_id": "4422236",
@@ -2057,7 +2387,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "VC@SOFT S A S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 42,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4417862",
@@ -2116,7 +2456,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "BANCO DE LAS MICROFINANZAS BANCAMIA S A",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6412",
+    "ind_actividad": "Bancos comerciales",
+    "ind_sector": "Financiero",
+    "ind_score": 53,
+    "ind_enfoque": "eficiencia operativa y automatización de procesos",
+    "ind_herramientas": "mapeo de procesos, control interno y análisis de datos"
   },
   {
     "solicitud_id": "4417916",
@@ -2175,7 +2525,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "BANCO DE LAS MICROFINANZAS BANCAMIA S A",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6412",
+    "ind_actividad": "Bancos comerciales",
+    "ind_sector": "Financiero",
+    "ind_score": 53,
+    "ind_enfoque": "eficiencia operativa y automatización de procesos",
+    "ind_herramientas": "mapeo de procesos, control interno y análisis de datos"
   },
   {
     "solicitud_id": "4424542",
@@ -2233,7 +2593,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "GRUPO MEDIR ING SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "7112",
+    "ind_actividad": "Actividades de ingeniería y consultoría técnica",
+    "ind_sector": "Consultoría e Ingeniería",
+    "ind_score": 64,
+    "ind_enfoque": "levantamiento y rediseño de procesos y formulación de proyectos",
+    "ind_herramientas": "mapeo de procesos BPMN, análisis de datos y evaluación financiera de proyectos"
   },
   {
     "solicitud_id": "4426913",
@@ -2291,7 +2661,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "CAMBIO COMUNICACIONES COLOMBIA S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "5813",
+    "ind_actividad": "Edición de periódicos y revistas",
+    "ind_sector": "Tecnología",
+    "ind_score": 40,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4428205",
@@ -2352,7 +2732,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "RAPPI S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 45,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4425794",
@@ -2413,7 +2803,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "KAESER COMPRESORES DE COLOMBIA S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "4659",
+    "ind_actividad": "Comercio al por mayor de maquinaria y equipo",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 66,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4427146",
@@ -2474,7 +2874,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "RECUPERACIONES NARANJO RECYCLING S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "CARTAGENA",
+    "rues_ciiu": "4665",
+    "ind_actividad": "Comercio al por mayor de desperdicios y chatarra",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 66,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4424215",
@@ -2535,7 +2945,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "AVILA SANCHEZ NESTOR ROLANDO",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "TUNJA",
+    "rues_ciiu": "4664",
+    "ind_actividad": "Comercio al por mayor de productos químicos",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 66,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4424233",
@@ -2596,7 +3016,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "AVILA SANCHEZ NESTOR ROLANDO",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "TUNJA",
+    "rues_ciiu": "4664",
+    "ind_actividad": "Comercio al por mayor de productos químicos",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 66,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4427372",
@@ -2654,7 +3084,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "LOGISTICA FERRETERA S A S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "4752",
+    "ind_actividad": "Comercio al por menor de artículos de ferretería",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 68,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4402952",
@@ -2715,7 +3155,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "CEMEX COLOMBIA S A",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "2394",
+    "ind_actividad": "Fabricación de cemento, cal y yeso",
+    "ind_sector": "Manufactura",
+    "ind_score": 90,
+    "ind_enfoque": "optimización de líneas de producción, balanceo de cargas y reducción de desperdicio",
+    "ind_herramientas": "Lean Manufacturing, estudio de tiempos y movimientos, OEE y control estadístico de procesos"
   },
   {
     "solicitud_id": "4428430",
@@ -2776,7 +3226,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "TONER DEPOT S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "HUILA",
+    "rues_ciiu": "7730",
+    "ind_actividad": "Alquiler de maquinaria y equipo",
+    "ind_sector": "Servicios a Empresas",
+    "ind_score": 58,
+    "ind_enfoque": "diseño de procesos, productividad del personal e indicadores de servicio",
+    "ind_herramientas": "estudio de métodos, dimensionamiento de capacidad y tableros de control"
   },
   {
     "solicitud_id": "4409304",
@@ -2834,7 +3294,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "GESTION DE SEGURIDAD ELECTRONICA S.A",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 45,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4419923",
@@ -2893,7 +3363,11 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": false,
+    "ind_sector": "Sin verificar",
+    "ind_score": 31,
+    "ind_actividad": ""
   },
   {
     "solicitud_id": "4427403",
@@ -2952,7 +3426,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "AUXIS COLOMBIA SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BARRANQUILLA",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 40,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4425816",
@@ -3010,7 +3494,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "PORTADA INMOBILIARIA S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "MEDELLIN PARA ANTIOQUIA",
+    "rues_ciiu": "6820",
+    "ind_actividad": "Actividades inmobiliarias a cambio de retribución",
+    "ind_sector": "Inmobiliario",
+    "ind_score": 40,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4408734",
@@ -3071,7 +3565,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "CEMEX COLOMBIA S A",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "2394",
+    "ind_actividad": "Fabricación de cemento, cal y yeso",
+    "ind_sector": "Manufactura",
+    "ind_score": 88,
+    "ind_enfoque": "optimización de líneas de producción, balanceo de cargas y reducción de desperdicio",
+    "ind_herramientas": "Lean Manufacturing, estudio de tiempos y movimientos, OEE y control estadístico de procesos"
   },
   {
     "solicitud_id": "4409297",
@@ -3132,7 +3636,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "PINTURAS Y DECORACIONES PINTUMAXTER S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "FACATATIVA",
+    "rues_ciiu": "2022",
+    "ind_actividad": "Fabricación de pinturas y barnices",
+    "ind_sector": "Manufactura",
+    "ind_score": 91,
+    "ind_enfoque": "optimización de líneas de producción, balanceo de cargas y reducción de desperdicio",
+    "ind_herramientas": "Lean Manufacturing, estudio de tiempos y movimientos, OEE y control estadístico de procesos"
   },
   {
     "solicitud_id": "4387112",
@@ -3193,7 +3707,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "NTT DATA COLOMBIA S. A. S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 43,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4422839",
@@ -3254,7 +3778,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "JAZZPLAT COLOMBIA S A S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "8220",
+    "ind_actividad": "Centros de llamadas (contact center)",
+    "ind_sector": "Servicios a Empresas",
+    "ind_score": 58,
+    "ind_enfoque": "diseño de procesos, productividad del personal e indicadores de servicio",
+    "ind_herramientas": "estudio de métodos, dimensionamiento de capacidad y tableros de control"
   },
   {
     "solicitud_id": "4427495",
@@ -3315,7 +3849,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "OPTIMUS TECH SOLUTIONS S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6190",
+    "ind_actividad": "Otras telecomunicaciones",
+    "ind_sector": "Tecnología",
+    "ind_score": 38,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4426132",
@@ -3376,7 +3920,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "LAWYERS ASSOCIATED CORPORATION S A S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6910",
+    "ind_actividad": "Actividades jurídicas",
+    "ind_sector": "Consultoría e Ingeniería",
+    "ind_score": 58,
+    "ind_enfoque": "levantamiento y rediseño de procesos y formulación de proyectos",
+    "ind_herramientas": "mapeo de procesos BPMN, análisis de datos y evaluación financiera de proyectos"
   },
   {
     "solicitud_id": "4423662",
@@ -3437,7 +3991,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "FEILO SYLVANIA COLOMBIA S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "4659",
+    "ind_actividad": "Comercio al por mayor de maquinaria y equipo",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 62,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4410809",
@@ -3498,7 +4062,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "PROFITLINE SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "7020",
+    "ind_actividad": "Consultoría de gestión",
+    "ind_sector": "Consultoría e Ingeniería",
+    "ind_score": 58,
+    "ind_enfoque": "levantamiento y rediseño de procesos y formulación de proyectos",
+    "ind_herramientas": "mapeo de procesos BPMN, análisis de datos y evaluación financiera de proyectos"
   },
   {
     "solicitud_id": "4415991",
@@ -3559,7 +4133,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "LUM LOGISTICS S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "MEDELLIN PARA ANTIOQUIA",
+    "rues_ciiu": "4711",
+    "ind_actividad": "Comercio al por menor en establecimientos no especializados",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 66,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4424652",
@@ -3617,7 +4201,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "SOMO GLOBAL S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "MEDELLIN PARA ANTIOQUIA",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4426051",
@@ -3678,7 +4272,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "GEOCAM INGENIERIA SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "7112",
+    "ind_actividad": "Actividades de ingeniería y consultoría técnica",
+    "ind_sector": "Consultoría e Ingeniería",
+    "ind_score": 58,
+    "ind_enfoque": "levantamiento y rediseño de procesos y formulación de proyectos",
+    "ind_herramientas": "mapeo de procesos BPMN, análisis de datos y evaluación financiera de proyectos"
   },
   {
     "solicitud_id": "4424866",
@@ -3739,7 +4343,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "HACIENDA EL PORTAL S.A.S.",
+    "rues_estado": "MATRÍCULA NUEVA, CONSTITUCIÓN POR TRASLADO",
+    "rues_camara": "ABURRA SUR",
+    "rues_ciiu": "6810",
+    "ind_actividad": "Actividades inmobiliarias con bienes propios",
+    "ind_sector": "Inmobiliario",
+    "ind_score": 38,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4423145",
@@ -3800,7 +4414,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "GESTIONES Y REPRESENTACIONES CHIA SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "0161",
+    "ind_actividad": "Apoyo a la agricultura",
+    "ind_sector": "Agroindustria",
+    "ind_score": 72,
+    "ind_enfoque": "estandarización de procesos productivos y trazabilidad",
+    "ind_herramientas": "BPM, HACCP, control de calidad y planeación de cosecha y producción"
   },
   {
     "solicitud_id": "4427801",
@@ -3861,7 +4485,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "NALSANI S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "1513",
+    "ind_actividad": "Fabricación de artículos de viaje y marroquinería",
+    "ind_sector": "Manufactura",
+    "ind_score": 90,
+    "ind_enfoque": "optimización de líneas de producción, balanceo de cargas y reducción de desperdicio",
+    "ind_herramientas": "Lean Manufacturing, estudio de tiempos y movimientos, OEE y control estadístico de procesos"
   },
   {
     "solicitud_id": "4420217",
@@ -3919,7 +4553,11 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": false,
+    "ind_sector": "Sin verificar",
+    "ind_score": 35,
+    "ind_actividad": ""
   },
   {
     "solicitud_id": "4422043",
@@ -3980,7 +4618,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "MANSAROVAR ENERGY COLOMBIA LTD",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "0610",
+    "ind_actividad": "Extracción de petróleo crudo",
+    "ind_sector": "Minería y Petróleo",
+    "ind_score": 80,
+    "ind_enfoque": "confiabilidad de activos, productividad y seguridad operacional",
+    "ind_herramientas": "mantenimiento centrado en confiabilidad, gestión de riesgos y SG-SST"
   },
   {
     "solicitud_id": "4418276",
@@ -4041,7 +4689,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "VC@SOFT S A S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 40,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4422233",
@@ -4102,7 +4760,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "VC@SOFT S A S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 40,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4426361",
@@ -4163,7 +4831,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "GEOCOL CONSULTORES S.A.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "7112",
+    "ind_actividad": "Actividades de ingeniería y consultoría técnica",
+    "ind_sector": "Consultoría e Ingeniería",
+    "ind_score": 58,
+    "ind_enfoque": "levantamiento y rediseño de procesos y formulación de proyectos",
+    "ind_herramientas": "mapeo de procesos BPMN, análisis de datos y evaluación financiera de proyectos"
   },
   {
     "solicitud_id": "4426399",
@@ -4224,7 +4902,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "AGESO S.A.S. ASESORIAS EN GERENCIA Y SALUD OCUPACIONAL.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "CUCUTA",
+    "rues_ciiu": "8699",
+    "ind_actividad": "Otras actividades de atención de la salud",
+    "ind_sector": "Salud",
+    "ind_score": 52,
+    "ind_enfoque": "mejora de procesos asistenciales y administrativos",
+    "ind_herramientas": "gestión por procesos, habilitación, indicadores de oportunidad y mejora continua"
   },
   {
     "solicitud_id": "4425203",
@@ -4282,7 +4970,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "PARAMETA SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4418284",
@@ -4343,7 +5041,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "VC@SOFT S A S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4417620",
@@ -4404,7 +5112,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "QUIRONPREVENCION COLOMBIA S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "7490",
+    "ind_actividad": "Otras actividades profesionales y técnicas",
+    "ind_sector": "Consultoría e Ingeniería",
+    "ind_score": 58,
+    "ind_enfoque": "levantamiento y rediseño de procesos y formulación de proyectos",
+    "ind_herramientas": "mapeo de procesos BPMN, análisis de datos y evaluación financiera de proyectos"
   },
   {
     "solicitud_id": "4413999",
@@ -4465,7 +5183,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "SAP COLOMBIA SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6209",
+    "ind_actividad": "Otras actividades de tecnologías de información",
+    "ind_sector": "Tecnología",
+    "ind_score": 43,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4418254",
@@ -4526,7 +5254,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "VC@SOFT S A S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4422231",
@@ -4587,7 +5325,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "VC@SOFT S A S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4424958",
@@ -4645,7 +5393,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "OUTSOURCING SERVICIOS INFORMÁTICOS S.A.S BIC",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "8220",
+    "ind_actividad": "Centros de llamadas (contact center)",
+    "ind_sector": "Servicios a Empresas",
+    "ind_score": 54,
+    "ind_enfoque": "diseño de procesos, productividad del personal e indicadores de servicio",
+    "ind_herramientas": "estudio de métodos, dimensionamiento de capacidad y tableros de control"
   },
   {
     "solicitud_id": "4425941",
@@ -4706,7 +5464,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "AXITY COLOMBIA SOCIEDAD POR ACCIONES SIMPLIFICADA",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4416614",
@@ -4767,7 +5535,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "ABAI COLOMBIA S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "8220",
+    "ind_actividad": "Centros de llamadas (contact center)",
+    "ind_sector": "Servicios a Empresas",
+    "ind_score": 56,
+    "ind_enfoque": "diseño de procesos, productividad del personal e indicadores de servicio",
+    "ind_herramientas": "estudio de métodos, dimensionamiento de capacidad y tableros de control"
   },
   {
     "solicitud_id": "4418360",
@@ -4826,7 +5604,11 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": false,
+    "ind_sector": "Sin verificar",
+    "ind_score": 31,
+    "ind_actividad": ""
   },
   {
     "solicitud_id": "4406736",
@@ -4887,7 +5669,11 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": false,
+    "ind_sector": "Sin verificar",
+    "ind_score": 27,
+    "ind_actividad": ""
   },
   {
     "solicitud_id": "4422096",
@@ -4948,7 +5734,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "TABASCO OC, LLC. SUCURSAL COLOMBIA",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6110",
+    "ind_actividad": "Telecomunicaciones alámbricas",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4421793",
@@ -5009,7 +5805,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "OVALLE AVILA & COMPANIA S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BARRANQUILLA",
+    "rues_ciiu": "0141",
+    "ind_actividad": "Cría de ganado bovino y bufalino",
+    "ind_sector": "Agroindustria",
+    "ind_score": 72,
+    "ind_enfoque": "estandarización de procesos productivos y trazabilidad",
+    "ind_herramientas": "BPM, HACCP, control de calidad y planeación de cosecha y producción"
   },
   {
     "solicitud_id": "4420061",
@@ -5070,7 +5876,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "ABAI COLOMBIA S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "8220",
+    "ind_actividad": "Centros de llamadas (contact center)",
+    "ind_sector": "Servicios a Empresas",
+    "ind_score": 56,
+    "ind_enfoque": "diseño de procesos, productividad del personal e indicadores de servicio",
+    "ind_herramientas": "estudio de métodos, dimensionamiento de capacidad y tableros de control"
   },
   {
     "solicitud_id": "4425951",
@@ -5131,7 +5947,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "EL FONDO DE EMPLEADOS DE LA CAJA COLOMBIANA DE SUBSIDIO FAMILIAR COLS UBSIDIO CUYA SIGLA SERA F E C",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6492",
+    "ind_actividad": "Actividades financieras de fondos",
+    "ind_sector": "Financiero",
+    "ind_score": 44,
+    "ind_enfoque": "eficiencia operativa y automatización de procesos",
+    "ind_herramientas": "mapeo de procesos, control interno y análisis de datos"
   },
   {
     "solicitud_id": "4416444",
@@ -5192,7 +6018,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "TAMBOURINE COLOMBIA HOLDINGS SUCURSAL COLOMBIA",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "7310",
+    "ind_actividad": "Publicidad",
+    "ind_sector": "Consultoría e Ingeniería",
+    "ind_score": 58,
+    "ind_enfoque": "levantamiento y rediseño de procesos y formulación de proyectos",
+    "ind_herramientas": "mapeo de procesos BPMN, análisis de datos y evaluación financiera de proyectos"
   },
   {
     "solicitud_id": "4403316",
@@ -5253,7 +6089,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "FINESA SERVICIOS S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "CALI",
+    "rues_ciiu": "7020",
+    "ind_actividad": "Consultoría de gestión",
+    "ind_sector": "Consultoría e Ingeniería",
+    "ind_score": 60,
+    "ind_enfoque": "levantamiento y rediseño de procesos y formulación de proyectos",
+    "ind_herramientas": "mapeo de procesos BPMN, análisis de datos y evaluación financiera de proyectos"
   },
   {
     "solicitud_id": "4427032",
@@ -5314,7 +6160,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "APREHSI GROUP S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "VALLEDUPAR",
+    "rues_ciiu": "8621",
+    "ind_actividad": "Actividades de medicina general",
+    "ind_sector": "Salud",
+    "ind_score": 52,
+    "ind_enfoque": "mejora de procesos asistenciales y administrativos",
+    "ind_herramientas": "gestión por procesos, habilitación, indicadores de oportunidad y mejora continua"
   },
   {
     "solicitud_id": "4410205",
@@ -5375,7 +6231,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "JOTA MUNDIAL S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "DOSQUEBRADAS",
+    "rues_ciiu": "4663",
+    "ind_actividad": "Comercio al por mayor de materiales de construcción",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 62,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4424530",
@@ -5434,7 +6300,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "FINCA URBANA PET'S S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "MEDELLIN PARA ANTIOQUIA",
+    "rues_ciiu": "4631",
+    "ind_actividad": "Comercio al por mayor de productos alimenticios",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 62,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4419976",
@@ -5492,7 +6368,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "RADAR S.A.S.",
+    "rues_estado": "MATRÍCULA NUEVA, CONSTITUCIÓN POR TRASLADO",
+    "rues_camara": "CARTAGENA",
+    "rues_ciiu": "5224",
+    "ind_actividad": "Manipulación de carga",
+    "ind_sector": "Transporte y Logística",
+    "ind_score": 80,
+    "ind_enfoque": "planeación de la cadena de abastecimiento, gestión de inventarios y diseño de rutas",
+    "ind_herramientas": "modelos de inventario, S&OP, indicadores de nivel de servicio y costeo logístico"
   },
   {
     "solicitud_id": "4411759",
@@ -5553,7 +6439,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "WM WIRELESS & MOBILE SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "4651",
+    "ind_actividad": "Comercio al por mayor de computadores y equipo",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 64,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4422824",
@@ -5611,7 +6507,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "TRANSPORTADORA DE VALORES ATLAS LTDA.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "CALI",
+    "rues_ciiu": "8010",
+    "ind_actividad": "Actividades de seguridad privada",
+    "ind_sector": "Servicios a Empresas",
+    "ind_score": 54,
+    "ind_enfoque": "diseño de procesos, productividad del personal e indicadores de servicio",
+    "ind_herramientas": "estudio de métodos, dimensionamiento de capacidad y tableros de control"
   },
   {
     "solicitud_id": "4420398",
@@ -5670,7 +6576,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "AHUMADOS TOTO S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "MEDELLIN PARA ANTIOQUIA",
+    "rues_ciiu": "1011",
+    "ind_actividad": "Procesamiento y conservación de carne",
+    "ind_sector": "Manufactura",
+    "ind_score": 86,
+    "ind_enfoque": "optimización de líneas de producción, balanceo de cargas y reducción de desperdicio",
+    "ind_herramientas": "Lean Manufacturing, estudio de tiempos y movimientos, OEE y control estadístico de procesos"
   },
   {
     "solicitud_id": "4415542",
@@ -5731,7 +6647,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "K LAB COLOMBIA S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6499",
+    "ind_actividad": "Otras actividades de servicio financiero",
+    "ind_sector": "Financiero",
+    "ind_score": 44,
+    "ind_enfoque": "eficiencia operativa y automatización de procesos",
+    "ind_herramientas": "mapeo de procesos, control interno y análisis de datos"
   },
   {
     "solicitud_id": "4419950",
@@ -5789,7 +6715,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "MICRO TALENT S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "CALI",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4420276",
@@ -5850,7 +6786,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "BANCO FALABELLA S A",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6412",
+    "ind_actividad": "Bancos comerciales",
+    "ind_sector": "Financiero",
+    "ind_score": 48,
+    "ind_enfoque": "eficiencia operativa y automatización de procesos",
+    "ind_herramientas": "mapeo de procesos, control interno y análisis de datos"
   },
   {
     "solicitud_id": "4410865",
@@ -5911,7 +6857,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "PUNTONET INSUPERABLE S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "HUILA",
+    "rues_ciiu": "4741",
+    "ind_actividad": "Comercio al por menor de computadores",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 62,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4414000",
@@ -5972,7 +6928,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "AVIA MARKETING S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "8299",
+    "ind_actividad": "Otros servicios de apoyo a empresas",
+    "ind_sector": "Servicios a Empresas",
+    "ind_score": 54,
+    "ind_enfoque": "diseño de procesos, productividad del personal e indicadores de servicio",
+    "ind_herramientas": "estudio de métodos, dimensionamiento de capacidad y tableros de control"
   },
   {
     "solicitud_id": "4398130",
@@ -6033,7 +6999,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "CLOUDBLUE SERVICES S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4427977",
@@ -6091,7 +7067,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "TRANSPORTES SUPERIOR S. A. S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "MEDELLIN PARA ANTIOQUIA",
+    "rues_ciiu": "4921",
+    "ind_actividad": "Transporte de pasajeros",
+    "ind_sector": "Transporte y Logística",
+    "ind_score": 80,
+    "ind_enfoque": "planeación de la cadena de abastecimiento, gestión de inventarios y diseño de rutas",
+    "ind_herramientas": "modelos de inventario, S&OP, indicadores de nivel de servicio y costeo logístico"
   },
   {
     "solicitud_id": "4418716",
@@ -6149,7 +7135,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "NUTRIUM S.A.S.",
+    "rues_estado": "MATRÍCULA NUEVA, CONSTITUCIÓN POR TRASLADO",
+    "rues_camara": "MEDELLIN PARA ANTIOQUIA",
+    "rues_ciiu": "1020",
+    "ind_actividad": "Procesamiento de pescado y mariscos",
+    "ind_sector": "Manufactura",
+    "ind_score": 84,
+    "ind_enfoque": "optimización de líneas de producción, balanceo de cargas y reducción de desperdicio",
+    "ind_herramientas": "Lean Manufacturing, estudio de tiempos y movimientos, OEE y control estadístico de procesos"
   },
   {
     "solicitud_id": "4402418",
@@ -6210,7 +7206,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "CAM COLOMBIA MULTISERVICIOS S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "4290",
+    "ind_actividad": "Construcción de otras obras de ingeniería civil",
+    "ind_sector": "Construcción",
+    "ind_score": 76,
+    "ind_enfoque": "programación de obra, control de presupuesto y productividad en campo",
+    "ind_herramientas": "ruta crítica, curvas S, control de costos y SG-SST"
   },
   {
     "solicitud_id": "4423972",
@@ -6271,7 +7277,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "LABORATORIOS OSA S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "CALI",
+    "rues_ciiu": "2100",
+    "ind_actividad": "Fabricación de productos farmacéuticos",
+    "ind_sector": "Manufactura",
+    "ind_score": 84,
+    "ind_enfoque": "optimización de líneas de producción, balanceo de cargas y reducción de desperdicio",
+    "ind_herramientas": "Lean Manufacturing, estudio de tiempos y movimientos, OEE y control estadístico de procesos"
   },
   {
     "solicitud_id": "4395524",
@@ -6329,7 +7345,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "S L RESEARCH COLOMBIA S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "7220",
+    "ind_actividad": "Investigación y desarrollo",
+    "ind_sector": "Consultoría e Ingeniería",
+    "ind_score": 58,
+    "ind_enfoque": "levantamiento y rediseño de procesos y formulación de proyectos",
+    "ind_herramientas": "mapeo de procesos BPMN, análisis de datos y evaluación financiera de proyectos"
   },
   {
     "solicitud_id": "4420271",
@@ -6390,7 +7416,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "RUITOQUE S.A. E.S.P.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BUCARAMANGA",
+    "rues_ciiu": "3514",
+    "ind_actividad": "Comercialización de energía eléctrica",
+    "ind_sector": "Energía",
+    "ind_score": 76,
+    "ind_enfoque": "eficiencia operativa y gestión de activos",
+    "ind_herramientas": "indicadores de disponibilidad, mantenimiento preventivo y análisis de causa raíz"
   },
   {
     "solicitud_id": "4392013",
@@ -6451,7 +7487,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "ONNET FIBRA COLOMBIA SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6110",
+    "ind_actividad": "Telecomunicaciones alámbricas",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4391515",
@@ -6512,7 +7558,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "ALTO COLOMBIA SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4394979",
@@ -6573,7 +7629,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "AUTOMATION ANYWHERE COLOMBIA SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4387991",
@@ -6631,7 +7697,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "GLOBAL CONNECT SOLUTIONS SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BUCARAMANGA",
+    "rues_ciiu": "7010",
+    "ind_actividad": "Actividades de administración empresarial",
+    "ind_sector": "Consultoría e Ingeniería",
+    "ind_score": 58,
+    "ind_enfoque": "levantamiento y rediseño de procesos y formulación de proyectos",
+    "ind_herramientas": "mapeo de procesos BPMN, análisis de datos y evaluación financiera de proyectos"
   },
   {
     "solicitud_id": "4412010",
@@ -6692,7 +7768,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "AIR - E S.A.S. E.S.P.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BARRANQUILLA",
+    "rues_ciiu": "3514",
+    "ind_actividad": "Comercialización de energía eléctrica",
+    "ind_sector": "Energía",
+    "ind_score": 76,
+    "ind_enfoque": "eficiencia operativa y gestión de activos",
+    "ind_herramientas": "indicadores de disponibilidad, mantenimiento preventivo y análisis de causa raíz"
   },
   {
     "solicitud_id": "4425564",
@@ -6753,7 +7839,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "GREEN SQA S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "CALI",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 42,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4409223",
@@ -6812,7 +7908,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "GESTION DE SEGURIDAD ELECTRONICA S.A",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 43,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4426743",
@@ -6873,7 +7979,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "SOCIEDAD DE SERVICIOS OCULARES S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "CASANARE",
+    "rues_ciiu": "8621",
+    "ind_actividad": "Actividades de medicina general",
+    "ind_sector": "Salud",
+    "ind_score": 52,
+    "ind_enfoque": "mejora de procesos asistenciales y administrativos",
+    "ind_herramientas": "gestión por procesos, habilitación, indicadores de oportunidad y mejora continua"
   },
   {
     "solicitud_id": "4421003",
@@ -6931,7 +8047,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "TECMOVIL GROUP S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "8220",
+    "ind_actividad": "Centros de llamadas (contact center)",
+    "ind_sector": "Servicios a Empresas",
+    "ind_score": 54,
+    "ind_enfoque": "diseño de procesos, productividad del personal e indicadores de servicio",
+    "ind_herramientas": "estudio de métodos, dimensionamiento de capacidad y tableros de control"
   },
   {
     "solicitud_id": "4426306",
@@ -6992,7 +8118,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "AGESO S.A.S. ASESORIAS EN GERENCIA Y SALUD OCUPACIONAL.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "CUCUTA",
+    "rues_ciiu": "8699",
+    "ind_actividad": "Otras actividades de atención de la salud",
+    "ind_sector": "Salud",
+    "ind_score": 52,
+    "ind_enfoque": "mejora de procesos asistenciales y administrativos",
+    "ind_herramientas": "gestión por procesos, habilitación, indicadores de oportunidad y mejora continua"
   },
   {
     "solicitud_id": "4418263",
@@ -7053,7 +8189,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "VC@SOFT S A S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4426549",
@@ -7114,7 +8260,11 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": false,
+    "ind_sector": "Sin verificar",
+    "ind_score": 29,
+    "ind_actividad": ""
   },
   {
     "solicitud_id": "4424257",
@@ -7176,7 +8326,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "CALL PROCESSING TECHNOLOGIES S A",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4417072",
@@ -7237,7 +8397,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "MAKITA COLOMBIA S.A.S",
+    "rues_estado": "MATRÍCULA NUEVA, CONSTITUCIÓN POR TRASLADO",
+    "rues_camara": "FACATATIVA",
+    "rues_ciiu": "4659",
+    "ind_actividad": "Comercio al por mayor de maquinaria y equipo",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 62,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4422248",
@@ -7298,7 +8468,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "VC@SOFT S A S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4416717",
@@ -7359,7 +8539,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "LEAL COLOMBIA S A S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6311",
+    "ind_actividad": "Procesamiento de datos y hosting",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4421878",
@@ -7420,7 +8610,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "CINTE COLOMBIA SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 38,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4418282",
@@ -7481,7 +8681,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "VC@SOFT S A S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4422246",
@@ -7542,7 +8752,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "VC@SOFT S A S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4412011",
@@ -7603,7 +8823,11 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": false,
+    "ind_sector": "Sin verificar",
+    "ind_score": 31,
+    "ind_actividad": ""
   },
   {
     "solicitud_id": "4406181",
@@ -7664,7 +8888,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "TKARGA S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "4923",
+    "ind_actividad": "Transporte de carga por carretera",
+    "ind_sector": "Transporte y Logística",
+    "ind_score": 80,
+    "ind_enfoque": "planeación de la cadena de abastecimiento, gestión de inventarios y diseño de rutas",
+    "ind_herramientas": "modelos de inventario, S&OP, indicadores de nivel de servicio y costeo logístico"
   },
   {
     "solicitud_id": "4418278",
@@ -7725,7 +8959,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "VC@SOFT S A S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4417184",
@@ -7786,7 +9030,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "EMPRESA COLOMBIANA DE PRODUCTOS VETERINARIOS S.A.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "2100",
+    "ind_actividad": "Fabricación de productos farmacéuticos",
+    "ind_sector": "Manufactura",
+    "ind_score": 86,
+    "ind_enfoque": "optimización de líneas de producción, balanceo de cargas y reducción de desperdicio",
+    "ind_herramientas": "Lean Manufacturing, estudio de tiempos y movimientos, OEE y control estadístico de procesos"
   },
   {
     "solicitud_id": "4404780",
@@ -7847,7 +9101,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "EMPRESA DE TRANSPORTE INTEGRADO DE BOGOTA SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "4921",
+    "ind_actividad": "Transporte de pasajeros",
+    "ind_sector": "Transporte y Logística",
+    "ind_score": 84,
+    "ind_enfoque": "planeación de la cadena de abastecimiento, gestión de inventarios y diseño de rutas",
+    "ind_herramientas": "modelos de inventario, S&OP, indicadores de nivel de servicio y costeo logístico"
   },
   {
     "solicitud_id": "4422239",
@@ -7908,7 +9172,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "VC@SOFT S A S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4418271",
@@ -7969,7 +9243,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "VC@SOFT S A S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4418248",
@@ -8030,7 +9314,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "VC@SOFT S A S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4414548",
@@ -8091,7 +9385,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "e2 ENERGIA EFICIENTE S.A. E.S.P.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BARRANQUILLA",
+    "rues_ciiu": "4661",
+    "ind_actividad": "Comercio al por mayor de combustibles",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 62,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4389577",
@@ -8149,7 +9453,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "INTEXUS S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "4774",
+    "ind_actividad": "Comercio al por menor de artículos de segunda mano",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 62,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4427784",
@@ -8210,7 +9524,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "TRAVEL CLUB SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "7911",
+    "ind_actividad": "Actividades de agencias de viaje",
+    "ind_sector": "Servicios a Empresas",
+    "ind_score": 63,
+    "ind_enfoque": "diseño de procesos, productividad del personal e indicadores de servicio",
+    "ind_herramientas": "estudio de métodos, dimensionamiento de capacidad y tableros de control"
   },
   {
     "solicitud_id": "4427595",
@@ -8268,7 +9592,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "CENTROAGUAS S.A. E.S.P.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "TULUA",
+    "rues_ciiu": "3600",
+    "ind_actividad": "Captación y distribución de agua",
+    "ind_sector": "Agua y Saneamiento",
+    "ind_score": 74,
+    "ind_enfoque": "eficiencia de procesos y control operativo",
+    "ind_herramientas": "gestión de indicadores, mejora continua y normatividad ambiental"
   },
   {
     "solicitud_id": "4416037",
@@ -8329,7 +9663,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "FINLECO B P O S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "8220",
+    "ind_actividad": "Centros de llamadas (contact center)",
+    "ind_sector": "Servicios a Empresas",
+    "ind_score": 54,
+    "ind_enfoque": "diseño de procesos, productividad del personal e indicadores de servicio",
+    "ind_herramientas": "estudio de métodos, dimensionamiento de capacidad y tableros de control"
   },
   {
     "solicitud_id": "4403868",
@@ -8388,7 +9732,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "PUNTO RED TELECOMUNICACIONES S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "VILLAVICENCIO",
+    "rues_ciiu": "6190",
+    "ind_actividad": "Otras telecomunicaciones",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4421452",
@@ -8449,7 +9803,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "CENTRAL DE INVERSIONES S.A.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "8291",
+    "ind_actividad": "Agencias de cobranza y bureaus de crédito",
+    "ind_sector": "Servicios a Empresas",
+    "ind_score": 54,
+    "ind_enfoque": "diseño de procesos, productividad del personal e indicadores de servicio",
+    "ind_herramientas": "estudio de métodos, dimensionamiento de capacidad y tableros de control"
   },
   {
     "solicitud_id": "4423262",
@@ -8507,7 +9871,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "IMAGINE CX SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4427043",
@@ -8565,7 +9939,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "PROCESADOS MARGARITA SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "2229",
+    "ind_actividad": "Fabricación de artículos de plástico",
+    "ind_sector": "Manufactura",
+    "ind_score": 84,
+    "ind_enfoque": "optimización de líneas de producción, balanceo de cargas y reducción de desperdicio",
+    "ind_herramientas": "Lean Manufacturing, estudio de tiempos y movimientos, OEE y control estadístico de procesos"
   },
   {
     "solicitud_id": "4410378",
@@ -8626,7 +10010,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "SUPPORTICAL SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 38,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4419278",
@@ -8687,7 +10081,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "INVERSIONES ELDORADO S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "DUITAMA",
+    "rues_ciiu": "0145",
+    "ind_actividad": "Cría de ovejas y cabras",
+    "ind_sector": "Agroindustria",
+    "ind_score": 74,
+    "ind_enfoque": "estandarización de procesos productivos y trazabilidad",
+    "ind_herramientas": "BPM, HACCP, control de calidad y planeación de cosecha y producción"
   },
   {
     "solicitud_id": "4410183",
@@ -8748,7 +10152,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "ARBITRIUM S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "7020",
+    "ind_actividad": "Consultoría de gestión",
+    "ind_sector": "Consultoría e Ingeniería",
+    "ind_score": 58,
+    "ind_enfoque": "levantamiento y rediseño de procesos y formulación de proyectos",
+    "ind_herramientas": "mapeo de procesos BPMN, análisis de datos y evaluación financiera de proyectos"
   },
   {
     "solicitud_id": "4417773",
@@ -8809,7 +10223,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "NOVATEC SOLUTIONS S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4417125",
@@ -8870,7 +10294,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "SMARTINFO S.A.S.",
+    "rues_estado": "MATRÍCULA NUEVA, CONSTITUCIÓN POR TRASLADO",
+    "rues_camara": "CARTAGENA",
+    "rues_ciiu": "5820",
+    "ind_actividad": "Edición de programas de informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4410848",
@@ -8931,7 +10365,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "LABORATORIOS AUROFARMA S.A.S.",
+    "rues_estado": "MATRÍCULA NUEVA, CONSTITUCIÓN POR TRASLADO",
+    "rues_camara": "FACATATIVA",
+    "rues_ciiu": "4645",
+    "ind_actividad": "Comercio al por mayor de productos farmacéuticos",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 62,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4409063",
@@ -8989,7 +10433,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "THE HALO TRUST",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "9499",
+    "ind_actividad": "Otras asociaciones",
+    "ind_sector": "Otros Servicios",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4406225",
@@ -9050,7 +10504,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "A&CI IT S A S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4413293",
@@ -9111,7 +10575,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "SOPORTE LOGICO SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4408181",
@@ -9169,7 +10643,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "EPAYCO.COM S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "MEDELLIN PARA ANTIOQUIA",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4391275",
@@ -9230,7 +10714,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "SKYDROPX S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6202",
+    "ind_actividad": "Consultoría informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 38,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4426384",
@@ -9291,7 +10785,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "PROBIENESTAR S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BARRANQUILLA",
+    "rues_ciiu": "5820",
+    "ind_actividad": "Edición de programas de informática",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4399710",
@@ -9352,7 +10856,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "ELITE LOGISTICA Y RENDIMIENTO SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "4923",
+    "ind_actividad": "Transporte de carga por carretera",
+    "ind_sector": "Transporte y Logística",
+    "ind_score": 80,
+    "ind_enfoque": "planeación de la cadena de abastecimiento, gestión de inventarios y diseño de rutas",
+    "ind_herramientas": "modelos de inventario, S&OP, indicadores de nivel de servicio y costeo logístico"
   },
   {
     "solicitud_id": "4397781",
@@ -9413,7 +10927,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "LOGISTIC SERVICES LATINOAMERICA SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "5229",
+    "ind_actividad": "Actividades complementarias al transporte",
+    "ind_sector": "Transporte y Logística",
+    "ind_score": 80,
+    "ind_enfoque": "planeación de la cadena de abastecimiento, gestión de inventarios y diseño de rutas",
+    "ind_herramientas": "modelos de inventario, S&OP, indicadores de nivel de servicio y costeo logístico"
   },
   {
     "solicitud_id": "4421611",
@@ -9474,7 +10998,17 @@
       "Procesos de selección corporativos más largos con múltiples etapas (pruebas psicotécnicas, exámenes médicos).",
       "Menor flexibilidad en el stack tecnológico debido a políticas de seguridad estrictas.",
       "Uso frecuente de arquitecturas y sistemas heredados (Legacy / ERPs cerrados)."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "ECOPETROL S A",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "0610",
+    "ind_actividad": "Extracción de petróleo crudo",
+    "ind_sector": "Minería y Petróleo",
+    "ind_score": 80,
+    "ind_enfoque": "confiabilidad de activos, productividad y seguridad operacional",
+    "ind_herramientas": "mantenimiento centrado en confiabilidad, gestión de riesgos y SG-SST"
   },
   {
     "solicitud_id": "4425192",
@@ -9534,7 +11068,17 @@
       "Menor cantidad de tiempo dedicado a escribir código nuevo desde cero.",
       "Tareas compartidas entre soporte a usuarios, configuración de equipos y mantenimiento de sistemas.",
       "Techo salarial más bajo a largo plazo si no se complementa con auto-estudio en programación."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "RETPLAS S.A.S.",
+    "rues_estado": "MATRÍCULA NUEVA, CONSTITUCIÓN POR TRASLADO",
+    "rues_camara": "ABURRA SUR",
+    "rues_ciiu": "2229",
+    "ind_actividad": "Fabricación de artículos de plástico",
+    "ind_sector": "Manufactura",
+    "ind_score": 88,
+    "ind_enfoque": "optimización de líneas de producción, balanceo de cargas y reducción de desperdicio",
+    "ind_herramientas": "Lean Manufacturing, estudio de tiempos y movimientos, OEE y control estadístico de procesos"
   },
   {
     "solicitud_id": "4427125",
@@ -9594,7 +11138,17 @@
       "Menor cantidad de tiempo dedicado a escribir código nuevo desde cero.",
       "Tareas compartidas entre soporte a usuarios, configuración de equipos y mantenimiento de sistemas.",
       "Techo salarial más bajo a largo plazo si no se complementa con auto-estudio en programación."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "AGROLOGISTICA ESPECIALIZADA SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "4923",
+    "ind_actividad": "Transporte de carga por carretera",
+    "ind_sector": "Transporte y Logística",
+    "ind_score": 84,
+    "ind_enfoque": "planeación de la cadena de abastecimiento, gestión de inventarios y diseño de rutas",
+    "ind_herramientas": "modelos de inventario, S&OP, indicadores de nivel de servicio y costeo logístico"
   },
   {
     "solicitud_id": "4425416",
@@ -9652,7 +11206,17 @@
       "Menor cantidad de tiempo dedicado a escribir código nuevo desde cero.",
       "Tareas compartidas entre soporte a usuarios, configuración de equipos y mantenimiento de sistemas.",
       "Techo salarial más bajo a largo plazo si no se complementa con auto-estudio en programación."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "OLEAGINOSAS SAN MARCOS S A",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "4620",
+    "ind_actividad": "Comercio al por mayor de materias primas agropecuarias",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 75,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4426161",
@@ -9709,7 +11273,17 @@
       "Menor cantidad de tiempo dedicado a escribir código nuevo desde cero.",
       "Tareas compartidas entre soporte a usuarios, configuración de equipos y mantenimiento de sistemas.",
       "Techo salarial más bajo a largo plazo si no se complementa con auto-estudio en programación."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "CLUB CAMPESTRE DE CALI",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "CALI",
+    "rues_ciiu": "9312",
+    "ind_actividad": "Actividades de clubes deportivos",
+    "ind_sector": "Entretenimiento",
+    "ind_score": 34,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4385616",
@@ -9766,7 +11340,17 @@
       "Menor cantidad de tiempo dedicado a escribir código nuevo desde cero.",
       "Tareas compartidas entre soporte a usuarios, configuración de equipos y mantenimiento de sistemas.",
       "Techo salarial más bajo a largo plazo si no se complementa con auto-estudio en programación."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "GRUPO ESPECIALIZADO EN SEGURIDAD PRIVADA OSZFORD LTDA- G.E.S.P. OSZFORD LTDA",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "CALI",
+    "rues_ciiu": "8010",
+    "ind_actividad": "Actividades de seguridad privada",
+    "ind_sector": "Servicios a Empresas",
+    "ind_score": 54,
+    "ind_enfoque": "diseño de procesos, productividad del personal e indicadores de servicio",
+    "ind_herramientas": "estudio de métodos, dimensionamiento de capacidad y tableros de control"
   },
   {
     "solicitud_id": "4415147",
@@ -9826,7 +11410,17 @@
       "Menor cantidad de tiempo dedicado a escribir código nuevo desde cero.",
       "Tareas compartidas entre soporte a usuarios, configuración de equipos y mantenimiento de sistemas.",
       "Techo salarial más bajo a largo plazo si no se complementa con auto-estudio en programación."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "CULTIVOS LA PLANICIE SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "0125",
+    "ind_actividad": "Cultivo de flores de corte",
+    "ind_sector": "Agroindustria",
+    "ind_score": 81,
+    "ind_enfoque": "estandarización de procesos productivos y trazabilidad",
+    "ind_herramientas": "BPM, HACCP, control de calidad y planeación de cosecha y producción"
   },
   {
     "solicitud_id": "4417548",
@@ -9886,7 +11480,17 @@
       "Menor cantidad de tiempo dedicado a escribir código nuevo desde cero.",
       "Tareas compartidas entre soporte a usuarios, configuración de equipos y mantenimiento de sistemas.",
       "Techo salarial más bajo a largo plazo si no se complementa con auto-estudio en programación."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "BROWNSTONE CAPITAL S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "MEDELLIN PARA ANTIOQUIA",
+    "rues_ciiu": "5511",
+    "ind_actividad": "Alojamiento en hoteles",
+    "ind_sector": "Hotelería y Alimentos",
+    "ind_score": 54,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4421923",
@@ -9946,7 +11550,17 @@
       "Menor cantidad de tiempo dedicado a escribir código nuevo desde cero.",
       "Tareas compartidas entre soporte a usuarios, configuración de equipos y mantenimiento de sistemas.",
       "Techo salarial más bajo a largo plazo si no se complementa con auto-estudio en programación."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "EVAL.COM CONSULTING S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "8291",
+    "ind_actividad": "Agencias de cobranza y bureaus de crédito",
+    "ind_sector": "Servicios a Empresas",
+    "ind_score": 58,
+    "ind_enfoque": "diseño de procesos, productividad del personal e indicadores de servicio",
+    "ind_herramientas": "estudio de métodos, dimensionamiento de capacidad y tableros de control"
   },
   {
     "solicitud_id": "4425461",
@@ -10006,7 +11620,17 @@
       "Menor cantidad de tiempo dedicado a escribir código nuevo desde cero.",
       "Tareas compartidas entre soporte a usuarios, configuración de equipos y mantenimiento de sistemas.",
       "Techo salarial más bajo a largo plazo si no se complementa con auto-estudio en programación."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "FUNDACION JUAN FELIPE GOMEZ ESCOBAR",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "CARTAGENA",
+    "rues_ciiu": "8899",
+    "ind_actividad": "Otras actividades de asistencia social",
+    "ind_sector": "Salud",
+    "ind_score": 52,
+    "ind_enfoque": "mejora de procesos asistenciales y administrativos",
+    "ind_herramientas": "gestión por procesos, habilitación, indicadores de oportunidad y mejora continua"
   },
   {
     "solicitud_id": "4420546",
@@ -10063,7 +11687,17 @@
       "Menor cantidad de tiempo dedicado a escribir código nuevo desde cero.",
       "Tareas compartidas entre soporte a usuarios, configuración de equipos y mantenimiento de sistemas.",
       "Techo salarial más bajo a largo plazo si no se complementa con auto-estudio en programación."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "NEWSAT SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "4652",
+    "ind_actividad": "Comercio al por mayor de equipo electrónico",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 66,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4415967",
@@ -10123,7 +11757,17 @@
       "Menor cantidad de tiempo dedicado a escribir código nuevo desde cero.",
       "Tareas compartidas entre soporte a usuarios, configuración de equipos y mantenimiento de sistemas.",
       "Techo salarial más bajo a largo plazo si no se complementa con auto-estudio en programación."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "INTERSATELITE DEL VALLE S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "CARTAGO",
+    "rues_ciiu": "6209",
+    "ind_actividad": "Otras actividades de tecnologías de información",
+    "ind_sector": "Tecnología",
+    "ind_score": 38,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4415600",
@@ -10183,7 +11827,17 @@
       "Menor cantidad de tiempo dedicado a escribir código nuevo desde cero.",
       "Tareas compartidas entre soporte a usuarios, configuración de equipos y mantenimiento de sistemas.",
       "Techo salarial más bajo a largo plazo si no se complementa con auto-estudio en programación."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "IPS PUNTO VITAL S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "SINCELEJO",
+    "rues_ciiu": "8621",
+    "ind_actividad": "Actividades de medicina general",
+    "ind_sector": "Salud",
+    "ind_score": 52,
+    "ind_enfoque": "mejora de procesos asistenciales y administrativos",
+    "ind_herramientas": "gestión por procesos, habilitación, indicadores de oportunidad y mejora continua"
   },
   {
     "solicitud_id": "4422433",
@@ -10243,7 +11897,17 @@
       "Menor cantidad de tiempo dedicado a escribir código nuevo desde cero.",
       "Tareas compartidas entre soporte a usuarios, configuración de equipos y mantenimiento de sistemas.",
       "Techo salarial más bajo a largo plazo si no se complementa con auto-estudio en programación."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "EVAL.COM CONSULTING S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "8291",
+    "ind_actividad": "Agencias de cobranza y bureaus de crédito",
+    "ind_sector": "Servicios a Empresas",
+    "ind_score": 54,
+    "ind_enfoque": "diseño de procesos, productividad del personal e indicadores de servicio",
+    "ind_herramientas": "estudio de métodos, dimensionamiento de capacidad y tableros de control"
   },
   {
     "solicitud_id": "4397220",
@@ -10303,7 +11967,17 @@
       "Menor cantidad de tiempo dedicado a escribir código nuevo desde cero.",
       "Tareas compartidas entre soporte a usuarios, configuración de equipos y mantenimiento de sistemas.",
       "Techo salarial más bajo a largo plazo si no se complementa con auto-estudio en programación."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "LITIGAR PUNTO COM SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6209",
+    "ind_actividad": "Otras actividades de tecnologías de información",
+    "ind_sector": "Tecnología",
+    "ind_score": 42,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4427107",
@@ -10361,7 +12035,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "COMERCIALIZADORA DE SERVICIOS DE SUCRE S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "SINCELEJO",
+    "rues_ciiu": "9200",
+    "ind_actividad": "Juegos de azar y apuestas",
+    "ind_sector": "Entretenimiento",
+    "ind_score": 40,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4394140",
@@ -10419,7 +12103,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "COMERCIALIZADORA BOHORQUEZ DISTRIBUCIONES SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "TUNJA",
+    "rues_ciiu": "4759",
+    "ind_actividad": "Comercio al por menor de electrodomésticos",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 71,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4427965",
@@ -10477,7 +12171,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "PORKILANDIA SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "PASTO",
+    "rues_ciiu": "4723",
+    "ind_actividad": "Comercio al por menor de bebidas y tabaco",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 66,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4425694",
@@ -10535,7 +12239,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "CREARTE BY CONFECCIONARTE S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "MEDELLIN PARA ANTIOQUIA",
+    "rues_ciiu": "1410",
+    "ind_actividad": "Confección de prendas de vestir",
+    "ind_sector": "Manufactura",
+    "ind_score": 84,
+    "ind_enfoque": "optimización de líneas de producción, balanceo de cargas y reducción de desperdicio",
+    "ind_herramientas": "Lean Manufacturing, estudio de tiempos y movimientos, OEE y control estadístico de procesos"
   },
   {
     "solicitud_id": "4427573",
@@ -10593,7 +12307,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "GRUPO F.R.C S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "GIRARDOT",
+    "rues_ciiu": "1011",
+    "ind_actividad": "Procesamiento y conservación de carne",
+    "ind_sector": "Manufactura",
+    "ind_score": 94,
+    "ind_enfoque": "optimización de líneas de producción, balanceo de cargas y reducción de desperdicio",
+    "ind_herramientas": "Lean Manufacturing, estudio de tiempos y movimientos, OEE y control estadístico de procesos"
   },
   {
     "solicitud_id": "4414677",
@@ -10651,7 +12375,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "SERVICIOS DE DISTRIBUCION ALMACENAMIENTO Y LOGISTICA S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "5224",
+    "ind_actividad": "Manipulación de carga",
+    "ind_sector": "Transporte y Logística",
+    "ind_score": 86,
+    "ind_enfoque": "planeación de la cadena de abastecimiento, gestión de inventarios y diseño de rutas",
+    "ind_herramientas": "modelos de inventario, S&OP, indicadores de nivel de servicio y costeo logístico"
   },
   {
     "solicitud_id": "4413391",
@@ -10709,7 +12443,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "COMERCIALIZADORA ARTURO CALLE SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "4771",
+    "ind_actividad": "Comercio al por menor de prendas de vestir",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 69,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4421311",
@@ -10767,7 +12511,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "DROGUERIAS COPIFAM DE COLOMBIA S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "MONTERIA",
+    "rues_ciiu": "4773",
+    "ind_actividad": "Comercio al por menor de productos farmacéuticos",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 62,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4405274",
@@ -10825,7 +12579,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "OLEAGINOSAS DEL NORTE DE SANTANDER S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "CUCUTA",
+    "rues_ciiu": "1031",
+    "ind_actividad": "Elaboración de aceites y grasas",
+    "ind_sector": "Manufactura",
+    "ind_score": 84,
+    "ind_enfoque": "optimización de líneas de producción, balanceo de cargas y reducción de desperdicio",
+    "ind_herramientas": "Lean Manufacturing, estudio de tiempos y movimientos, OEE y control estadístico de procesos"
   },
   {
     "solicitud_id": "4425959",
@@ -10883,7 +12647,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "CONTACT POINT 360 SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "8220",
+    "ind_actividad": "Centros de llamadas (contact center)",
+    "ind_sector": "Servicios a Empresas",
+    "ind_score": 63,
+    "ind_enfoque": "diseño de procesos, productividad del personal e indicadores de servicio",
+    "ind_herramientas": "estudio de métodos, dimensionamiento de capacidad y tableros de control"
   },
   {
     "solicitud_id": "4427648",
@@ -10941,7 +12715,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "COATS CADENA ANDINA S.A.",
+    "rues_estado": "MATRÍCULA NUEVA, CONSTITUCIÓN POR TRASLADO",
+    "rues_camara": "PEREIRA",
+    "rues_ciiu": "1311",
+    "ind_actividad": "Preparación e hilatura de fibras textiles",
+    "ind_sector": "Manufactura",
+    "ind_score": 88,
+    "ind_enfoque": "optimización de líneas de producción, balanceo de cargas y reducción de desperdicio",
+    "ind_herramientas": "Lean Manufacturing, estudio de tiempos y movimientos, OEE y control estadístico de procesos"
   },
   {
     "solicitud_id": "4419873",
@@ -10996,7 +12780,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "CARNES SANTACRUZ S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BARRANQUILLA",
+    "rues_ciiu": "4723",
+    "ind_actividad": "Comercio al por menor de bebidas y tabaco",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 66,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4425311",
@@ -11054,7 +12848,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "E ADVISING S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6209",
+    "ind_actividad": "Otras actividades de tecnologías de información",
+    "ind_sector": "Tecnología",
+    "ind_score": 38,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4385514",
@@ -11112,7 +12916,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "BOYDORR SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "4631",
+    "ind_actividad": "Comercio al por mayor de productos alimenticios",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 64,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4417341",
@@ -11170,7 +12984,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "MG CONSULTORES SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "0125",
+    "ind_actividad": "Cultivo de flores de corte",
+    "ind_sector": "Agroindustria",
+    "ind_score": 72,
+    "ind_enfoque": "estandarización de procesos productivos y trazabilidad",
+    "ind_herramientas": "BPM, HACCP, control de calidad y planeación de cosecha y producción"
   },
   {
     "solicitud_id": "4417565",
@@ -11228,7 +13052,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "TENARIS TUBOCARIBE LTDA",
+    "rues_estado": "MATRÍCULA NUEVA, CONSTITUCIÓN POR TRASLADO",
+    "rues_camara": "CARTAGENA",
+    "rues_ciiu": "2592",
+    "ind_actividad": "Tratamiento y revestimiento de metales",
+    "ind_sector": "Manufactura",
+    "ind_score": 93,
+    "ind_enfoque": "optimización de líneas de producción, balanceo de cargas y reducción de desperdicio",
+    "ind_herramientas": "Lean Manufacturing, estudio de tiempos y movimientos, OEE y control estadístico de procesos"
   },
   {
     "solicitud_id": "4425386",
@@ -11286,7 +13120,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "ASSISPREX SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "8299",
+    "ind_actividad": "Otros servicios de apoyo a empresas",
+    "ind_sector": "Servicios a Empresas",
+    "ind_score": 54,
+    "ind_enfoque": "diseño de procesos, productividad del personal e indicadores de servicio",
+    "ind_herramientas": "estudio de métodos, dimensionamiento de capacidad y tableros de control"
   },
   {
     "solicitud_id": "4421826",
@@ -11344,7 +13188,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "PGD PROCESOS DE GESTION DOCUMENTAL SAS",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "9101",
+    "ind_actividad": "Bibliotecas y archivos",
+    "ind_sector": "Entretenimiento",
+    "ind_score": 38,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4418836",
@@ -11402,7 +13256,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "ZAJANA S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "6201",
+    "ind_actividad": "Desarrollo de sistemas informáticos",
+    "ind_sector": "Tecnología",
+    "ind_score": 36,
+    "ind_enfoque": "mejora de procesos, productividad e indicadores de gestión",
+    "ind_herramientas": "gestión por procesos, análisis de datos, control de calidad y SG-SST"
   },
   {
     "solicitud_id": "4413616",
@@ -11460,7 +13324,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "TRANSPORTES MASA LTDA",
+    "rues_estado": "MATRÍCULA NUEVA, CONSTITUCIÓN POR TRASLADO",
+    "rues_camara": "HUILA",
+    "rues_ciiu": "4923",
+    "ind_actividad": "Transporte de carga por carretera",
+    "ind_sector": "Transporte y Logística",
+    "ind_score": 80,
+    "ind_enfoque": "planeación de la cadena de abastecimiento, gestión de inventarios y diseño de rutas",
+    "ind_herramientas": "modelos de inventario, S&OP, indicadores de nivel de servicio y costeo logístico"
   },
   {
     "solicitud_id": "4425317",
@@ -11518,7 +13392,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "INTERELECTRICOS GROUP S.A.S.",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "CUCUTA",
+    "rues_ciiu": "4663",
+    "ind_actividad": "Comercio al por mayor de materiales de construcción",
+    "ind_sector": "Comercio y Distribución",
+    "ind_score": 62,
+    "ind_enfoque": "gestión de inventarios, planeación de la demanda y eficiencia en distribución",
+    "ind_herramientas": "pronósticos de demanda, rotación de inventario, layout de bodega y costeo"
   },
   {
     "solicitud_id": "4423036",
@@ -11576,7 +13460,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "ZIPPOL LIMITADA",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "BOGOTA",
+    "rues_ciiu": "2221",
+    "ind_actividad": "Fabricación de formas primarias de plástico",
+    "ind_sector": "Manufactura",
+    "ind_score": 84,
+    "ind_enfoque": "optimización de líneas de producción, balanceo de cargas y reducción de desperdicio",
+    "ind_herramientas": "Lean Manufacturing, estudio de tiempos y movimientos, OEE y control estadístico de procesos"
   },
   {
     "solicitud_id": "4414845",
@@ -11634,7 +13528,17 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "INVERSIONES DEL ANCA S.A.S",
+    "rues_estado": "ACTIVA",
+    "rues_camara": "MEDELLIN PARA ANTIOQUIA",
+    "rues_ciiu": "1011",
+    "ind_actividad": "Procesamiento y conservación de carne",
+    "ind_sector": "Manufactura",
+    "ind_score": 84,
+    "ind_enfoque": "optimización de líneas de producción, balanceo de cargas y reducción de desperdicio",
+    "ind_herramientas": "Lean Manufacturing, estudio de tiempos y movimientos, OEE y control estadístico de procesos"
   },
   {
     "solicitud_id": "4414238",
@@ -11692,6 +13596,16 @@
       "🚨 Riesgo de estancamiento profesional: 6 meses sin programar ni tocar bases de datos reales.",
       "Techo salarial limitado al salario mínimo legal vigente.",
       "Obliga al aprendiz a estudiar programación en las noches para no perder los conocimientos adquiridos en la etapa lectiva."
-    ]
+    ],
+    "rues_verificado": true,
+    "rues_razon_social": "PLASTICOS FORMOSA LIMITADA",
+    "rues_estado": "MATRÍCULA NUEVA, CONSTITUCIÓN POR TRASLADO",
+    "rues_camara": "CUCUTA",
+    "rues_ciiu": "2013",
+    "ind_actividad": "Fabricación de plásticos en formas primarias",
+    "ind_sector": "Manufactura",
+    "ind_score": 84,
+    "ind_enfoque": "optimización de líneas de producción, balanceo de cargas y reducción de desperdicio",
+    "ind_herramientas": "Lean Manufacturing, estudio de tiempos y movimientos, OEE y control estadístico de procesos"
   }
 ]

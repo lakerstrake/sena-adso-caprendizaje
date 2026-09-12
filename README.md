@@ -62,6 +62,7 @@ cd output && python -m http.server 8899 &
 
 python scripts/test_ui_e2e.py       # 53 aserciones funcionales, de foco y XSS
 python scripts/test_perfil.py       # 30 aserciones del perfil intercambiable
+python scripts/test_modo_industrial.py  # 41 aserciones del modo industrial
 python scripts/audit_ui_quality.py  # contraste, desbordes y objetivos táctiles
 ```
 
@@ -184,6 +185,51 @@ Se configuran como variables del Worker en Cloudflare, no como secretos de GitHu
 ## 📄 Licencia
 
 Este proyecto está bajo la Licencia [MIT](LICENSE).
+
+---
+
+## 🏭 Modo Ingeniería Industrial
+
+El mismo directorio sirve a dos perfiles. El selector de la cabecera cambia
+entre **Software · ADSO** e **Ingeniería Industrial** sin duplicar la aplicación.
+
+### De dónde salen los datos
+
+| Dato | Origen | Qué significa |
+| --- | --- | --- |
+| Correo y teléfono | Portal SGVA del SENA | Los publicó la propia empresa para recibir postulaciones |
+| Razón social, NIT y estado | RUES en datos.gov.co | Empresa confirmada como **activa** en el registro mercantil |
+| Actividad económica (CIIU) | RUES en datos.gov.co | Lo que la empresa declara que hace, no una etiqueta inferida |
+| Sector y relevancia | Derivados del CIIU | Afinidad con procesos, producción y logística |
+
+**189 de 195 empresas** quedaron verificadas contra el registro mercantil. Eso
+corrigió la clasificación original, que miraba todo con lente de software: entre
+ellas hay 21 manufactureras reales (Tenaris Tubocaribe, Cemex, Coats, Nalsani,
+Retplas, Pinturas Pintumaxter) y 10 de transporte y logística.
+
+### Advertencia importante
+
+Las vacantes publicadas son **contratos de aprendizaje SENA**, a los que un
+ingeniero titulado no aplica. El valor aquí es otro: son contactos reales y
+vigentes del área de Gestión Humana de empresas industriales activas, útiles
+para enviar la hoja de vida de forma espontánea. La aplicación lo dice en
+pantalla al entrar en este modo para que nadie se confunda.
+
+No se inventó ningún correo ni teléfono, y no existe fuente pública que publique
+contactos corporativos de Gestión Humana a escala: el registro mercantil no los
+incluye.
+
+### Cartas por sector
+
+La carta se redacta en el navegador con la actividad real de cada empresa y las
+competencias que ese sector demanda. A una manufacturera se le habla de balanceo
+de líneas y OEE; a una de logística, de inventarios, S&OP y nivel de servicio.
+
+```bash
+python scripts/verificar_rues.py        # verifica los NIT contra el registro
+python scripts/enriquecer_industrial.py # asigna sector y relevancia
+python scripts/test_modo_industrial.py  # 41 aserciones del modo industrial
+```
 
 ---
 
